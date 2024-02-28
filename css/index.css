@@ -3836,8 +3836,11 @@ pre .coffeescript .title {
 }
 .trm-blog-categories,
 footer,
-img,
+.trm-publication img,
 .trm-card,
 .highlight .code {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 8px;
+}
+.trm-menu nav ul li a {
+  font-size: 13px;
 }
