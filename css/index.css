@@ -3830,3 +3830,14 @@ pre .coffeescript .title {
   --primary-weak: #82df7a;
   --primary-weak-50: rgba(130, 223, 122, 0.5);
 }
+.trm-main-card-frame .trm-main-card {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: rgba(0, 0, 0, 0.634) 0px 0px 10px;
+}
+.trm-blog-categories,
+footer,
+img,
+.trm-card,
+.highlight .code {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 8px;
+}
