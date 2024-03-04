@@ -7,12 +7,12 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="谁偷了我的外卖  题目描述  小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢   解题过程  拿到手是一张jpg    binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件   观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，很容易猜测是要把">
+<meta name="description" content="谁偷了我的外卖  题目描述  小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢   解题过程  拿到手是一张jpg    binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    010里还有个提示：I can give you a hint: - &#x3D; &#x2F; But there was a takeaway that was partia">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2023春秋杯_Misc">
 <meta property="og:url" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/index.html">
 <meta property="og:site_name" content="Mad1sun个人博客">
-<meta property="og:description" content="谁偷了我的外卖  题目描述  小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢   解题过程  拿到手是一张jpg    binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件   观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，很容易猜测是要把">
+<meta property="og:description" content="谁偷了我的外卖  题目描述  小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢   解题过程  拿到手是一张jpg    binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    010里还有个提示：I can give you a hint: - &#x3D; &#x2F; But there was a takeaway that was partia">
 <meta property="og:locale">
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
@@ -28,8 +28,13 @@
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
 <meta property="article:published_time" content="2024-03-04T07:57:40.000Z">
-<meta property="article:modified_time" content="2024-03-04T08:56:34.570Z">
+<meta property="article:modified_time" content="2024-03-04T13:22:17.696Z">
 <meta property="article:author" content="Mad1sun">
 <meta property="article:tag" content="MISC-压缩包">
 <meta name="twitter:card" content="summary">
@@ -81,7 +86,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"madifaye.github.io","author":"Mad1sun","root":"/","typed_text":["Mad1sun:)"],"theme_version":"2.1.10","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"rainbow.svg","icon16":"rainbow.svg","icon32":"rainbow.svg","appleTouchIcon":"rainbow.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"02/27/2024 08:08:08","prefix":"博客已悄悄地运行 undefined 天啦～欢迎你的到来～"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"trigger":"auto","path":"search.xml"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-04 16:56:34"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-04 21:22:17"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
@@ -321,10 +326,11 @@
 </ul>
 <p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160239092.png" alt="image-20240304160239092" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <ul>
+<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
 <li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
 </ul>
 <p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160712556.png" alt="image-20240304160712556" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
+<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
 <ul>
 <li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
 </ul>
@@ -380,6 +386,32 @@
 <li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="明文混淆复现"><a class="markdownIt-Anchor" href="#明文混淆复现"></a> 明文混淆（复现）</h1>
+<h2 id="题目描述-2"><a class="markdownIt-Anchor" href="#题目描述-2"></a> 题目描述</h2>
+<ul>
+<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
+</ul>
+<h2 id="解题过程-2"><a class="markdownIt-Anchor" href="#解题过程-2"></a> 解题过程</h2>
+<ul>
+<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
+</ul>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203835579.png" alt="image-20240304203835579" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
+</ul>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203726863.png" alt="image-20240304203726863" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
+<ul>
+<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
+<li>bkcrack爆破</li>
+</ul>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211905788.png" alt="image-20240304211905788" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211926934.png" alt="image-20240304211926934" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>提取出shell2.php，解混淆</li>
+</ul>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304212121097.png" alt="image-20240304212121097" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><em>php解混淆知识有待加强😭</em></p>
 
 </article>
     
@@ -475,7 +507,7 @@
 				</span>
       </div>
       <div class="trm-post-toc-content">
-        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title=" 谁偷了我的外卖"><a rel="nofollow" class="trm-toc-link" href="#谁偷了我的外卖"><span class="trm-toc-number">1.</span> <span class="trm-toc-text"> 谁偷了我的外卖</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title=" 题目描述"><a rel="nofollow" class="trm-toc-link" href="#题目描述"><span class="trm-toc-number">1.1.</span> <span class="trm-toc-text"> 题目描述</span></a></li><li class="trm-toc-item trm-toc-level-2" title=" 解题过程"><a rel="nofollow" class="trm-toc-link" href="#解题过程"><span class="trm-toc-number">1.2.</span> <span class="trm-toc-text"> 解题过程</span></a></li></ol></li></ol>
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title=" 谁偷了我的外卖"><a rel="nofollow" class="trm-toc-link" href="#谁偷了我的外卖"><span class="trm-toc-number">1.</span> <span class="trm-toc-text"> 谁偷了我的外卖</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title=" 题目描述"><a rel="nofollow" class="trm-toc-link" href="#题目描述"><span class="trm-toc-number">1.1.</span> <span class="trm-toc-text"> 题目描述</span></a></li><li class="trm-toc-item trm-toc-level-2" title=" 解题过程"><a rel="nofollow" class="trm-toc-link" href="#解题过程"><span class="trm-toc-number">1.2.</span> <span class="trm-toc-text"> 解题过程</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-1" title=" 明文混淆（复现）"><a rel="nofollow" class="trm-toc-link" href="#明文混淆复现"><span class="trm-toc-number">2.</span> <span class="trm-toc-text"> 明文混淆（复现）</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title=" 题目描述"><a rel="nofollow" class="trm-toc-link" href="#题目描述-2"><span class="trm-toc-number">2.1.</span> <span class="trm-toc-text"> 题目描述</span></a></li><li class="trm-toc-item trm-toc-level-2" title=" 解题过程"><a rel="nofollow" class="trm-toc-link" href="#解题过程-2"><span class="trm-toc-number">2.2.</span> <span class="trm-toc-text"> 解题过程</span></a></li></ol></li></ol>
       </div>
     </div>
 

@@ -18,10 +18,11 @@
 </ul>
 <p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160239092.png" alt="image-20240304160239092" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <ul>
+<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
 <li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
 </ul>
 <p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160712556.png" alt="image-20240304160712556" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
+<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
 <ul>
 <li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
 </ul>
@@ -77,6 +78,32 @@
 <li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="明文混淆复现"><a class="markdownIt-Anchor" href="#明文混淆复现"></a> 明文混淆（复现）</h1>
+<h2 id="题目描述-2"><a class="markdownIt-Anchor" href="#题目描述-2"></a> 题目描述</h2>
+<ul>
+<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
+</ul>
+<h2 id="解题过程-2"><a class="markdownIt-Anchor" href="#解题过程-2"></a> 解题过程</h2>
+<ul>
+<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
+</ul>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203835579.png" alt="image-20240304203835579" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
+</ul>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203726863.png" alt="image-20240304203726863" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
+<ul>
+<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
+<li>bkcrack爆破</li>
+</ul>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211905788.png" alt="image-20240304211905788" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211926934.png" alt="image-20240304211926934" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>提取出shell2.php，解混淆</li>
+</ul>
+<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304212121097.png" alt="image-20240304212121097" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><em>php解混淆知识有待加强😭</em></p>
 ]]></content>
       <categories>
         <category>CTF做题记录</category>
