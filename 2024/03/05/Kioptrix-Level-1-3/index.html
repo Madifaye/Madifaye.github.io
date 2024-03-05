@@ -7,12 +7,12 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="谁偷了我的外卖  题目描述  小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢   解题过程  拿到手是一张jpg    binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    010里还有个提示：I can give you a hint: - &#x3D; &#x2F; But there was a takeaway that was partia">
+<meta name="description" content="Kioptrix Level 1.3(#4)  渗透思路  信息搜集  IP为192.168.89.141 nmap扫描端口以及端口服务  12345678910111213Starting Nmap 7.94SVN ( https:&#x2F;&#x2F;nmap.org ) at 2024-03-04 22:04 ESTNmap scan report for 192.168.89.141Host is up">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2023春秋杯_Misc">
-<meta property="og:url" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/index.html">
+<meta property="og:title" content="Kioptrix_Level_1.3(#4)">
+<meta property="og:url" content="https://madifaye.github.io/2024/03/05/Kioptrix-Level-1-3/index.html">
 <meta property="og:site_name" content="Mad1sun个人博客">
-<meta property="og:description" content="谁偷了我的外卖  题目描述  小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢   解题过程  拿到手是一张jpg    binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    010里还有个提示：I can give you a hint: - &#x3D; &#x2F; But there was a takeaway that was partia">
+<meta property="og:description" content="Kioptrix Level 1.3(#4)  渗透思路  信息搜集  IP为192.168.89.141 nmap扫描端口以及端口服务  12345678910111213Starting Nmap 7.94SVN ( https:&#x2F;&#x2F;nmap.org ) at 2024-03-04 22:04 ESTNmap scan report for 192.168.89.141Host is up">
 <meta property="og:locale">
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
@@ -27,21 +27,15 @@
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
 <meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="article:published_time" content="2024-03-04T07:57:40.000Z">
-<meta property="article:modified_time" content="2024-03-04T13:22:17.696Z">
+<meta property="article:published_time" content="2024-03-05T02:57:49.000Z">
+<meta property="article:modified_time" content="2024-03-05T14:15:54.644Z">
 <meta property="article:author" content="Mad1sun">
-<meta property="article:tag" content="MISC-压缩包">
+<meta property="article:tag" content="vulnhub">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://madifaye.github.io/img/404.jpg">
 
 
-<title >2023春秋杯_Misc</title>
+<title >Kioptrix_Level_1.3(#4)</title>
 
 <!-- Favicon -->
 
@@ -86,7 +80,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"madifaye.github.io","author":"Mad1sun","root":"/","typed_text":["Mad1sun:)"],"theme_version":"2.1.10","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"rainbow.svg","icon16":"rainbow.svg","icon32":"rainbow.svg","appleTouchIcon":"rainbow.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"02/27/2024 08:08:08","prefix":"博客已悄悄地运行 undefined 天啦～欢迎你的到来～"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"trigger":"auto","path":"search.xml"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-04 21:22:17"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-05 22:15:54"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
@@ -252,7 +246,7 @@
                             NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            2023春秋杯_Misc
+                            Kioptrix_Level_1.3(#4)
                         </h1>
 
                         
@@ -293,13 +287,13 @@
     <div class="col-sm-4">
         <div class="trm-card trm-label trm-label-light text-center">
             <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
-            03/04
+            03/05
         </div>
     </div>
     <div class="col-sm-4">
         <div class="trm-card trm-label trm-label-light text-center">
             <i class="iconfont far fa-clock trm-icon"></i><br>
-            15:57
+            10:57
         </div>
     </div>
     <div class="col-sm-4">
@@ -311,107 +305,132 @@
 </div>
 <div class="trm-card ">
     <article id="article-container" class="trm-publication">
-    <h1 id="谁偷了我的外卖"><a class="markdownIt-Anchor" href="#谁偷了我的外卖"></a> 谁偷了我的外卖</h1>
-<h2 id="题目描述"><a class="markdownIt-Anchor" href="#题目描述"></a> 题目描述</h2>
+    <h1 id="kioptrix-level-134"><a class="markdownIt-Anchor" href="#kioptrix-level-134"></a> Kioptrix Level 1.3(#4)</h1>
+<h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2>
+<h3 id="信息搜集"><a class="markdownIt-Anchor" href="#信息搜集"></a> 信息搜集</h3>
 <ul>
-<li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li>
+<li>IP为<code>192.168.89.141</code></li>
+<li>nmap扫描端口以及端口服务</li>
 </ul>
-<h2 id="解题过程"><a class="markdownIt-Anchor" href="#解题过程"></a> 解题过程</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-03-04 22:04 EST</span><br><span class="line">Nmap scan report for 192.168.89.141</span><br><span class="line">Host is up (0.00057s latency).</span><br><span class="line">Not shown: 39528 closed tcp ports (conn-refused), 26003 filtered tcp ports (no-response)</span><br><span class="line">PORT    STATE SERVICE     VERSION</span><br><span class="line">22/tcp  open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)</span><br><span class="line">80/tcp  open  http        Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)</span><br><span class="line">139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">445/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 32.68 seconds</span><br></pre></td></tr></table></figure>
+<p>开放了ssh、http、samba</p>
 <ul>
-<li>拿到手是一张jpg</li>
+<li>开放了80，那就先dirsearch扫扫看：<code>dirsearch --url http://192.168.89.141 </code>，同时浏览器访问 <code>http://192.168.89.141</code></li>
 </ul>
-<img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/小凯.jpg" alt="小凯" style="zoom:33%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
+<img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204216081.png" alt="image-20240305204216081" style="zoom:50%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
 <ul>
-<li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li>
+<li>看到了smb服务且80端口需要用户信息，那么就用enum4linux扫扫</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160239092.png" alt="image-20240304160239092" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<blockquote>
+<p>enum4linux的介绍：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客</a></p>
+</blockquote>
+<p>比较全的扫描方法：<code>enum4linux -a -o &lt;ip&gt;</code>，这里主要看他的用户信息：<code>enum4linux -U 192.168.89.141</code>(<em>主要是因为http里面涉及到用户登录</em>)</p>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305203732012.png" alt="image-20240305203732012" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>能看到一些用户信息，主要有loneferret、john、robert、root、nobody</p>
 <ul>
-<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
-<li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
+<li>80端口是个登录界面，先试试能不能简单sql注入，随便在Username里输入<code>admin</code>，在Password里输入<code>'or'1'='1'</code>，发现还真能注入😆</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160712556.png" alt="image-20240304160712556" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204504698.png" alt="image-20240305204504698" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <ul>
-<li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
+<li>回显了一个User信息，但估计这个admin用户不在members里面，简单探索到这里，看看dirsearch什么结果</li>
 </ul>
-<p><strong>能发现第一个少了四个字母</strong></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161318875.png" alt="处理文件夹文件名称" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure>
-<p><strong>先把第2个文件开始的提取出来</strong></p>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204622062.png" alt="image-20240305204622062" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <ul>
-<li>base64解码，可以在末尾发现应该是压缩包</li>
+<li>dirsearch其实也没什么特别的，/checklogin就是一个页面没什么信息，/database.sql是个sql文件，但是我们能在里面看到有一个<code>john</code>在members表里面密码是<code>1234</code></li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161819149.png" alt="image-20240304161819149" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204912967.png" alt="image-20240305204912967" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <ul>
-<li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li>
+<li>但是拿这个密码登录失败了，看来是修改过，无所谓，我会注入，输入上面一样的注入密码<code>'or'1'='1</code>，轻松登录，拿到了john的真实密码<code>MyNameIsJohn</code></li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162516972.png" alt="image-20240304162516972" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162720172.png" alt="image-20240304162720172" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>成功拿到download.zip</strong></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162046748.png" alt="image-20240304162046748" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162147928.png" alt="image-20240304162147928" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305205101931.png" alt="image-20240305205101931" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <ul>
-<li>查看这两个文件
+<li>同样的方式，看看能不能拿到root、nobody、loneferret、robert的密码，最后只拿到了robert的密码<code>ADGAdsafdfwt4gadfga==</code></li>
+</ul>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305205720214.png" alt="image-20240305205720214" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <ul>
-<li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li>
+<li>ssh 连接用户，但是发现两个用户都在受限的shell里面（以john为例），根据提示<code>Type '?' or 'help' to get the list of allowed commands</code>，输入一个<code>?</code>发现能执行的命令很有限：<code>cd clear echo exit help ll lpath ls</code></li>
 </ul>
-</li>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305210854321.png" alt="image-20240305210854321" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h4 id="信息搜集总结"><a class="markdownIt-Anchor" href="#信息搜集总结"></a> 信息搜集总结</h4>
+<ul>
+<li>发现了登录界面的sql注入，通过简单注入，拿到了john和robert两个用户的密码</li>
+<li>利用拿到的密码，通过ssh，远程登录了主机，但在受限的shell环境里，<mark>下一步需要绕过限制，如果只是普通用户权限，还需要考虑提权</mark></li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162805829.png" alt="image-20240304162805829" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304163109001.png" alt="image-20240304163109001" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h3>
+<h4 id="echo绕过受限的shell"><a class="markdownIt-Anchor" href="#echo绕过受限的shell"></a> echo绕过受限的shell</h4>
+<ul>
+<li>这种受限的shell称为lshell(limited shell)，执行的命令优有限，但是lshell关于<code>echo</code>存在一个漏洞，我们可以通过<code>echo os.system(&quot;/bin/bash&quot;)</code>，绕过限制。</li>
+</ul>
+<blockquote>
+<p>lshell绕过限制：<a target="_blank" rel="noopener" href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com)</a></p>
+<p><em>文章中还提到了通过vim命令绕过的方法</em></p>
+</blockquote>
+<ul>
+<li>输入命令，成功绕过，可以执行很多命令，但我们还是普通用户权限</li>
+</ul>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305212141847.png" alt="image-20240305212141847" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h4 id="查看网站源代码"><a class="markdownIt-Anchor" href="#查看网站源代码"></a> 查看网站源代码</h4>
+<ul>
+<li>回到80端口的思路，看看网站源码，试试看login的校验，于是查看<code>checklogin.php</code>，发现了mysql用户root，没有密码，好家伙😄</li>
+</ul>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305212754868.png" alt="image-20240305212754868" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="权限提升"><a class="markdownIt-Anchor" href="#权限提升"></a> 权限提升</h3>
+<h4 id="mysqludf提权"><a class="markdownIt-Anchor" href="#mysqludf提权"></a> MySQLUDF提权</h4>
+<ul>
+<li>先用root登录mysql：<code>mysql -u root</code>，发现mysql的版本是<code>5.0.51a</code></li>
+</ul>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305213255453.png" alt="image-20240305213255453" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><mark>接下来的思路就是看看能不能利用mysql提权</mark></p>
+<p><em>如果是 MySQL &gt;= 5.1 的版本，必须把 UDF 的动态链接库文件放置于 MySQL 安装目录下的 lib\plugin 文件夹下文件夹下才能创建自定义函数。<strong>由于MySQL这里正好&lt;5.1,我们可以直接尝试UDF提权</strong></em></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/miansj/p/13996110.html">Mysql提权-基于Mysql的UDF提权（Linux系统） - 码小农的幸福生活 - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+<ul>
+<li>在mysql数据库下输入命令<code>create function sys_eval returns string soname 'lib_mysqludf_sys.so';</code>，<strong>sys_eval可以执行系统命令并在屏幕上显示</strong>，<code>select * from mysql.func</code>查看是否创建成功</li>
+</ul>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305214900539.png" alt="image-20240305214900539" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>成功创建</strong></p>
+<ul>
+<li>利用sys_eval实现系统命令，我们直接来修改root密码，<code>select sys_eval(&quot;sudo passwd root&quot;)</code>，然后直接设置root的新密码，再登录，成功拿到root</li>
+</ul>
+<p><em>后来发现sys_exec也可以执行系统命令，但是他无法打印在屏幕上，也无法交互，所以可以用来修改一些权限，比如<code>chmod u+x /bin/bash</code>或者用usermod修改用户所在的组，提权</em></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://shifty0g.github.io/posts/kioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn)</a></p>
+</blockquote>
+<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305220016944.png" alt="image-20240305220016944" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="学习总结与参考链接"><a class="markdownIt-Anchor" href="#学习总结与参考链接"></a> 学习总结与参考链接</h2>
+<ul>
+<li>enum4linux的使用场景</li>
+</ul>
+<blockquote>
+<p>enum4linux的介绍：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客</a></p>
+</blockquote>
 <ul>
 <li>
-<p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
+<p>涉及到80端口，可以先扫起来，然后去搜集信息，拿到shell之后，<strong>要先查看源代码</strong>，看看有没有漏掉的信息</p>
 </li>
 <li>
-<p>用bkcrack明文爆破出密钥</p>
+<p>受限shell绕过方法：echo</p>
 </li>
 </ul>
-<p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164507564.png" alt="image-20240304164507564" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p>
+<blockquote>
+<p>lshell绕过限制：<a target="_blank" rel="noopener" href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com)</a></p>
+</blockquote>
 <ul>
-<li>利用密钥破解</li>
+<li>mysql中的udf提权，<strong>mysql还有很多种提权方式有待学习</strong></li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure>
-<p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164738068.png" alt="image-20240304164738068" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com)</a></p>
+</blockquote>
 <ul>
-<li>成功提取并打开txt.galf</li>
+<li>参考walkthrough</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164841781.png" alt="image-20240304164841781" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="明文混淆复现"><a class="markdownIt-Anchor" href="#明文混淆复现"></a> 明文混淆（复现）</h1>
-<h2 id="题目描述-2"><a class="markdownIt-Anchor" href="#题目描述-2"></a> 题目描述</h2>
-<ul>
-<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
-</ul>
-<h2 id="解题过程-2"><a class="markdownIt-Anchor" href="#解题过程-2"></a> 解题过程</h2>
-<ul>
-<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203835579.png" alt="image-20240304203835579" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203726863.png" alt="image-20240304203726863" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
-<ul>
-<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
-<li>bkcrack爆破</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211905788.png" alt="image-20240304211905788" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211926934.png" alt="image-20240304211926934" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>提取出shell2.php，解混淆</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304212121097.png" alt="image-20240304212121097" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><em>php解混淆知识有待加强😭</em></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://shifty0g.github.io/posts/kioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn)</a></p>
+</blockquote>
 
 </article>
     
@@ -427,42 +446,22 @@
         </h5>
     </div>
     
-        <div class="col-lg-6">
-    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
-        <div class="trm-older-publication">
-            
-            <a class="trm-op-top trm-anima-link" href="/2024/03/05/Kioptrix-Level-1-3/">
-                <span class="trm-op-cover">
-                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
-                </span>
-                <h6 class="trm-op-title">Kioptrix_Level_1.3(#4)</h6>
-            </a>
-            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
-            <ul class="trm-card-data trm-label">
-                <li>24/03/05</li>
-                <li>10:57</li>
-                <li>类OSCP靶机练习</li>
-            </ul>
-        </div>
-    </div>
-</div>
-    
     
         <div class="col-lg-6">
     <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
         <div class="trm-older-publication">
             
-            <a class="trm-op-top trm-anima-link" href="/2024/03/04/Mad1sun-s-diary/">
+            <a class="trm-op-top trm-anima-link" href="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/">
                 <span class="trm-op-cover">
                     <img alt="cover" class="no-fancybox" src="/img/block.jpg">
                 </span>
-                <h6 class="trm-op-title">Mad1sun&#39;s_diary</h6>
+                <h6 class="trm-op-title">2023春秋杯_Misc</h6>
             </a>
             <div class="trm-divider trm-mb-15 trm-mt-20"></div>
             <ul class="trm-card-data trm-label">
                 <li>24/03/04</li>
-                <li>15:05</li>
-                <li>Mad1sun的生活小日记</li>
+                <li>15:57</li>
+                <li>CTF做题记录</li>
             </ul>
         </div>
     </div>
@@ -527,7 +526,7 @@
 				</span>
       </div>
       <div class="trm-post-toc-content">
-        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title=" 谁偷了我的外卖"><a rel="nofollow" class="trm-toc-link" href="#谁偷了我的外卖"><span class="trm-toc-number">1.</span> <span class="trm-toc-text"> 谁偷了我的外卖</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title=" 题目描述"><a rel="nofollow" class="trm-toc-link" href="#题目描述"><span class="trm-toc-number">1.1.</span> <span class="trm-toc-text"> 题目描述</span></a></li><li class="trm-toc-item trm-toc-level-2" title=" 解题过程"><a rel="nofollow" class="trm-toc-link" href="#解题过程"><span class="trm-toc-number">1.2.</span> <span class="trm-toc-text"> 解题过程</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-1" title=" 明文混淆（复现）"><a rel="nofollow" class="trm-toc-link" href="#明文混淆复现"><span class="trm-toc-number">2.</span> <span class="trm-toc-text"> 明文混淆（复现）</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title=" 题目描述"><a rel="nofollow" class="trm-toc-link" href="#题目描述-2"><span class="trm-toc-number">2.1.</span> <span class="trm-toc-text"> 题目描述</span></a></li><li class="trm-toc-item trm-toc-level-2" title=" 解题过程"><a rel="nofollow" class="trm-toc-link" href="#解题过程-2"><span class="trm-toc-number">2.2.</span> <span class="trm-toc-text"> 解题过程</span></a></li></ol></li></ol>
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title=" Kioptrix Level 1.3(#4)"><a rel="nofollow" class="trm-toc-link" href="#kioptrix-level-134"><span class="trm-toc-number">1.</span> <span class="trm-toc-text"> Kioptrix Level 1.3(#4)</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title=" 渗透思路"><a rel="nofollow" class="trm-toc-link" href="#渗透思路"><span class="trm-toc-number">1.1.</span> <span class="trm-toc-text"> 渗透思路</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title=" 信息搜集"><a rel="nofollow" class="trm-toc-link" href="#信息搜集"><span class="trm-toc-number">1.1.1.</span> <span class="trm-toc-text"> 信息搜集</span></a></li><li class="trm-toc-item trm-toc-level-3" title=" 漏洞利用"><a rel="nofollow" class="trm-toc-link" href="#漏洞利用"><span class="trm-toc-number">1.1.2.</span> <span class="trm-toc-text"> 漏洞利用</span></a></li><li class="trm-toc-item trm-toc-level-3" title=" 权限提升"><a rel="nofollow" class="trm-toc-link" href="#权限提升"><span class="trm-toc-number">1.1.3.</span> <span class="trm-toc-text"> 权限提升</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title=" 学习总结与参考链接"><a rel="nofollow" class="trm-toc-link" href="#学习总结与参考链接"><span class="trm-toc-number">1.2.</span> <span class="trm-toc-text"> 学习总结与参考链接</span></a></li></ol></li></ol>
       </div>
     </div>
 
