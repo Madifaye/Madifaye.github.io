@@ -3835,12 +3835,13 @@ pre .coffeescript .title {
   box-shadow: rgba(0, 0, 0, 0.634) 0px 0px 10px;
 }
 .trm-blog-categories,
-footer,
+.trm-blog-card,
 .trm-publication img,
 .trm-card,
 .highlight .code {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 8px;
 }
+.trm-blog-card:hover,
 .trm-publication img:hover {
   transform: scale(1.02);
 }
