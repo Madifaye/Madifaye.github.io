@@ -3841,6 +3841,9 @@ footer,
 .highlight .code {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 8px;
 }
+.trm-publication img:hover {
+  transform: scale(1.02);
+}
 .trm-menu nav ul li a {
   font-size: 13px;
 }
