@@ -1,653 +1,1135 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
-
+<html lang="en">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="x5-fullscreen" content="true">
-<meta name="full-screen" content="yes">
-<meta name="theme-color" content="#317EFB" />
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="谁偷了我的外卖  题目描述  小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢   解题过程  拿到手是一张jpg    binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    010里还有个提示：I can give you a hint: - &#x3D; &#x2F; But there was a takeaway that was partia">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="MADISUN">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://madifaye.github.io/2024/03/04/2023春秋杯-misc/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="谁偷了我的外卖题目描述 小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢  解题过程 拿到手是一张jpg     binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    010里还有个提示：I can give you a hint: - &#x3D; &#x2F; But there was a takeaway that was partially e">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2023春秋杯_Misc">
 <meta property="og:url" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/index.html">
 <meta property="og:site_name" content="Mad1sun个人博客">
-<meta property="og:description" content="谁偷了我的外卖  题目描述  小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢   解题过程  拿到手是一张jpg    binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    010里还有个提示：I can give you a hint: - &#x3D; &#x2F; But there was a takeaway that was partia">
-<meta property="og:locale">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:description" content="谁偷了我的外卖题目描述 小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢  解题过程 拿到手是一张jpg     binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下    010里还有个提示：I can give you a hint: - &#x3D; &#x2F; But there was a takeaway that was partially e">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/%E5%B0%8F%E5%87%AF.jpg">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160239092.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160712556.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161318875.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161819149.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162516972.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162720172.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162046748.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162147928.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162805829.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304163109001.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164507564.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164738068.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164841781.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203835579.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203726863.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211905788.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211926934.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304212121097.png">
 <meta property="article:published_time" content="2024-03-04T07:57:40.000Z">
-<meta property="article:modified_time" content="2024-03-04T13:22:17.696Z">
+<meta property="article:modified_time" content="2024-03-09T09:11:47.585Z">
 <meta property="article:author" content="Mad1sun">
 <meta property="article:tag" content="MISC-压缩包">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://madifaye.github.io/img/404.jpg">
+<meta name="twitter:image" content="https://madifaye.github.io/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/%E5%B0%8F%E5%87%AF.jpg">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/rainbow.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/rainbow.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/rainbow.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            2023春秋杯_Misc -
+        
+        Mad1sun&#39;s BL0G~
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
 
 
-<title >2023春秋杯_Misc</title>
+    <!--- Inject Part-->
+    
 
-<!-- Favicon -->
+    
+        <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
 
-    <link href='/rainbow.svg?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    
+<script src="/js/libs/anime.min.js"></script>
+
+    <h1 class="ml13">
+        Mad1sun&#39;s BL0G~
+    </h1>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
 
 
-    <link href='/rainbow.svg?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
+        anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [100,0],
+                translateZ: 0,
+                opacity: [0,1],
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i
+            }).add({
+            targets: '.ml13 .letter',
+            translateY: [0,-100],
+            opacity: [1,0],
+            easing: "easeInExpo",
+            duration: 1200,
+            delay: (el, i) => 100 + 30 * i
+        });
 
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
 
-    <link href='/rainbow.svg?v=2.1.10' rel='apple-touch-icon' sizes='180x180' ></link>
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
 
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
 
-    <link href='/site.webmanifest' rel='manifest' ></link>
+        window.addEventListener('load', function () {
+            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
+        });
 
+        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
+        hidePreloaderAfterTimeout(5000);
 
-<!-- Plugin -->
+        function hidePreloaderAfterTimeout(delay) {
+            setTimeout(function () {
+                var preloader = document.querySelector('.preloader');
+                preloader.style.opacity = '0';
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 200);
+            }, delay);
+        }
+    </script>
+</div>
+    
 
-
+    
+<link rel="stylesheet" href="/css/style.css">
 
 
     
-<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
-
-    
-<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
-
-    
-<link rel="stylesheet" href="https://npm.elemecdn.com/swiper@4.5.1/dist/css/swiper.min.css">
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
 
     
 
-
-
-
-<!-- Icon -->
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
 
     
-<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
 
-
-
-
-<!-- Variable -->
-<script>window.ASYNC_CONFIG = {"hostname":"madifaye.github.io","author":"Mad1sun","root":"/","typed_text":["Mad1sun:)"],"theme_version":"2.1.10","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"rainbow.svg","icon16":"rainbow.svg","icon32":"rainbow.svg","appleTouchIcon":"rainbow.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"02/27/2024 08:08:08","prefix":"博客已悄悄地运行 undefined 天啦～欢迎你的到来～"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"trigger":"auto","path":"search.xml"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-04 21:22:17"};</script>
-
-<!-- Theme mode css -->
-<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
-<script>
-    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
-    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
-    let type = catchMode === 'style-dark' ? 'add' : 'remove';
-    document.documentElement.classList[type]('dark')
-</script>
-
-<!-- CDN -->
-
-
+    <!--- Font Part-->
+    
+        <link href="https://fonts.cdnfonts.com/css/komix" rel="stylesheet">
+    
+    
+    
+        <link href="https://192960944.r.cdn36.com/chinesefonts3/packages/jhlst/dist/京華老宋体v1_007/result.css" rel="stylesheet">
     
     
 
 
+    <script id="hexo-configurations">
+    window.config = {"hostname":"madifaye.github.io","root":"/","language":"en","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":6,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":true,"family":"KingHwa_OldSong","url":"https://192960944.r.cdn36.com/chinesefonts3/packages/jhlst/dist/京華老宋体v1_007/result.css"},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":true},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/image/grand_budapest.jpg","dark":"/image/before_sunset.jpg"},"title":"MAD1SUN'S BLOG","subtitle":{"text":["Im Mad1sun.","Carpe Diem"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#c30452","dark":"#c32504"},"text_style":{"title_size":"4.0rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":true,"family":"\"Komix\",sans-serif","url":"https://fonts.cdnfonts.com/css/komix"},"social_links":{"enable":true,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":"xqlmadison@outlook.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"Probably Up","artist":"Lawrence","url":"http://music.163.com/outchain/player?type=2&id=865052867&auto=1&height=66","cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"},"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}},"search":{"enable":true,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}},"categories":{"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"你常活在光明里。","show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/2/27 08:08:08"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
 
-<!-- Site Analytics -->
- 
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
 <meta name="generator" content="Hexo 7.1.1"></head>
 
+
 <body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
 
-  <!-- app wrapper -->
-  <div class="trm-app-frame">
-
-    <!-- page preloader -->
-    <div class="trm-preloader">
-    <div class="trm-holder">
-        <div class="preloader">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
 </div>
-    <!-- page preloader end -->
 
-    <!-- change mode preloader -->
-    <div class="trm-mode-swich-animation-frame">
-    <div class="trm-mode-swich-animation">
-        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
-        <div class="trm-horizon"></div>
-        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
-    </div>
-</div>
-    <!-- change mode preloader end -->
 
-      <!-- scroll container -->
-      <div id="trm-dynamic-content" class="trm-swup-animation">
-        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
-            <!-- top bar -->
-            <header class="trm-top-bar">
-	<div class="container">
-		<div class="trm-left-side">
-			<!-- logo -->
-<a href="/" class="trm-logo-frame trm-anima-link">
+<main class="page-container" id="swup">
+
     
-        <img alt="logo" src="/rainbow.svg">
-    
-    
-        <div class="trm-logo-text">
-            Mad1sun<span>Handle</span>
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Mad1sun&#39;s BL0G~
+                
+            </a>
         </div>
-    
-</a>
-<!-- logo end -->
-		</div>
-		<div class="trm-right-side">
-			<!-- menu -->
-<div class="trm-menu">
-    <nav>
-        <ul>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/" target="">
-                    主页
-                </a>
-                
-            </li>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/archives/" target="">
-                    归档
-                </a>
-                
-            </li>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/categories/" target="">
-                    分类
-                </a>
-                
-            </li>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/tags/" target="">
-                    标签
-                </a>
-                
-            </li>
-            
-        </ul>
-    </nav>
-</div>
-<!-- menu end -->
-			
-    <!-- mode switcher place -->
-    <div class="trm-mode-switcher-place">
-        <div class="trm-mode-switcher">
-            <i class="iconfont far fa-sun"></i>
-            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
-            <label class="trm-swich" for="trm-swich"></label>
-            <i class="iconfont far fa-moon"></i>
-        </div>
-    </div>
-    <!-- mode switcher place end -->
 
-			
-    
-    <div id="trm-search-btn" class="trm-search-btn">
-        <i class="iconfont fas fa-search"></i>
-    </div>
-     
-
-		</div>
-		<div class="trm-menu-btn">
-			<span></span>
-		</div>
-	</div>
-</header>
-            <!-- top bar end -->
-
-            <!-- body -->
-            
-<div class="trm-content-start">
-    <!-- banner -->
-    <div class="trm-banner">
-    
-    <!-- banner cover -->
-    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
-    <!-- banner cover end -->
-    
-
-    <!-- banner content -->
-    <div class="trm-banner-content trm-overlay">
-        <div class="container">
-            <div class="row">
-                
-                <div class="col-lg-12">
-
-                    <!-- banner title -->
-                    <div class="trm-banner-text trm-text-center ">
-                        <div class="trm-label trm-mb-20">
-                            NEWS LETTER
-                        </div>
-                        <h1 class="trm-mb-30 trm-hsmb-font">
-                            2023春秋杯_Misc
-                        </h1>
-
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
                         
-                            <ul class="trm-breadcrumbs trm-label">
-                                <li>
-                                    <a href="/" class="trm-anima-link">Home</a>
-                                </li>
-                                <li>
-                                    <span>
-                                        2024
-                                    </span>
-                                </li>
-                            </ul>
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
                         
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-solid fa-tags fa-fw"></i>
+                                    TAGS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/"
+                                        >
+                                    <i class="fa-solid fa-folder fa-fw"></i>
+                                    CATEGORIES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
                     </div>
-                    <!-- banner title end -->
-
-                    <!-- scroll hint -->
-                    <span id="scroll-triger" class="trm-scroll-hint-frame">
-                        <div class="trm-scroll-hint"></div>
-                        <span class="trm-label">Scroll down</span>
-                    </span>
-                    <!-- scroll hint end -->
-
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- banner content end -->
-</div>
-    <!-- banner end -->
-    <div class="container">
-        <div class="row">
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
             
-            <div class="trm-page-content col-lg-12">
-                <div id="trm-content" class="trm-content">
-                    <div class="trm-post-info row hidden-sm">
-    <div class="col-sm-4">
-        <div class="trm-card trm-label trm-label-light text-center">
-            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
-            03/04
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="trm-card trm-label trm-label-light text-center">
-            <i class="iconfont far fa-clock trm-icon"></i><br>
-            15:57
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
-            <i class="iconfont far fa-user trm-icon"></i><br>
-            Mad1sun
-        </div>
-    </div>
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                TAGS
+                            </span>
+                            
+                                <i class="fa-solid fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/"
+                        >
+                            <span>
+                                CATEGORIES
+                            </span>
+                            
+                                <i class="fa-solid fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
 </div>
-<div class="trm-card ">
-    <article id="article-container" class="trm-publication">
-    <h1 id="谁偷了我的外卖"><a class="markdownIt-Anchor" href="#谁偷了我的外卖"></a> 谁偷了我的外卖</h1>
-<h2 id="题目描述"><a class="markdownIt-Anchor" href="#题目描述"></a> 题目描述</h2>
-<ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3">2023春秋杯_Misc</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/image/avatar.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">MADISUN</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-03-04 15:57:40</span>
+        <span class="mobile">2024-03-04 15:57:40</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-03-09 17:11:47</span>
+            <span class="mobile">2024-03-09 17:11:47</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CTF%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/">CTF做题记录</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/MISC-%E5%8E%8B%E7%BC%A9%E5%8C%85/">MISC-压缩包</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>814 Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>3 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="谁偷了我的外卖"><a href="#谁偷了我的外卖" class="headerlink" title="谁偷了我的外卖"></a>谁偷了我的外卖</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
 <li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li>
 </ul>
-<h2 id="解题过程"><a class="markdownIt-Anchor" href="#解题过程"></a> 解题过程</h2>
-<ul>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
 <li>拿到手是一张jpg</li>
 </ul>
-<img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/小凯.jpg" alt="小凯" style="zoom:33%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
+<img lazyload src="/images/loading.svg" data-src="2023春秋杯-Misc/小凯.jpg" alt="小凯" style="zoom:33%;">
+
 <ul>
 <li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160239092.png" alt="image-20240304160239092" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160239092.png" alt="image-20240304160239092"></p>
 <ul>
 <li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
 <li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304160712556.png" alt="image-20240304160712556" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160712556.png" alt="image-20240304160712556"></p>
 <p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
 <ul>
 <li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
 </ul>
 <p><strong>能发现第一个少了四个字母</strong></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161318875.png" alt="处理文件夹文件名称" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161318875.png" alt="处理文件夹文件名称"></p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure></div>
+
 <p><strong>先把第2个文件开始的提取出来</strong></p>
 <ul>
 <li>base64解码，可以在末尾发现应该是压缩包</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304161819149.png" alt="image-20240304161819149" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161819149.png" alt="image-20240304161819149"></p>
 <ul>
 <li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162516972.png" alt="image-20240304162516972" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162720172.png" alt="image-20240304162720172" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162516972.png" alt="image-20240304162516972"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162720172.png" alt="image-20240304162720172"></p>
 <p><strong>成功拿到download.zip</strong></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162046748.png" alt="image-20240304162046748" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162046748.png" alt="image-20240304162046748"></p>
 <p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162147928.png" alt="image-20240304162147928" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162147928.png" alt="image-20240304162147928"></p>
 <ul>
-<li>查看这两个文件
-<ul>
+<li>查看这两个文件<ul>
 <li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li>
 </ul>
 </li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304162805829.png" alt="image-20240304162805829" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304163109001.png" alt="image-20240304163109001" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162805829.png" alt="image-20240304162805829"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304163109001.png" alt="image-20240304163109001"></p>
 <ul>
-<li>
-<p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
+<li><p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
 </li>
-<li>
-<p>用bkcrack明文爆破出密钥</p>
+<li><p>用bkcrack明文爆破出密钥</p>
 </li>
 </ul>
 <p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164507564.png" alt="image-20240304164507564" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164507564.png" alt="image-20240304164507564"></p>
 <p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p>
 <ul>
 <li>利用密钥破解</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure></div>
+
 <p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164738068.png" alt="image-20240304164738068" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164738068.png" alt="image-20240304164738068"></p>
 <ul>
 <li>成功提取并打开txt.galf</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304164841781.png" alt="image-20240304164841781" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164841781.png" alt="image-20240304164841781"></p>
 <ul>
 <li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="明文混淆复现"><a class="markdownIt-Anchor" href="#明文混淆复现"></a> 明文混淆（复现）</h1>
-<h2 id="题目描述-2"><a class="markdownIt-Anchor" href="#题目描述-2"></a> 题目描述</h2>
-<ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h1 id="明文混淆（复现）"><a href="#明文混淆（复现）" class="headerlink" title="明文混淆（复现）"></a>明文混淆（复现）</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
 <li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
 </ul>
-<h2 id="解题过程-2"><a class="markdownIt-Anchor" href="#解题过程-2"></a> 解题过程</h2>
-<ul>
+<h2 id="解题过程-1"><a href="#解题过程-1" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
 <li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203835579.png" alt="image-20240304203835579" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203835579.png" alt="image-20240304203835579"></p>
 <ul>
 <li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304203726863.png" alt="image-20240304203726863" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203726863.png" alt="image-20240304203726863"></p>
 <p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
 <ul>
 <li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
 <li>bkcrack爆破</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211905788.png" alt="image-20240304211905788" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304211926934.png" alt="image-20240304211926934" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211905788.png" alt="image-20240304211905788"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211926934.png" alt="image-20240304211926934"></p>
 <ul>
 <li>提取出shell2.php，解混淆</li>
 </ul>
-<p><img src="/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/image-20240304212121097.png" alt="image-20240304212121097" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><em>php解混淆知识有待加强😭</em></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304212121097.png" alt="image-20240304212121097"></p>
+<p><em>php解混淆知识有待加强:sob:</em></p>
 
-</article>
-    
-    
+        </div>
 
-</div>
-<div class="trm-post-next-prev row">
-    <div class="col-lg-12">
-        <!-- title -->
-        <h5 class="trm-title-with-divider">
-            其他文章
-            <span data-number="02"></span>
-        </h5>
-    </div>
-    
-        <div class="col-lg-6">
-    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
-        <div class="trm-older-publication">
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 2023春秋杯_Misc</li>
+        <li><strong>Author:</strong> MADISUN</li>
+        <li><strong>Created at
+                :</strong> 2024-03-04 15:57:40</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-03-09 17:11:47
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/03/04/2023春秋杯-Misc/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
             
-            <a class="trm-op-top trm-anima-link" href="/2024/03/05/Kioptrix-Level-1-3/">
-                <span class="trm-op-cover">
-                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
-                </span>
-                <h6 class="trm-op-title">Kioptrix_Level_1.3(#4)</h6>
-            </a>
-            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
-            <ul class="trm-card-data trm-label">
-                <li>24/03/05</li>
-                <li>10:57</li>
-                <li>类OSCP靶机练习</li>
-            </ul>
-        </div>
-    </div>
-</div>
-    
-    
-        <div class="col-lg-6">
-    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
-        <div class="trm-older-publication">
+
             
-            <a class="trm-op-top trm-anima-link" href="/2024/03/04/Mad1sun-s-diary/">
-                <span class="trm-op-cover">
-                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
-                </span>
-                <h6 class="trm-op-title">Mad1sun&#39;s_diary</h6>
-            </a>
-            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
-            <ul class="trm-card-data trm-label">
-                <li>24/03/04</li>
-                <li>15:05</li>
-                <li>Mad1sun的生活小日记</li>
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/MISC-%E5%8E%8B%E7%BC%A9%E5%8C%85/">#MISC-压缩包</a>&nbsp;
+                    </li>
+                
             </ul>
-        </div>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2024/03/05/Kioptrix-Level-1-3/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Kioptrix_Level_1.3(#4)</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/03/04/Mad1sun-s-diary/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Mad1sun&#39;s_diary</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">2023春秋杯_Misc</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%81%E5%81%B7%E4%BA%86%E6%88%91%E7%9A%84%E5%A4%96%E5%8D%96"><span class="nav-text">谁偷了我的外卖</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E8%BF%87%E7%A8%8B"><span class="nav-text">解题过程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%8E%E6%96%87%E6%B7%B7%E6%B7%86%EF%BC%88%E5%A4%8D%E7%8E%B0%EF%BC%89"><span class="nav-text">明文混淆（复现）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0-1"><span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E8%BF%87%E7%A8%8B-1"><span class="nav-text">解题过程</span></a></li></ol></li></ol>
+
     </div>
 </div>
+        </div>
     
 </div>
 
-    
 
 
+                
 
-                    <div class="trm-divider footer-divider"></div>
+            </div>
 
-                    <!-- footer -->
-                    <footer class="trm-scroll-animation">
+            
 
-    
-
-    
-
-    
-        <div class="trm-footer-item">
-            <span>
-                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.1.1
-            </span>
-            <span class="footer-separator" data-separator=" | "></span>
-            <span> 
-                主题 - 
-                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
-                v2.1.10
-            </span>
         </div>
-      
 
-    
-        <div class="trm-footer-item blog-run-long"></div>
-     
-
-     
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">MADISUN</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        8 posts in total
+                    </span>
+                    
+                        <span>
+                            7.1k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.1</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
 </footer>
-                    <!-- footer end -->
+        </div>
+    </div>
 
-                </div>
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
             </div>
         </div>
     </div>
 </div>
-<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
-<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
-<script type="text/javascript" src="/js/firework.js"></script>
+
+    
+
+</main>
 
 
-            <!-- body end -->
+    
+<script src="/js/libs/Swup.min.js"></script>
 
-            
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
 
-    <div id="post-toc" class="trm-post-toc">
-      <div class="trm-post-toc-header">
-        目录导航
-				<span id="post-toc-top">
-					置顶
-				</span>
-      </div>
-      <div class="trm-post-toc-content">
-        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title=" 谁偷了我的外卖"><a rel="nofollow" class="trm-toc-link" href="#谁偷了我的外卖"><span class="trm-toc-number">1.</span> <span class="trm-toc-text"> 谁偷了我的外卖</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title=" 题目描述"><a rel="nofollow" class="trm-toc-link" href="#题目描述"><span class="trm-toc-number">1.1.</span> <span class="trm-toc-text"> 题目描述</span></a></li><li class="trm-toc-item trm-toc-level-2" title=" 解题过程"><a rel="nofollow" class="trm-toc-link" href="#解题过程"><span class="trm-toc-number">1.2.</span> <span class="trm-toc-text"> 解题过程</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-1" title=" 明文混淆（复现）"><a rel="nofollow" class="trm-toc-link" href="#明文混淆复现"><span class="trm-toc-number">2.</span> <span class="trm-toc-text"> 明文混淆（复现）</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title=" 题目描述"><a rel="nofollow" class="trm-toc-link" href="#题目描述-2"><span class="trm-toc-number">2.1.</span> <span class="trm-toc-text"> 题目描述</span></a></li><li class="trm-toc-item trm-toc-level-2" title=" 解题过程"><a rel="nofollow" class="trm-toc-link" href="#解题过程-2"><span class="trm-toc-number">2.2.</span> <span class="trm-toc-text"> 解题过程</span></a></li></ol></li></ol>
-      </div>
-    </div>
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
 
-            
-<div class="trm-fixed-container">
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
     
-        <div class="trm-fixed-btn post-toc-btn" data-title="目录">
-            <i class="iconfont fas fa-th-list"></i>
-        </div>
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
     
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
     
-        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
-            <i class="iconfont fas fa-book-reader"></i>
-        </div>
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
     
+<script src="/js/tools/runtime.js"></script>
+
     
-    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
-        <i class="iconfont fas fa-arrow-up"></i>
-    </div>
-</div>
-        </div>
-      </div>
-      <!-- scroll container end -->
-  </div>
-  <!-- app wrapper end -->
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
 
   
-    <div class="trm-search-popup">
-        <div class="trm-search-wrapper">
-            <div class="form trm-search-form">
-                <div class="trm-search-input-icon">
-                    <i class="iconfont fas fa-search"></i>
-                </div>
-                <input class="trm-search-input" type="text" placeholder="搜索文章...">
-                <div class="trm-search-btn-close">
-                    <i class="iconfont fas fa-times"></i>
-                </div>
-            </div>
-            <div class="trm-search-result-container">
-                <div class="trm-search-empty">
-                    请输入关键词进行搜索
-                </div>
-            </div>
-            <div class="trm-search-footer">
-                <div class="trm-search-stats"></div>
-                <ul class="trm-search-commands">
-                    <li>
-                        <kbd class="command-palette-commands-key">
-                            <svg width="15" height="15" aria-label="Escape key" role="img">
-                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="1.2">
-                                    <path
-                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
-                                    </path>
-                                </g>
-                            </svg>
-                        </kbd>
-                        <span class="command-palette-Label">to close</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<script src="/js/libs/Typed.min.js"></script>
 
-  <!-- Plugin -->
+  
+<script src="/js/plugins/typed.js" type="module"></script>
 
 
 
 
-    
-    
-<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
-
-    
-<script src="https://npm.elemecdn.com/swiper@4.5.1/dist/js/swiper.min.js"></script>
 
 
-    
-        <script src="/js/plugins/typing.js?v=2.1.10"></script>
-    
 
+
+
+<div class="post-scripts" data-swup-reload-script>
     
         
-<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="/js/tools/tocToggle.js" type="module"></script>
 
-        <script src="/js/plugins/local_search.js?v=2.1.10"></script>
-    
+<script src="/js/layouts/toc.js" type="module"></script>
 
-    <!-- 数学公式 -->
-    
-
-    <!-- 评论插件 -->
-    
-        
-
-        
-    
-
-
-
-<!-- CDN -->
-
+<script src="/js/plugins/tabs.js" type="module"></script>
 
     
-
-    
-
-    
+</div>
 
 
+    <div id="aplayer"></div>
+
+<script src="/js/libs/APlayer.min.js"></script>
 
 
-    <!-- Service Worker -->
-    
-    <!-- baidu push -->
-    
+<script src="/js/plugins/aplayer.js"></script>
 
-
-<script id="async-script" src="/js/main.js?v=2.1.10"></script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"react":{"opacity":0.8},"dialog":{"enable":true},"display":{"hOffset":30},"log":false});</script></body>
-
 </html>

