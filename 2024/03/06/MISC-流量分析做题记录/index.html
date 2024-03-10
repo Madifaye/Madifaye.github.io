@@ -18,12 +18,12 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="CTF MISC 流量分析做题记录 做题记录，主打一个简单，主要是为了列出做过的流量分析。标上难度，给各位练习流量分析提供一些方向，步骤很简略，要看详细的wp可以自行搜索 总结在后面  BUUCTF简单0x01 wireshark 简单，wireshark搜索password，直接可以找到  0x02 被嗅探的流量 简单，wireshark搜索flag{    0x03 http流量分析1 简单，">
+        <meta name="description" content="CTF MISC Wireshark流量分析做题记录与总结  从零开始的wireshark流量分析做题记录，主要是为了列出做过的流量分析。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索 总结在后面  BUUCTF简单0x01 wireshark 简单，wireshark搜索password，直接可以找到  0x02 被嗅探的流量 简单，wire">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CTF_MISC_流量分析做题记录与总结">
+<meta property="og:title" content="CTF_MISC_Wireshark流量分析做题记录与总结">
 <meta property="og:url" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="Mad1sun个人博客">
-<meta property="og:description" content="CTF MISC 流量分析做题记录 做题记录，主打一个简单，主要是为了列出做过的流量分析。标上难度，给各位练习流量分析提供一些方向，步骤很简略，要看详细的wp可以自行搜索 总结在后面  BUUCTF简单0x01 wireshark 简单，wireshark搜索password，直接可以找到  0x02 被嗅探的流量 简单，wireshark搜索flag{    0x03 http流量分析1 简单，">
+<meta property="og:description" content="CTF MISC Wireshark流量分析做题记录与总结  从零开始的wireshark流量分析做题记录，主要是为了列出做过的流量分析。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索 总结在后面  BUUCTF简单0x01 wireshark 简单，wireshark搜索password，直接可以找到  0x02 被嗅探的流量 简单，wire">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307170807418.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307214852713.png">
@@ -31,13 +31,20 @@
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307215844137.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307215943179.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307220232663.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310155921443.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310162626338.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310162851452.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310163311760.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310163430226.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310164237676.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310164729838.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307203003473.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/download.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307204942387.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307204958136.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307204857654.png">
 <meta property="article:published_time" content="2024-03-06T03:39:59.000Z">
-<meta property="article:modified_time" content="2024-03-09T12:28:57.461Z">
+<meta property="article:modified_time" content="2024-03-10T09:31:34.115Z">
 <meta property="article:author" content="Mad1sun">
 <meta property="article:tag" content="MISC-流量分析">
 <meta name="twitter:card" content="summary">
@@ -53,7 +60,7 @@
     
     <title>
         
-            CTF_MISC_流量分析做题记录与总结 -
+            CTF_MISC_Wireshark流量分析做题记录与总结 -
         
         Mad1sun&#39;s BL0G~
     </title>
@@ -534,10 +541,10 @@
             
                 
                 
-                <img src="/image/background.jpg" alt="CTF_MISC_流量分析做题记录与总结" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                <img src="/image/background.jpg" alt="CTF_MISC_Wireshark流量分析做题记录与总结" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
                 
                 <div class="w-full flex items-center absolute bottom-0 justify-start">
-                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-bold backdrop-blur-lg rounded-xl border border-border-color ">CTF_MISC_流量分析做题记录与总结</h1>
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-bold backdrop-blur-lg rounded-xl border border-border-color ">CTF_MISC_Wireshark流量分析做题记录与总结</h1>
                 </div>
             
             </div>
@@ -565,8 +572,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-03-09 20:28:57</span>
-            <span class="mobile">2024-03-09 20:28:57</span>
+            <span class="desktop">2024-03-10 17:31:34</span>
+            <span class="mobile">2024-03-10 17:31:34</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -604,12 +611,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>643 Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.1k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>2 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>4 Mins</span>
         </span>
     
     
@@ -628,8 +635,9 @@
 
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <h1 id="CTF-MISC-流量分析做题记录"><a href="#CTF-MISC-流量分析做题记录" class="headerlink" title="CTF MISC 流量分析做题记录"></a>CTF MISC 流量分析做题记录</h1><blockquote>
-<p>做题记录，主打一个简单，主要是为了列出做过的流量分析。标上难度，给各位练习流量分析提供一些方向，步骤很简略，要看详细的wp可以自行搜索</p>
+            <p>CTF MISC Wireshark流量分析做题记录与总结</p>
+<blockquote>
+<p>从零开始的wireshark流量分析做题记录，主要是为了列出做过的流量分析。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索</p>
 <p>总结在后面</p>
 </blockquote>
 <h2 id="BUUCTF"><a href="#BUUCTF" class="headerlink" title="BUUCTF"></a>BUUCTF</h2><h3 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h3><h4 id="0x01-wireshark"><a href="#0x01-wireshark" class="headerlink" title="0x01 wireshark"></a>0x01 wireshark</h4><ul>
@@ -684,8 +692,47 @@
 <p>看到一篇不错的文章：<a class="link" target="_blank" rel="noopener" href="https://www.freebuf.com/articles/terminal/195721.html">Windows ADS在渗透测试中的妙用 - FreeBuf网络安全行业门户 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
 <h3 id="中等"><a href="#中等" class="headerlink" title="中等"></a>中等</h3><h4 id="0x01-9-3-2-webshell混淆流量分析-webshell流量分析1"><a href="#0x01-9-3-2-webshell混淆流量分析-webshell流量分析1" class="headerlink" title="0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1"></a>0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</h4><ul>
-<li>webshell</li>
+<li>中等</li>
+<li>设置筛选条件<code>http</code>，先看看http的数据包都有些啥，然后看到了有些是<code>/upload/1.php</code>，应该是上传了什么东西，追踪一下http流</li>
 </ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240310155921443.png" alt="image-20240310155921443"></p>
+<p>可以看到里面传了一个z1 base64为<code>RDpcd2FtcDY0XHd3d1x1cGxvYWQ=</code>，cyberchef拿到解码后结果<code>D:\wamp64\www\upload</code>，所以z1应该是上传的路径的参数</p>
+<ul>
+<li><p>我们可以找找他上传了什么东西，先通过<code>http.request.uri contains &#39;/upload/1.php&#39;</code>筛选数据包，把数据包的length从大到小排列一下。<em>length长的想必信息一定是最多的吧！</em></p>
+</li>
+<li><p>果然我们在第一条里看到了不一样的东西，首先此包有个z1参数，解码后为<code>D:\wamp64\www\upload\6666.jpg</code>，看来上传了一个jpg，此外，还有一个新的参数z2，from hex后发现应该就是6666.jpg，里面有一行像password的，先留着<code>Th1s_1s_p4sswd_!!!</code></p>
+</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240310162626338.png" alt="image-20240310162626338"></p>
+<ul>
+<li>再追踪一下这个包，发现应该是上传了<code>6666.jpg flag.txt hello.zip</code>这些文件，可以猜测上面拿到的password是压缩包的密码</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240310162851452.png" alt="image-20240310162851452"></p>
+<ul>
+<li>目标转化成找flag.txt 或 hellp.zip了,回到<code>http.request.uri contains &#39;/upload/1.php&#39;</code>的筛选列表里，通过z1的值来判断上传的文件，看来这个1364的包就是传hello.zip的包了</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240310163311760.png" alt="image-20240310163311760"></p>
+<ul>
+<li>追踪一下，发现了PK字眼，找到<code>hello.zip</code>了，开心😄</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240310163430226.png" alt="image-20240310163430226"></p>
+<p><code>well,you need passwd!</code>也验证了我们的猜想，这个压缩包是需要密码的；并且可以看出来flag.txt应该在zip里面，接下来我们只需要把这个zip提取出来就好了。</p>
+<ul>
+<li><code>Show data as</code>选择 Raw，把最后面一段蓝色数据复制下来，在cyberchef中from hex，在输入窗口中搜索<code>504b0304</code>(zip 头)，定位后把前面的多余数据删掉即可</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240310164237676.png" alt="image-20240310164237676"></p>
+<p>点击保存为zip</p>
+<ul>
+<li>zip提取需要密码，输入密码<code>Th1s_1s_p4sswd_!!!</code>，可以看到flag.txt</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240310164729838.png" alt="image-20240310164729838"></p>
+<ul>
+<li>get the flag</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;3OpWdJ-JP6FzK-koCMAK-VkfWBq-75Un2z&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+
 <h4 id="0x03-流量分析"><a href="#0x03-流量分析" class="headerlink" title="0x03 流量分析"></a>0x03 流量分析</h4><ul>
 <li>题目hint</li>
 </ul>
@@ -728,14 +775,14 @@
             <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
                 <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> CTF_MISC_流量分析做题记录与总结</li>
+        <li><strong>Title:</strong> CTF_MISC_Wireshark流量分析做题记录与总结</li>
         <li><strong>Author:</strong> MADISUN</li>
         <li><strong>Created at
                 :</strong> 2024-03-06 11:39:59</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-03-09 20:28:57
+                    :</strong> 2024-03-10 17:31:34
             </li>
         
         <li>
@@ -800,8 +847,8 @@
             <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">CTF_MISC_流量分析做题记录与总结</div>
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95"><span class="nav-text">CTF MISC 流量分析做题记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BUUCTF"><span class="nav-text">BUUCTF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95"><span class="nav-text">简单</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-wireshark"><span class="nav-text">0x01 wireshark</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-%E8%A2%AB%E5%97%85%E6%8E%A2%E7%9A%84%E6%B5%81%E9%87%8F"><span class="nav-text">0x02 被嗅探的流量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-http%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%901"><span class="nav-text">0x03 http流量分析1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-%E6%95%B0%E6%8D%AE%E5%8C%85%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%B4%A2"><span class="nav-text">0x04 数据包中的线索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05-%E8%A2%AB%E5%81%B7%E8%B5%B0%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-text">0x05 被偷走的文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06-%E8%8D%B7%E5%85%B0%E6%95%B0%E6%8D%AE%E6%B3%84%E9%9C%B2"><span class="nav-text">0x06 荷兰数据泄露</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07-NTFS%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="nav-text">0x07 NTFS数据流</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E7%AD%89"><span class="nav-text">中等</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-9-3-2-webshell%E6%B7%B7%E6%B7%86%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-webshell%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%901"><span class="nav-text">0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x03 流量分析</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93"><span class="nav-text">CTF MISC 流量分析总结</span></a></li></ol>
+        <div class="page-title">CTF_MISC_Wireshark流量分析做题记录与总结</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BUUCTF"><span class="nav-text">BUUCTF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95"><span class="nav-text">简单</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-wireshark"><span class="nav-text">0x01 wireshark</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-%E8%A2%AB%E5%97%85%E6%8E%A2%E7%9A%84%E6%B5%81%E9%87%8F"><span class="nav-text">0x02 被嗅探的流量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-http%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%901"><span class="nav-text">0x03 http流量分析1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-%E6%95%B0%E6%8D%AE%E5%8C%85%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%B4%A2"><span class="nav-text">0x04 数据包中的线索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05-%E8%A2%AB%E5%81%B7%E8%B5%B0%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-text">0x05 被偷走的文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06-%E8%8D%B7%E5%85%B0%E6%95%B0%E6%8D%AE%E6%B3%84%E9%9C%B2"><span class="nav-text">0x06 荷兰数据泄露</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07-NTFS%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="nav-text">0x07 NTFS数据流</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E7%AD%89"><span class="nav-text">中等</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-9-3-2-webshell%E6%B7%B7%E6%B7%86%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-webshell%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%901"><span class="nav-text">0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x03 流量分析</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93"><span class="nav-text">CTF MISC 流量分析总结</span></a>
 
     </div>
 </div>
@@ -838,7 +885,7 @@
                     </span>
                     
                         <span>
-                            7.1k words in total
+                            7.6k words in total
                         </span>
                     
                 </p>
