@@ -1,6 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>2023春秋杯_Misc</title>
+    <url>/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/</url>
+    <content><![CDATA[<h1 id="谁偷了我的外卖"><a href="#谁偷了我的外卖" class="headerlink" title="谁偷了我的外卖"></a>谁偷了我的外卖</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
+<li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li>
+</ul>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
+<li>拿到手是一张jpg</li>
+</ul>
+<img lazyload src="/images/loading.svg" data-src="2023春秋杯-Misc/小凯.jpg" alt="小凯" style="zoom:33%;">
+
+<ul>
+<li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160239092.png" alt="image-20240304160239092"></p>
+<ul>
+<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
+<li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160712556.png" alt="image-20240304160712556"></p>
+<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
+<ul>
+<li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
+</ul>
+<p><strong>能发现第一个少了四个字母</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161318875.png" alt="处理文件夹文件名称"></p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>先把第2个文件开始的提取出来</strong></p>
+<ul>
+<li>base64解码，可以在末尾发现应该是压缩包</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161819149.png" alt="image-20240304161819149"></p>
+<ul>
+<li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162516972.png" alt="image-20240304162516972"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162720172.png" alt="image-20240304162720172"></p>
+<p><strong>成功拿到download.zip</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162046748.png" alt="image-20240304162046748"></p>
+<p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162147928.png" alt="image-20240304162147928"></p>
+<ul>
+<li>查看这两个文件<ul>
+<li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li>
+</ul>
+</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162805829.png" alt="image-20240304162805829"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304163109001.png" alt="image-20240304163109001"></p>
+<ul>
+<li><p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
+</li>
+<li><p>用bkcrack明文爆破出密钥</p>
+</li>
+</ul>
+<p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164507564.png" alt="image-20240304164507564"></p>
+<p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p>
+<ul>
+<li>利用密钥破解</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure></div>
+
+<p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164738068.png" alt="image-20240304164738068"></p>
+<ul>
+<li>成功提取并打开txt.galf</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164841781.png" alt="image-20240304164841781"></p>
+<ul>
+<li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h1 id="明文混淆（复现）"><a href="#明文混淆（复现）" class="headerlink" title="明文混淆（复现）"></a>明文混淆（复现）</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
+<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
+</ul>
+<h2 id="解题过程-1"><a href="#解题过程-1" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
+<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203835579.png" alt="image-20240304203835579"></p>
+<ul>
+<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203726863.png" alt="image-20240304203726863"></p>
+<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
+<ul>
+<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
+<li>bkcrack爆破</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211905788.png" alt="image-20240304211905788"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211926934.png" alt="image-20240304211926934"></p>
+<ul>
+<li>提取出shell2.php，解混淆</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304212121097.png" alt="image-20240304212121097"></p>
+<p><em>php解混淆知识有待加强:sob:</em></p>
+]]></content>
+      <categories>
+        <category>CTF做题记录</category>
+      </categories>
+      <tags>
+        <tag>MISC-压缩包</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Kioptrix Level 1.3(#4)</title>
     <url>/2024/03/05/Kioptrix-Level-1-3/</url>
     <content><![CDATA[<h1 id="Kioptrix-Level-1-3-4"><a href="#Kioptrix-Level-1-3-4" class="headerlink" title="Kioptrix Level 1.3(#4)"></a>Kioptrix Level 1.3(#4)</h1><h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h3><ul>
@@ -125,114 +233,6 @@
       </categories>
       <tags>
         <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2023春秋杯_Misc</title>
-    <url>/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/</url>
-    <content><![CDATA[<h1 id="谁偷了我的外卖"><a href="#谁偷了我的外卖" class="headerlink" title="谁偷了我的外卖"></a>谁偷了我的外卖</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
-<li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li>
-</ul>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
-<li>拿到手是一张jpg</li>
-</ul>
-<img lazyload src="/images/loading.svg" data-src="2023春秋杯-Misc/小凯.jpg" alt="小凯" style="zoom:33%;">
-
-<ul>
-<li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160239092.png" alt="image-20240304160239092"></p>
-<ul>
-<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
-<li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160712556.png" alt="image-20240304160712556"></p>
-<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
-<ul>
-<li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
-</ul>
-<p><strong>能发现第一个少了四个字母</strong></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161318875.png" alt="处理文件夹文件名称"></p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>先把第2个文件开始的提取出来</strong></p>
-<ul>
-<li>base64解码，可以在末尾发现应该是压缩包</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161819149.png" alt="image-20240304161819149"></p>
-<ul>
-<li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162516972.png" alt="image-20240304162516972"></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162720172.png" alt="image-20240304162720172"></p>
-<p><strong>成功拿到download.zip</strong></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162046748.png" alt="image-20240304162046748"></p>
-<p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162147928.png" alt="image-20240304162147928"></p>
-<ul>
-<li>查看这两个文件<ul>
-<li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li>
-</ul>
-</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162805829.png" alt="image-20240304162805829"></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304163109001.png" alt="image-20240304163109001"></p>
-<ul>
-<li><p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
-</li>
-<li><p>用bkcrack明文爆破出密钥</p>
-</li>
-</ul>
-<p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure></div>
-
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164507564.png" alt="image-20240304164507564"></p>
-<p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p>
-<ul>
-<li>利用密钥破解</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure></div>
-
-<p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164738068.png" alt="image-20240304164738068"></p>
-<ul>
-<li>成功提取并打开txt.galf</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164841781.png" alt="image-20240304164841781"></p>
-<ul>
-<li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure></div>
-
-<h1 id="明文混淆（复现）"><a href="#明文混淆（复现）" class="headerlink" title="明文混淆（复现）"></a>明文混淆（复现）</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
-<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
-</ul>
-<h2 id="解题过程-1"><a href="#解题过程-1" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
-<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203835579.png" alt="image-20240304203835579"></p>
-<ul>
-<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203726863.png" alt="image-20240304203726863"></p>
-<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
-<ul>
-<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
-<li>bkcrack爆破</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211905788.png" alt="image-20240304211905788"></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211926934.png" alt="image-20240304211926934"></p>
-<ul>
-<li>提取出shell2.php，解混淆</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304212121097.png" alt="image-20240304212121097"></p>
-<p><em>php解混淆知识有待加强:sob:</em></p>
-]]></content>
-      <categories>
-        <category>CTF做题记录</category>
-      </categories>
-      <tags>
-        <tag>MISC-压缩包</tag>
       </tags>
   </entry>
   <entry>
@@ -795,6 +795,43 @@
 <ul>
 <li>flag为<code>flag&#123;e3364403651e775bfb9b3ffa06b69994&#125;</code></li>
 </ul>
+<h4 id="0x0C-大流量分析（一）"><a href="#0x0C-大流量分析（一）" class="headerlink" title="0x0C 大流量分析（一）"></a>0x0C 大流量分析（一）</h4><ul>
+<li>简单，flag是攻击ip，利用wireshark的统计功能即可，大多是sourceip是172开头，b类的内网ip，找统计里，次数比较多的外网ip，很容易找到<code>183.129.152.140</code></li>
+</ul>
+<h4 id="0x0D-大流量分析（二）"><a href="#0x0D-大流量分析（二）" class="headerlink" title="0x0D 大流量分析（二）"></a>0x0D 大流量分析（二）</h4><ul>
+<li>简单，flag是发送钓鱼邮件的邮箱地址，在时间最早的数据包中过滤<code>smtp</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240313112441291.png" alt="image-20240313112441291"></p>
+<p>已经可以看到几个邮箱了，直觉和经验告诉我应该是<code>xsser@live.cn </code>，嗯确实是</p>
+<ul>
+<li>追踪一下<code>xsser@live.cn</code>相关tcp流，发现这样一段消息：</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240313112628888.png" alt="image-20240313112628888"></p>
+<ul>
+<li>一看就是钓鱼邮件啦，所以flag就是<code>flag&#123;xsser@live.cn&#125;</code></li>
+</ul>
+<h4 id="0x0E-大流量分析（三）"><a href="#0x0E-大流量分析（三）" class="headerlink" title="0x0E 大流量分析（三）"></a>0x0E 大流量分析（三）</h4><ul>
+<li>简单，挨个数据包找，后门一般都是.php文件，而且，一般上传了一个木马后会测试phpinfo能不能返回，利用这点写过滤<code>http.request.full_uri  contains &quot;phpinfo()&quot;</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240313114448816.png" alt="image-20240313114448816"></p>
+<ul>
+<li>找到了<code>admin.bak.php</code>，flag为<code>flag&#123;admin.bak.php&#125;</code></li>
+</ul>
+<h4 id="0x0F-秘密文件"><a href="#0x0F-秘密文件" class="headerlink" title="0x0F 秘密文件"></a>0x0F 秘密文件</h4><ul>
+<li>简单，先过滤一下ftp</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240313165812088.png" alt="image-20240313165812088"></p>
+<ul>
+<li>看到第一个包的info，像是一段话，追踪一下，直接能看到传输的文件应该是<code>6b0341642a8ddcbeb7eca927dae6d541.rar</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240313165855826.png" alt="image-20240313165855826"></p>
+<ul>
+<li>遇到这种需要提取文件的问题，可以利用wireshark自带的<code>Export Objects</code>或者直接利用<code>binwalk</code> <code>foremost</code>这类工具提取 文件。这里第一种方法无法提取，采用binwalk。</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240313170459423.png" alt="image-20240313170459423"></p>
+<ul>
+<li>拿到的rar是加密的，里面有个txt，对于rar来说最常见的就是暴力破解，ARCHPR直接破解得到密码<code>1903</code>，txt里面就是flag：<code>flag&#123;d72e5a671aa50fa5f400e5d10eedeaa5&#125;</code></li>
+</ul>
 <h3 id="中等"><a href="#中等" class="headerlink" title="中等"></a>中等</h3><h4 id="0x01-9-3-2-webshell混淆流量分析-webshell流量分析1"><a href="#0x01-9-3-2-webshell混淆流量分析-webshell流量分析1" class="headerlink" title="0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1"></a>0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</h4><ul>
 <li>中等</li>
 <li>设置筛选条件<code>http</code>，先看看http的数据包都有些啥，然后看到了有些是<code>/upload/1.php</code>，应该是上传了什么东西，追踪一下http流</li>
@@ -886,7 +923,27 @@
 <li>最终得到flag:<code>flag&#123;c84bb04a-8663-4ee2-9449-349f1ee83e11&#125; </code>，<code>%7B</code>和<code>%7D</code>分别是url编码里的<code>&#123;</code>和<code>&#125;</code></li>
 </ul>
 <p><img lazyload src="/images/loading.svg" data-src="./image-20240312225854294.png" alt="image-20240312225854294"></p>
-<h4 id="0x03-流量分析"><a href="#0x03-流量分析" class="headerlink" title="0x03 流量分析"></a>0x03 流量分析</h4><ul>
+<h4 id="0x03-sqltest"><a href="#0x03-sqltest" class="headerlink" title="0x03 sqltest"></a>0x03 sqltest</h4><ul>
+<li><p>如题，应该知道是sql盲注的攻击流量，http过滤一下发现攻击者是在利用二分法盲注攻击</p>
+</li>
+<li><p>根据上道题目最后的流量分析，积累的经验，找到成功的数据包长度，应该是1095，失败的长度是1027；攻击者在套flag之前，先会通过二分法注入找flag字段的长度，所以我们应该只过滤验证flag具体内容的数据包</p>
+</li>
+<li><p>根据上述两条编写过滤规则：<code>http.response_for.uri contains &quot;ascii(substr(((select%20concat_ws(char(94&quot; and data-text-lines</code> 。</p>
+<p><em>这里不能和上一题一样只过滤注入成功的包（长度为1095的包），因为我们需要通过一个成功和下一个的失败来判断具体的数据（例如现在的字符的ascii码是102，我们需要通过 &gt;101成功和&gt;102失败来验证ascii=102）</em></p>
+</li>
+<li><p>tshark 提取数据：</p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">tshark -nr &quot;sqltest.pcapng&quot; -Y &#x27;http.response_for.uri contains &quot;ascii(substr(((select%20concat_ws(char(94&quot; and data-text-lines&#x27; -T fields -e &quot;frame.len&quot; -e &quot;http.response_for.uri&quot; | sed &#x27;s/http.*)),%20//g&#x27;|sed &#x27;s/,%201))&gt;/,/g&#x27; &gt; ~/Desktop/sqltest.txt</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240313230051394.png" alt="image-20240313230051394"></p>
+<p>把包长度，当前字符位置，&gt;后面的数据提取出来</p>
+<ul>
+<li>python处理数据，得出flag</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/Users/madison/Desktop/sqltest.txt&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    lines = f.readlines()</span><br><span class="line">    flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    count = <span class="string">&#x27;1&#x27;</span> <span class="comment">#当前的字符顺序</span></span><br><span class="line">    result = [<span class="number">0</span>,<span class="number">201</span>] <span class="comment">#result[0]用来存放低临界值，result[1]存放高临界值</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">        ret =re.findall(<span class="string">r&#x27;\d+&#x27;</span>,line)</span><br><span class="line">        <span class="keyword">if</span>(count != ret[<span class="number">1</span>]):</span><br><span class="line">            count = ret[<span class="number">1</span>]</span><br><span class="line">            flag += <span class="built_in">chr</span>(<span class="built_in">int</span>(result[<span class="number">1</span>]))</span><br><span class="line">            result = [<span class="number">0</span>,<span class="number">201</span>]</span><br><span class="line">        <span class="keyword">if</span> ret[<span class="number">0</span>] == <span class="string">&#x27;1095&#x27;</span> <span class="keyword">and</span> <span class="built_in">int</span>(ret[<span class="number">2</span>])&gt;result[<span class="number">0</span>]:</span><br><span class="line">            result[<span class="number">0</span>] = <span class="built_in">int</span>(ret[<span class="number">2</span>])</span><br><span class="line">        <span class="keyword">elif</span> ret[<span class="number">0</span>] == <span class="string">&#x27;1027&#x27;</span> <span class="keyword">and</span> <span class="built_in">int</span>(ret[<span class="number">2</span>])&lt;result[<span class="number">1</span>]:</span><br><span class="line">            result[<span class="number">1</span>] = <span class="built_in">int</span>(ret[<span class="number">2</span>])</span><br><span class="line">    flag += <span class="built_in">chr</span>(<span class="built_in">int</span>(result[<span class="number">1</span>]))</span><br><span class="line"><span class="built_in">print</span>(flag)</span><br><span class="line"><span class="comment">#flag&#123;47edb8300ed5f9b28fc54b0d09ecdef7&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<h4 id="0x04-流量分析"><a href="#0x04-流量分析" class="headerlink" title="0x04 流量分析"></a>0x04 流量分析</h4><ul>
 <li>题目hint</li>
 </ul>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">流量分析</span><br><span class="line"></span><br><span class="line">提示一：若感觉在中间某个容易出错的步骤，若有需要检验是否正确时，可以比较MD5: 90c490781f9c320cd1ba671fcb112d1c</span><br><span class="line">提示二：注意补齐私钥格式</span><br><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br><span class="line">XXXXXXX</span><br><span class="line">-----END RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure></div>
@@ -921,20 +978,9 @@
 <blockquote>
 <p>这位师傅做这道题的心路历程和我差不多😭：<a class="link" href="https://fengyuhetao.github.io/posts/22230/#%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90">ddctf2018 · Tianji’s Blog (fengyuhetao.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
-<h1 id="CTF-MISC-流量分析总结"><a href="#CTF-MISC-流量分析总结" class="headerlink" title="CTF MISC 流量分析总结"></a>CTF MISC 流量分析总结</h1>]]></content>
+]]></content>
       <categories>
         <category>CTF做题记录</category>
-      </categories>
-      <tags>
-        <tag>MISC-流量分析</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CTF_MISC流量分析总结</title>
-    <url>/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h2 id="Wireshark-工具使用"><a href="#Wireshark-工具使用" class="headerlink" title="Wireshark 工具使用"></a>Wireshark 工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><h2 id="sql注入流量"><a href="#sql注入流量" class="headerlink" title="sql注入流量"></a>sql注入流量</h2>]]></content>
-      <categories>
-        <category>CTF知识积累</category>
       </categories>
       <tags>
         <tag>MISC-流量分析</tag>
@@ -961,6 +1007,20 @@
       </categories>
       <tags>
         <tag>Mad1sun倒霉蛋的日常</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CTF_MISC流量分析总结</title>
+    <url>/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><h2 id="sql注入流量"><a href="#sql注入流量" class="headerlink" title="sql注入流量"></a>sql注入流量</h2><h2 id="大流量"><a href="#大流量" class="headerlink" title="大流量"></a>大流量</h2><blockquote>
+<p>数据处理：<a class="link" href="https://zhuanlan.zhihu.com/p/35623547">模拟企业网络流量进行入侵溯源分析 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>CTF知识积累</category>
+      </categories>
+      <tags>
+        <tag>MISC-流量分析</tag>
       </tags>
   </entry>
   <entry>
