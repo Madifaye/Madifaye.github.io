@@ -109,133 +109,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Kioptrix Level 1.3(#4)</title>
-    <url>/2024/03/05/Kioptrix-Level-1-3/</url>
-    <content><![CDATA[<h1 id="Kioptrix-Level-1-3-4"><a href="#Kioptrix-Level-1-3-4" class="headerlink" title="Kioptrix Level 1.3(#4)"></a>Kioptrix Level 1.3(#4)</h1><h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h3><ul>
-<li>IP为<code>192.168.89.141</code></li>
-<li>nmap扫描端口以及端口服务</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-03-04 22:04 EST</span><br><span class="line">Nmap scan report for 192.168.89.141</span><br><span class="line">Host is up (0.00057s latency).</span><br><span class="line">Not shown: 39528 closed tcp ports (conn-refused), 26003 filtered tcp ports (no-response)</span><br><span class="line">PORT    STATE SERVICE     VERSION</span><br><span class="line">22/tcp  open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)</span><br><span class="line">80/tcp  open  http        Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)</span><br><span class="line">139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">445/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 32.68 seconds</span><br></pre></td></tr></table></figure></div>
-
-<p>开放了ssh、http、samba</p>
-<ul>
-<li>开放了80，那就先dirsearch扫扫看：<code>dirsearch --url http://192.168.89.141 </code>，同时浏览器访问 <code>http://192.168.89.141</code></li>
-</ul>
-<img lazyload src="/images/loading.svg" data-src="Kioptrix-Level-1-3/image-20240305204216081.png" alt="image-20240305204216081" style="zoom:50%;">
-
-<ul>
-<li>看到了smb服务且80端口需要用户信息，那么就用enum4linux扫扫</li>
-</ul>
-<blockquote>
-<p>enum4linux的介绍：<a class="link" href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<p>比较全的扫描方法：<code>enum4linux -a -o &lt;ip&gt;</code>，这里主要看他的用户信息：<code>enum4linux -U 192.168.89.141</code>(<em>主要是因为http里面涉及到用户登录</em>)</p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305203732012.png" alt="image-20240305203732012"></p>
-<p>能看到一些用户信息，主要有loneferret、john、robert、root、nobody</p>
-<ul>
-<li>80端口是个登录界面，先试试能不能简单sql注入，随便在Username里输入<code>admin</code>，在Password里输入<code>&#39;or&#39;1&#39;=&#39;1&#39;</code>，发现还真能注入:laughing:</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305204504698.png" alt="image-20240305204504698"></p>
-<ul>
-<li>回显了一个User信息，但估计这个admin用户不在members里面，简单探索到这里，看看dirsearch什么结果</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305204622062.png" alt="image-20240305204622062"></p>
-<ul>
-<li>dirsearch其实也没什么特别的，/checklogin就是一个页面没什么信息，/database.sql是个sql文件，但是我们能在里面看到有一个<code>john</code>在members表里面密码是<code>1234</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305204912967.png" alt="image-20240305204912967"></p>
-<ul>
-<li>但是拿这个密码登录失败了，看来是修改过，无所谓，我会注入，输入上面一样的注入密码<code>&#39;or&#39;1&#39;=&#39;1</code>，轻松登录，拿到了john的真实密码<code>MyNameIsJohn</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305205101931.png" alt="image-20240305205101931"></p>
-<ul>
-<li>同样的方式，看看能不能拿到root、nobody、loneferret、robert的密码，最后只拿到了robert的密码<code>ADGAdsafdfwt4gadfga==</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305205720214.png" alt="image-20240305205720214"></p>
-<ul>
-<li>ssh 连接用户，但是发现两个用户都在受限的shell里面（以john为例），根据提示<code>Type &#39;?&#39; or &#39;help&#39; to get the list of allowed commands</code>，输入一个<code>?</code>发现能执行的命令很有限：<code>cd clear echo exit help ll lpath ls</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305210854321.png" alt="image-20240305210854321"></p>
-<h4 id="信息搜集总结"><a href="#信息搜集总结" class="headerlink" title="信息搜集总结"></a>信息搜集总结</h4><ul>
-<li>发现了登录界面的sql注入，通过简单注入，拿到了john和robert两个用户的密码</li>
-<li>利用拿到的密码，通过ssh，远程登录了主机，但在受限的shell环境里，==下一步需要绕过限制，如果只是普通用户权限，还需要考虑提权==</li>
-</ul>
-<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><h4 id="echo绕过受限的shell"><a href="#echo绕过受限的shell" class="headerlink" title="echo绕过受限的shell"></a>echo绕过受限的shell</h4><ul>
-<li>这种受限的shell称为lshell(limited shell)，执行的命令优有限，但是lshell关于<code>echo</code>存在一个漏洞，我们可以通过<code>echo os.system(&quot;/bin/bash&quot;)</code>，绕过限制。</li>
-</ul>
-<blockquote>
-<p>lshell绕过限制：<a class="link" href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><em>文章中还提到了通过vim命令绕过的方法</em></p>
-</blockquote>
-<ul>
-<li>输入命令，成功绕过，可以执行很多命令，但我们还是普通用户权限</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305212141847.png" alt="image-20240305212141847"></p>
-<h4 id="查看网站源代码"><a href="#查看网站源代码" class="headerlink" title="查看网站源代码"></a>查看网站源代码</h4><ul>
-<li>回到80端口的思路，看看网站源码，试试看login的校验，于是查看<code>checklogin.php</code>，发现了mysql用户root，没有密码，好家伙😄</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305212754868.png" alt="image-20240305212754868"></p>
-<h3 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h3><h4 id="MySQLUDF提权"><a href="#MySQLUDF提权" class="headerlink" title="MySQLUDF提权"></a>MySQLUDF提权</h4><ul>
-<li>先用root登录mysql：<code>mysql -u root</code>，发现mysql的版本是<code>5.0.51a</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305213255453.png" alt="image-20240305213255453"></p>
-<p>==接下来的思路就是看看能不能利用mysql提权==</p>
-<p><em>如果是 MySQL &gt;= 5.1 的版本，必须把 UDF 的动态链接库文件放置于 MySQL 安装目录下的 lib\plugin 文件夹下文件夹下才能创建自定义函数。<strong>由于MySQL这里正好&lt;5.1,我们可以直接尝试UDF提权</strong></em></p>
-<blockquote>
-<p><a class="link" href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link" href="https://www.cnblogs.com/miansj/p/13996110.html">Mysql提权-基于Mysql的UDF提权（Linux系统） - 码小农的幸福生活 - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<ul>
-<li>在mysql数据库下输入命令<code>create function sys_eval returns string soname &#39;lib_mysqludf_sys.so&#39;;</code>，<strong>sys_eval可以执行系统命令并在屏幕上显示</strong>，<code>select * from mysql.func</code>查看是否创建成功</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305214900539.png" alt="image-20240305214900539"></p>
-<p><strong>成功创建</strong></p>
-<ul>
-<li>利用sys_eval实现系统命令，我们直接来修改root密码，<code>select sys_eval(&quot;sudo passwd root&quot;)</code>，然后直接设置root的新密码，再登录，成功拿到root</li>
-</ul>
-<p><em>后来发现sys_exec也可以执行系统命令，但是他无法打印在屏幕上，也无法交互，所以可以用来修改一些权限，比如<code>chmod u+x /bin/bash</code>或者用usermod修改用户所在的组，提权</em> </p>
-<blockquote>
-<p><a class="link" href="https://shifty0g.github.io/postsKioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link" href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240305220016944.png" alt="image-20240305220016944"></p>
-<h2 id="学习总结与参考链接"><a href="#学习总结与参考链接" class="headerlink" title="学习总结与参考链接"></a>学习总结与参考链接</h2><ul>
-<li>enum4linux的使用场景</li>
-</ul>
-<blockquote>
-<p> enum4linux的介绍：<a class="link" href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<ul>
-<li><p>涉及到80端口，可以先扫起来，然后去搜集信息，拿到shell之后，<strong>要先查看源代码</strong>，看看有没有漏掉的信息</p>
-</li>
-<li><p>受限shell绕过方法：echo</p>
-</li>
-</ul>
-<blockquote>
-<p>lshell绕过限制：<a class="link" href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<ul>
-<li>mysql中的udf提权，<strong>mysql还有很多种提权方式有待学习</strong></li>
-</ul>
-<blockquote>
-<p><a class="link" href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<ul>
-<li>参考walkthrough</li>
-</ul>
-<blockquote>
-<p><a class="link" href="https://shifty0g.github.io/posts/kioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link" href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>类OSCP靶机练习</category>
-      </categories>
-      <tags>
-        <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Kioptrix Level 1.1(#2)</title>
     <url>/2024/02/03/Kioptrix_Level_1.1/</url>
     <content><![CDATA[<h1 id="Kioptrix-Level-1-1-2"><a href="#Kioptrix-Level-1-1-2" class="headerlink" title="Kioptrix Level 1.1(#2)"></a>Kioptrix Level 1.1(#2)</h1><blockquote>
@@ -663,7 +536,7 @@
 <blockquote>
 <p>从零开始的CTF流量分析做题记录，工具主要是wireshark/tshark。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索</p>
 </blockquote>
-<h2 id="BUUCTF"><a href="#BUUCTF" class="headerlink" title="BUUCTF"></a>BUUCTF</h2><h3 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h3><h4 id="0x01-wireshark"><a href="#0x01-wireshark" class="headerlink" title="0x01 wireshark"></a>0x01 wireshark</h4><ul>
+<h2 id="BUUCTF流量分析全记录"><a href="#BUUCTF流量分析全记录" class="headerlink" title="BUUCTF流量分析全记录"></a>BUUCTF流量分析全记录</h2><h3 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h3><h4 id="0x01-wireshark"><a href="#0x01-wireshark" class="headerlink" title="0x01 wireshark"></a>0x01 wireshark</h4><ul>
 <li>简单，wireshark搜索password，直接可以找到</li>
 </ul>
 <h4 id="0x02-被嗅探的流量"><a href="#0x02-被嗅探的流量" class="headerlink" title="0x02 被嗅探的流量"></a>0x02 被嗅探的流量</h4><ul>
@@ -832,8 +705,33 @@
 <ul>
 <li>拿到的rar是加密的，里面有个txt，对于rar来说最常见的就是暴力破解，ARCHPR直接破解得到密码<code>1903</code>，txt里面就是flag：<code>flag&#123;d72e5a671aa50fa5f400e5d10eedeaa5&#125;</code></li>
 </ul>
+<h4 id="0x10-John-in-the-middle"><a href="#0x10-John-in-the-middle" class="headerlink" title="0x10 John-in-the-middle"></a>0x10 John-in-the-middle</h4><ul>
+<li>简单的套娃，流量分析的外壳，实则是个图片隐写</li>
+<li>wireshark打开发现了很多png，foremost分出来，依次丢进stegsolve，logo.png直接有flag出来</li>
+</ul>
+<h4 id="0x11【SUCTF2018】-followme"><a href="#0x11【SUCTF2018】-followme" class="headerlink" title="0x11【SUCTF2018】 followme"></a>0x11【SUCTF2018】 followme</h4><ul>
+<li>简单，过滤http之后，随便看看Post，就看到了flag</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314153648704-0401811.png" alt="image-20240314153648704"></p>
+<h4 id="0x12-CFI-CTF-2018-webLogon-capture"><a href="#0x12-CFI-CTF-2018-webLogon-capture" class="headerlink" title="0x12 [CFI-CTF 2018]webLogon capture"></a>0x12 [CFI-CTF 2018]webLogon capture</h4><ul>
+<li>简单，urldecode</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314185839330.png" alt="image-20240314185839330"></p>
+<p>urldecode:<code>CFI&#123;1ns3cur3_l0g0n&#125;</code></p>
+<p>Flag:<code>flag&#123;1ns3cur3_l0g0n&#125;</code></p>
+<h4 id="0x13-greatescape"><a href="#0x13-greatescape" class="headerlink" title="0x13 greatescape"></a>0x13 greatescape</h4><ul>
+<li>简单，看到ftp-data，先export objects-&gt;ftp-data，发现有个ssc.key，正好有很多tls数据包</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314214100048.png" alt="image-20240314214100048"></p>
+<ul>
+<li>把ssc.key存下来，放进设置tls协议的rsalists里面，然后直接可以看到多出来的http数据包，按照大小排序一下，优先查看更大的数据包，依次追踪一下，很容易在头里面发现一个flag：<code>INS&#123;OkThatWasWay2Easy&#125;</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314214242854.png" alt="image-20240314214242854"></p>
+<ul>
+<li>flag : <code>flag&#123;OkThatWasWay2Easy&#125;</code></li>
+</ul>
 <h3 id="中等"><a href="#中等" class="headerlink" title="中等"></a>中等</h3><h4 id="0x01-9-3-2-webshell混淆流量分析-webshell流量分析1"><a href="#0x01-9-3-2-webshell混淆流量分析-webshell流量分析1" class="headerlink" title="0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1"></a>0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</h4><ul>
-<li>中等</li>
+<li>中等，菜刀</li>
 <li>设置筛选条件<code>http</code>，先看看http的数据包都有些啥，然后看到了有些是<code>/upload/1.php</code>，应该是上传了什么东西，追踪一下http流</li>
 </ul>
 <p><img lazyload src="/images/loading.svg" data-src="./image-20240310155921443.png" alt="image-20240310155921443"></p>
@@ -978,9 +876,113 @@
 <blockquote>
 <p>这位师傅做这道题的心路历程和我差不多😭：<a class="link" href="https://fengyuhetao.github.io/posts/22230/#%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90">ddctf2018 · Tianji’s Blog (fengyuhetao.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
+<h4 id="0x05-安洵杯2019-Attack"><a href="#0x05-安洵杯2019-Attack" class="headerlink" title="0x05 [安洵杯2019] Attack"></a>0x05 [安洵杯2019] Attack</h4><ul>
+<li>中等</li>
+<li>看到了upload，先binwalk看看里面有啥东西，能看到里面有个zip，zip里面有个flag.txt，但是zip是加密的，用foremost把zip提取出来</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314184142874.png" alt="image-20240314184142874"></p>
+<ul>
+<li>丢进010先看看是不是伪加密，可惜不是伪加密，同时看到flag.txt有一个注释：<code>这可是administrator的秘密，怎么能随便给人看呢？</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314184428929.png" alt="image-20240314184428929"></p>
+<ul>
+<li>回到wireshark，export objects-&gt;http，看到里面有一个lsass.dmp</li>
+</ul>
+<p><strong>lsass是windows系统的一个进程，用于本地安全和登陆策略。mimikatz可以从 lsass.exe 里获取windows处于active状态账号明文密码。本题的lsass.dmp就是内存运行的镜像，也可以提取到账户密码</strong></p>
+<p>结合注释，应该是需要通过mimikatz提取这个dump里面的账户密码</p>
+<blockquote>
+<p>[BUU MISC刷题记录 <a class="link" href="https://www.cnblogs.com/yunqian2017/p/14992169.html">安洵杯 2019]Attack - 云千 - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<p>Mimikatz：<a class="link" href="https://github.com/gentilkiwi/mimikatz">gentilkiwi/mimikatz: A little tool to play with Windows security (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>mimikatz提取</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">//提升权限</span><br><span class="line">privilege::debug</span><br><span class="line">//载入dmp文件</span><br><span class="line">sekurlsa::minidump lsass.dmp</span><br><span class="line">//读取登陆密码</span><br><span class="line">sekurlsa::logonpasswords full</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314185043343.png" alt="image-20240314185043343"></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">Username：Administrator</span><br><span class="line">Password: W3lc0meToD0g3</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>用password打开压缩包，打开flag.txt，最底部是flag：<code>flag&#123;3466b11de8894198af3636c5bd1efce2&#125;</code></li>
+</ul>
+<h4 id="0x06-BSidesSF2019-table-tennis"><a href="#0x06-BSidesSF2019-table-tennis" class="headerlink" title="0x06 [BSidesSF2019]table-tennis"></a>0x06 [BSidesSF2019]table-tennis</h4><ul>
+<li>中等，icmp数据处理</li>
+<li>发现icmp有data，里面有一些数据，能看到&lt;html&gt;等信息</li>
+<li>用tshark把data先提取出来：</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">tshark -nr &quot;tabletennis.pcapng&quot; -Y &#x27;icmp.resp_to&#x27; -T fields -e &quot;data.data&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>发现每个包里面有很多重复数据，一个包里面大概有5份重复数据，一个icmp包data数据块一共是40bytes，里面一份数据是8bytes</p>
+<ul>
+<li>利用cut只提取第二个8bytes：<code>cut -c 17,32</code>，-c表示按照字符切割，前面有16个字符（8bytes），故从第17位开始往后提取16个到第32位；再xxd把hex转成文本</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">tshark -nr &quot;tabletennis.pcapng&quot; -Y &#x27;icmp.resp_to&#x27; -T fields -e &quot;data.data&quot; |cut -c 17-32 | xxd -r -p</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314225618844.png" alt="image-20240314225618844"></p>
+<p>很容易注意到script标签下的这行数据：<code>Q1RGe0p1c3RBUzBuZ0FiMHV0UDFuZ1Awbmd9</code>，base64解码</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314225708405.png" alt="image-20240314225708405"></p>
+<ul>
+<li>得到flag:<code>flag&#123;JustAS0ngAb0utP1ngP0ng&#125;</code></li>
+</ul>
+<h3 id="困难"><a href="#困难" class="headerlink" title="困难"></a>困难</h3><h4 id="0x01-蜘蛛侠呀"><a href="#0x01-蜘蛛侠呀" class="headerlink" title="0x01 蜘蛛侠呀"></a>0x01 蜘蛛侠呀</h4><ul>
+<li><p>困难在 很难猜到后面的gif隐写</p>
+</li>
+<li><p>wireshark里面主要是icmp包，查看这些icmp，发现data里面类似base64编码，用tshark提取出来</p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">tshark -nr &quot;out.pcap&quot; -Y &#x27;icmp.resp_to&#x27; -T fields -e &quot;data.data&quot;|xxd -r -p |sed &#x27;s/^.*\$//g&#x27; |awk &#x27;NR%2 == 0&#x27; &gt; zhishuxia_ssh.txt</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>-Y</strong> 过滤的是reply包，**-e** 提取data，<strong>xxd</strong>是把提取的hex解码，<strong>sed</strong>删除前面多余的<code>$$START$$</code>，取出来的消息每条有一个重复，利用<strong>awk</strong>每隔一行打印（NR为行号，模2为0实现每隔一行打印）</p>
+<p><em>开头的—-BEGIN CERTIFICATE—–和结尾的end一开始让我以为是什么证书文件，对应数据包中也有ssh，以为是要通过证书解密ssh，发现在wireshark中ssh不支持这么做，尝试无果</em></p>
+<ul>
+<li>把多余的信息（certificate的标头和标尾）去除后，直接拿去base64解码，得到了一个zip文件</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314205235462.png" alt="image-20240314205235462"></p>
+<ul>
+<li>zip里面是一个<code>flag.gif</code>，开始gif隐写了，这里是时间轴隐写</li>
+</ul>
+<blockquote>
+<p>关于gif隐写 <a class="link" href="https://ctf-wiki.org/misc/picture/gif/">GIF - CTF Wiki (ctf-wiki.org) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li><code>identify -format &quot;%T &quot; flag.gif </code>查看每一帧的时间间隔，发现是20和50交替</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314205812516.png" alt="image-20240314205812516"></p>
+<ul>
+<li>利用sed，把20转成0，50转成1；利用tr删除空格：<code>identify -format &quot;%T &quot; flag.gif | sed &#39;s/20/0/g&#39; | sed &#39;s/50/1/g&#39;|tr -d &#39; &#39;</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314210137379.png" alt="image-20240314210137379"></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">011011010100010000110101010111110011000101110100</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>cyberchef-from binary</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314210248126.png" alt="image-20240314210248126"></p>
+<ul>
+<li>flag为<code>mD5_1t</code> 经过md5后的密文，那么再加个md5</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314210354365.png" alt="image-20240314210354365"></p>
+<ul>
+<li>包上flag:<code>flag&#123;f0f1003afe4ae8ce4aa8e8487a8ab3b6&#125;</code></li>
+</ul>
+<p><em>这道题，挺有意思的，卡在gif隐写，我不是很熟😭</em></p>
 ]]></content>
       <categories>
         <category>CTF做题记录</category>
+      </categories>
+      <tags>
+        <tag>MISC-流量分析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CTF_MISC流量分析总结</title>
+    <url>/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><h2 id="sql注入流量"><a href="#sql注入流量" class="headerlink" title="sql注入流量"></a>sql注入流量</h2><h2 id="大流量"><a href="#大流量" class="headerlink" title="大流量"></a>大流量</h2><blockquote>
+<p>数据处理：<a class="link" href="https://zhuanlan.zhihu.com/p/35623547">模拟企业网络流量进行入侵溯源分析 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>CTF知识积累</category>
       </categories>
       <tags>
         <tag>MISC-流量分析</tag>
@@ -1010,20 +1012,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CTF_MISC流量分析总结</title>
-    <url>/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><h2 id="sql注入流量"><a href="#sql注入流量" class="headerlink" title="sql注入流量"></a>sql注入流量</h2><h2 id="大流量"><a href="#大流量" class="headerlink" title="大流量"></a>大流量</h2><blockquote>
-<p>数据处理：<a class="link" href="https://zhuanlan.zhihu.com/p/35623547">模拟企业网络流量进行入侵溯源分析 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>CTF知识积累</category>
-      </categories>
-      <tags>
-        <tag>MISC-流量分析</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Mad1sun&#39;s_diary</title>
     <url>/2024/03/04/Mad1sun-s-diary/</url>
     <content><![CDATA[
@@ -1042,5 +1030,132 @@
       <categories>
         <category>Mad1sun的生活小日记</category>
       </categories>
+  </entry>
+  <entry>
+    <title>Kioptrix Level 1.3(#4)</title>
+    <url>/2024/03/05/Kioptrix-Level-1-3/</url>
+    <content><![CDATA[<h1 id="Kioptrix-Level-1-3-4"><a href="#Kioptrix-Level-1-3-4" class="headerlink" title="Kioptrix Level 1.3(#4)"></a>Kioptrix Level 1.3(#4)</h1><h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h3><ul>
+<li>IP为<code>192.168.89.141</code></li>
+<li>nmap扫描端口以及端口服务</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-03-04 22:04 EST</span><br><span class="line">Nmap scan report for 192.168.89.141</span><br><span class="line">Host is up (0.00057s latency).</span><br><span class="line">Not shown: 39528 closed tcp ports (conn-refused), 26003 filtered tcp ports (no-response)</span><br><span class="line">PORT    STATE SERVICE     VERSION</span><br><span class="line">22/tcp  open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)</span><br><span class="line">80/tcp  open  http        Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)</span><br><span class="line">139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">445/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 32.68 seconds</span><br></pre></td></tr></table></figure></div>
+
+<p>开放了ssh、http、samba</p>
+<ul>
+<li>开放了80，那就先dirsearch扫扫看：<code>dirsearch --url http://192.168.89.141 </code>，同时浏览器访问 <code>http://192.168.89.141</code></li>
+</ul>
+<img lazyload src="/images/loading.svg" data-src="Kioptrix-Level-1-3/image-20240305204216081.png" alt="image-20240305204216081" style="zoom:50%;">
+
+<ul>
+<li>看到了smb服务且80端口需要用户信息，那么就用enum4linux扫扫</li>
+</ul>
+<blockquote>
+<p>enum4linux的介绍：<a class="link" href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<p>比较全的扫描方法：<code>enum4linux -a -o &lt;ip&gt;</code>，这里主要看他的用户信息：<code>enum4linux -U 192.168.89.141</code>(<em>主要是因为http里面涉及到用户登录</em>)</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305203732012.png" alt="image-20240305203732012"></p>
+<p>能看到一些用户信息，主要有loneferret、john、robert、root、nobody</p>
+<ul>
+<li>80端口是个登录界面，先试试能不能简单sql注入，随便在Username里输入<code>admin</code>，在Password里输入<code>&#39;or&#39;1&#39;=&#39;1&#39;</code>，发现还真能注入:laughing:</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305204504698.png" alt="image-20240305204504698"></p>
+<ul>
+<li>回显了一个User信息，但估计这个admin用户不在members里面，简单探索到这里，看看dirsearch什么结果</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305204622062.png" alt="image-20240305204622062"></p>
+<ul>
+<li>dirsearch其实也没什么特别的，/checklogin就是一个页面没什么信息，/database.sql是个sql文件，但是我们能在里面看到有一个<code>john</code>在members表里面密码是<code>1234</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305204912967.png" alt="image-20240305204912967"></p>
+<ul>
+<li>但是拿这个密码登录失败了，看来是修改过，无所谓，我会注入，输入上面一样的注入密码<code>&#39;or&#39;1&#39;=&#39;1</code>，轻松登录，拿到了john的真实密码<code>MyNameIsJohn</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305205101931.png" alt="image-20240305205101931"></p>
+<ul>
+<li>同样的方式，看看能不能拿到root、nobody、loneferret、robert的密码，最后只拿到了robert的密码<code>ADGAdsafdfwt4gadfga==</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305205720214.png" alt="image-20240305205720214"></p>
+<ul>
+<li>ssh 连接用户，但是发现两个用户都在受限的shell里面（以john为例），根据提示<code>Type &#39;?&#39; or &#39;help&#39; to get the list of allowed commands</code>，输入一个<code>?</code>发现能执行的命令很有限：<code>cd clear echo exit help ll lpath ls</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305210854321.png" alt="image-20240305210854321"></p>
+<h4 id="信息搜集总结"><a href="#信息搜集总结" class="headerlink" title="信息搜集总结"></a>信息搜集总结</h4><ul>
+<li>发现了登录界面的sql注入，通过简单注入，拿到了john和robert两个用户的密码</li>
+<li>利用拿到的密码，通过ssh，远程登录了主机，但在受限的shell环境里，==下一步需要绕过限制，如果只是普通用户权限，还需要考虑提权==</li>
+</ul>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><h4 id="echo绕过受限的shell"><a href="#echo绕过受限的shell" class="headerlink" title="echo绕过受限的shell"></a>echo绕过受限的shell</h4><ul>
+<li>这种受限的shell称为lshell(limited shell)，执行的命令优有限，但是lshell关于<code>echo</code>存在一个漏洞，我们可以通过<code>echo os.system(&quot;/bin/bash&quot;)</code>，绕过限制。</li>
+</ul>
+<blockquote>
+<p>lshell绕过限制：<a class="link" href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><em>文章中还提到了通过vim命令绕过的方法</em></p>
+</blockquote>
+<ul>
+<li>输入命令，成功绕过，可以执行很多命令，但我们还是普通用户权限</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305212141847.png" alt="image-20240305212141847"></p>
+<h4 id="查看网站源代码"><a href="#查看网站源代码" class="headerlink" title="查看网站源代码"></a>查看网站源代码</h4><ul>
+<li>回到80端口的思路，看看网站源码，试试看login的校验，于是查看<code>checklogin.php</code>，发现了mysql用户root，没有密码，好家伙😄</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305212754868.png" alt="image-20240305212754868"></p>
+<h3 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h3><h4 id="MySQLUDF提权"><a href="#MySQLUDF提权" class="headerlink" title="MySQLUDF提权"></a>MySQLUDF提权</h4><ul>
+<li>先用root登录mysql：<code>mysql -u root</code>，发现mysql的版本是<code>5.0.51a</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305213255453.png" alt="image-20240305213255453"></p>
+<p>==接下来的思路就是看看能不能利用mysql提权==</p>
+<p><em>如果是 MySQL &gt;= 5.1 的版本，必须把 UDF 的动态链接库文件放置于 MySQL 安装目录下的 lib\plugin 文件夹下文件夹下才能创建自定义函数。<strong>由于MySQL这里正好&lt;5.1,我们可以直接尝试UDF提权</strong></em></p>
+<blockquote>
+<p><a class="link" href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link" href="https://www.cnblogs.com/miansj/p/13996110.html">Mysql提权-基于Mysql的UDF提权（Linux系统） - 码小农的幸福生活 - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li>在mysql数据库下输入命令<code>create function sys_eval returns string soname &#39;lib_mysqludf_sys.so&#39;;</code>，<strong>sys_eval可以执行系统命令并在屏幕上显示</strong>，<code>select * from mysql.func</code>查看是否创建成功</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305214900539.png" alt="image-20240305214900539"></p>
+<p><strong>成功创建</strong></p>
+<ul>
+<li>利用sys_eval实现系统命令，我们直接来修改root密码，<code>select sys_eval(&quot;sudo passwd root&quot;)</code>，然后直接设置root的新密码，再登录，成功拿到root</li>
+</ul>
+<p><em>后来发现sys_exec也可以执行系统命令，但是他无法打印在屏幕上，也无法交互，所以可以用来修改一些权限，比如<code>chmod u+x /bin/bash</code>或者用usermod修改用户所在的组，提权</em> </p>
+<blockquote>
+<p><a class="link" href="https://shifty0g.github.io/postsKioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link" href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240305220016944.png" alt="image-20240305220016944"></p>
+<h2 id="学习总结与参考链接"><a href="#学习总结与参考链接" class="headerlink" title="学习总结与参考链接"></a>学习总结与参考链接</h2><ul>
+<li>enum4linux的使用场景</li>
+</ul>
+<blockquote>
+<p> enum4linux的介绍：<a class="link" href="https://blog.csdn.net/qq_63844103/article/details/127219997">【网安神器篇】——enum4linux枚举工具-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li><p>涉及到80端口，可以先扫起来，然后去搜集信息，拿到shell之后，<strong>要先查看源代码</strong>，看看有没有漏掉的信息</p>
+</li>
+<li><p>受限shell绕过方法：echo</p>
+</li>
+</ul>
+<blockquote>
+<p>lshell绕过限制：<a class="link" href="https://www.aldeid.com/wiki/Lshell">Lshell - 醛 (aldeid.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li>mysql中的udf提权，<strong>mysql还有很多种提权方式有待学习</strong></li>
+</ul>
+<blockquote>
+<p><a class="link" href="https://www.sqlsec.com/2020/11/mysql.html#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%9D%83%E9%99%90">MySQL 漏洞利用与提权 | 国光 (sqlsec.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li>参考walkthrough</li>
+</ul>
+<blockquote>
+<p><a class="link" href="https://shifty0g.github.io/posts/kioptrix-level-4/">Kioptrix Level 1.3 (#4) - Vulnhub | @shifty0g <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link" href="https://juejin.cn/post/7291291581574529078#heading-6">【Vulnhub通关】Kioptrix: Level 1.3 (#4) - 掘金 (juejin.cn) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>类OSCP靶机练习</category>
+      </categories>
+      <tags>
+        <tag>vulnhub</tag>
+      </tags>
   </entry>
 </search>

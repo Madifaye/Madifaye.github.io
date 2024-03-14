@@ -18,12 +18,12 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="CTF MISC 流量分析做题记录  从零开始的CTF流量分析做题记录，工具主要是wireshark&#x2F;tshark。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索  BUUCTF简单0x01 wireshark 简单，wireshark搜索password，直接可以找到  0x02 被嗅探的流量 简单，wireshark搜索flag{    0">
+        <meta name="description" content="CTF MISC 流量分析做题记录  从零开始的CTF流量分析做题记录，工具主要是wireshark&#x2F;tshark。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索  BUUCTF流量分析全记录简单0x01 wireshark 简单，wireshark搜索password，直接可以找到  0x02 被嗅探的流量 简单，wireshark搜索fla">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CTF_MISC流量分析做题记录">
 <meta property="og:url" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="Mad1sun个人博客">
-<meta property="og:description" content="CTF MISC 流量分析做题记录  从零开始的CTF流量分析做题记录，工具主要是wireshark&#x2F;tshark。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索  BUUCTF简单0x01 wireshark 简单，wireshark搜索password，直接可以找到  0x02 被嗅探的流量 简单，wireshark搜索flag{    0">
+<meta property="og:description" content="CTF MISC 流量分析做题记录  从零开始的CTF流量分析做题记录，工具主要是wireshark&#x2F;tshark。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索  BUUCTF流量分析全记录简单0x01 wireshark 简单，wireshark搜索password，直接可以找到  0x02 被嗅探的流量 简单，wireshark搜索fla">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307170807418.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307214852713.png">
@@ -47,6 +47,10 @@
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240313165812088.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240313165855826.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240313170459423.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314153648704-0401811.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314185839330.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314214100048.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314214242854.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310155921443.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310162626338.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240310162851452.png">
@@ -63,8 +67,18 @@
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307204942387.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307204958136.png">
 <meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240307204857654.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314184142874.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314184428929.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314185043343.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314225618844.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314225708405.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314205235462.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314205812516.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314210137379.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314210248126.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/03/06/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/image-20240314210354365.png">
 <meta property="article:published_time" content="2024-03-06T03:39:59.000Z">
-<meta property="article:modified_time" content="2024-03-13T15:06:26.240Z">
+<meta property="article:modified_time" content="2024-03-14T14:58:53.738Z">
 <meta property="article:author" content="Mad1sun">
 <meta property="article:tag" content="MISC-流量分析">
 <meta name="twitter:card" content="summary">
@@ -592,8 +606,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-03-13 23:06:26</span>
-            <span class="mobile">2024-03-13 23:06:26</span>
+            <span class="desktop">2024-03-14 22:58:53</span>
+            <span class="mobile">2024-03-14 22:58:53</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -631,12 +645,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.4k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.4k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>13 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>18 Mins</span>
         </span>
     
     
@@ -659,7 +673,7 @@
 <blockquote>
 <p>从零开始的CTF流量分析做题记录，工具主要是wireshark/tshark。标上难度，给各位CTFer练习流量分析提供一些方向，简单的题目步骤很简略，要看详细的wp可以自行搜索</p>
 </blockquote>
-<h2 id="BUUCTF"><a href="#BUUCTF" class="headerlink" title="BUUCTF"></a>BUUCTF</h2><h3 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h3><h4 id="0x01-wireshark"><a href="#0x01-wireshark" class="headerlink" title="0x01 wireshark"></a>0x01 wireshark</h4><ul>
+<h2 id="BUUCTF流量分析全记录"><a href="#BUUCTF流量分析全记录" class="headerlink" title="BUUCTF流量分析全记录"></a>BUUCTF流量分析全记录</h2><h3 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h3><h4 id="0x01-wireshark"><a href="#0x01-wireshark" class="headerlink" title="0x01 wireshark"></a>0x01 wireshark</h4><ul>
 <li>简单，wireshark搜索password，直接可以找到</li>
 </ul>
 <h4 id="0x02-被嗅探的流量"><a href="#0x02-被嗅探的流量" class="headerlink" title="0x02 被嗅探的流量"></a>0x02 被嗅探的流量</h4><ul>
@@ -828,8 +842,33 @@
 <ul>
 <li>拿到的rar是加密的，里面有个txt，对于rar来说最常见的就是暴力破解，ARCHPR直接破解得到密码<code>1903</code>，txt里面就是flag：<code>flag&#123;d72e5a671aa50fa5f400e5d10eedeaa5&#125;</code></li>
 </ul>
+<h4 id="0x10-John-in-the-middle"><a href="#0x10-John-in-the-middle" class="headerlink" title="0x10 John-in-the-middle"></a>0x10 John-in-the-middle</h4><ul>
+<li>简单的套娃，流量分析的外壳，实则是个图片隐写</li>
+<li>wireshark打开发现了很多png，foremost分出来，依次丢进stegsolve，logo.png直接有flag出来</li>
+</ul>
+<h4 id="0x11【SUCTF2018】-followme"><a href="#0x11【SUCTF2018】-followme" class="headerlink" title="0x11【SUCTF2018】 followme"></a>0x11【SUCTF2018】 followme</h4><ul>
+<li>简单，过滤http之后，随便看看Post，就看到了flag</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314153648704-0401811.png" alt="image-20240314153648704"></p>
+<h4 id="0x12-CFI-CTF-2018-webLogon-capture"><a href="#0x12-CFI-CTF-2018-webLogon-capture" class="headerlink" title="0x12 [CFI-CTF 2018]webLogon capture"></a>0x12 [CFI-CTF 2018]webLogon capture</h4><ul>
+<li>简单，urldecode</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314185839330.png" alt="image-20240314185839330"></p>
+<p>urldecode:<code>CFI&#123;1ns3cur3_l0g0n&#125;</code></p>
+<p>Flag:<code>flag&#123;1ns3cur3_l0g0n&#125;</code></p>
+<h4 id="0x13-greatescape"><a href="#0x13-greatescape" class="headerlink" title="0x13 greatescape"></a>0x13 greatescape</h4><ul>
+<li>简单，看到ftp-data，先export objects-&gt;ftp-data，发现有个ssc.key，正好有很多tls数据包</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314214100048.png" alt="image-20240314214100048"></p>
+<ul>
+<li>把ssc.key存下来，放进设置tls协议的rsalists里面，然后直接可以看到多出来的http数据包，按照大小排序一下，优先查看更大的数据包，依次追踪一下，很容易在头里面发现一个flag：<code>INS&#123;OkThatWasWay2Easy&#125;</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314214242854.png" alt="image-20240314214242854"></p>
+<ul>
+<li>flag : <code>flag&#123;OkThatWasWay2Easy&#125;</code></li>
+</ul>
 <h3 id="中等"><a href="#中等" class="headerlink" title="中等"></a>中等</h3><h4 id="0x01-9-3-2-webshell混淆流量分析-webshell流量分析1"><a href="#0x01-9-3-2-webshell混淆流量分析-webshell流量分析1" class="headerlink" title="0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1"></a>0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</h4><ul>
-<li>中等</li>
+<li>中等，菜刀</li>
 <li>设置筛选条件<code>http</code>，先看看http的数据包都有些啥，然后看到了有些是<code>/upload/1.php</code>，应该是上传了什么东西，追踪一下http流</li>
 </ul>
 <p><img lazyload src="/images/loading.svg" data-src="./image-20240310155921443.png" alt="image-20240310155921443"></p>
@@ -974,6 +1013,96 @@
 <blockquote>
 <p>这位师傅做这道题的心路历程和我差不多😭：<a class="link" target="_blank" rel="noopener" href="https://fengyuhetao.github.io/posts/22230/#%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90">ddctf2018 · Tianji’s Blog (fengyuhetao.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
+<h4 id="0x05-安洵杯2019-Attack"><a href="#0x05-安洵杯2019-Attack" class="headerlink" title="0x05 [安洵杯2019] Attack"></a>0x05 [安洵杯2019] Attack</h4><ul>
+<li>中等</li>
+<li>看到了upload，先binwalk看看里面有啥东西，能看到里面有个zip，zip里面有个flag.txt，但是zip是加密的，用foremost把zip提取出来</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314184142874.png" alt="image-20240314184142874"></p>
+<ul>
+<li>丢进010先看看是不是伪加密，可惜不是伪加密，同时看到flag.txt有一个注释：<code>这可是administrator的秘密，怎么能随便给人看呢？</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314184428929.png" alt="image-20240314184428929"></p>
+<ul>
+<li>回到wireshark，export objects-&gt;http，看到里面有一个lsass.dmp</li>
+</ul>
+<p><strong>lsass是windows系统的一个进程，用于本地安全和登陆策略。mimikatz可以从 lsass.exe 里获取windows处于active状态账号明文密码。本题的lsass.dmp就是内存运行的镜像，也可以提取到账户密码</strong></p>
+<p>结合注释，应该是需要通过mimikatz提取这个dump里面的账户密码</p>
+<blockquote>
+<p>[BUU MISC刷题记录 <a class="link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yunqian2017/p/14992169.html">安洵杯 2019]Attack - 云千 - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<p>Mimikatz：<a class="link" target="_blank" rel="noopener" href="https://github.com/gentilkiwi/mimikatz">gentilkiwi/mimikatz: A little tool to play with Windows security (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>mimikatz提取</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//提升权限</span><br><span class="line">privilege::debug</span><br><span class="line">//载入dmp文件</span><br><span class="line">sekurlsa::minidump lsass.dmp</span><br><span class="line">//读取登陆密码</span><br><span class="line">sekurlsa::logonpasswords full</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314185043343.png" alt="image-20240314185043343"></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Username：Administrator</span><br><span class="line">Password: W3lc0meToD0g3</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>用password打开压缩包，打开flag.txt，最底部是flag：<code>flag&#123;3466b11de8894198af3636c5bd1efce2&#125;</code></li>
+</ul>
+<h4 id="0x06-BSidesSF2019-table-tennis"><a href="#0x06-BSidesSF2019-table-tennis" class="headerlink" title="0x06 [BSidesSF2019]table-tennis"></a>0x06 [BSidesSF2019]table-tennis</h4><ul>
+<li>中等，icmp数据处理</li>
+<li>发现icmp有data，里面有一些数据，能看到&lt;html&gt;等信息</li>
+<li>用tshark把data先提取出来：</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tshark -nr &quot;tabletennis.pcapng&quot; -Y &#x27;icmp.resp_to&#x27; -T fields -e &quot;data.data&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>发现每个包里面有很多重复数据，一个包里面大概有5份重复数据，一个icmp包data数据块一共是40bytes，里面一份数据是8bytes</p>
+<ul>
+<li>利用cut只提取第二个8bytes：<code>cut -c 17,32</code>，-c表示按照字符切割，前面有16个字符（8bytes），故从第17位开始往后提取16个到第32位；再xxd把hex转成文本</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tshark -nr &quot;tabletennis.pcapng&quot; -Y &#x27;icmp.resp_to&#x27; -T fields -e &quot;data.data&quot; |cut -c 17-32 | xxd -r -p</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314225618844.png" alt="image-20240314225618844"></p>
+<p>很容易注意到script标签下的这行数据：<code>Q1RGe0p1c3RBUzBuZ0FiMHV0UDFuZ1Awbmd9</code>，base64解码</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314225708405.png" alt="image-20240314225708405"></p>
+<ul>
+<li>得到flag:<code>flag&#123;JustAS0ngAb0utP1ngP0ng&#125;</code></li>
+</ul>
+<h3 id="困难"><a href="#困难" class="headerlink" title="困难"></a>困难</h3><h4 id="0x01-蜘蛛侠呀"><a href="#0x01-蜘蛛侠呀" class="headerlink" title="0x01 蜘蛛侠呀"></a>0x01 蜘蛛侠呀</h4><ul>
+<li><p>困难在 很难猜到后面的gif隐写</p>
+</li>
+<li><p>wireshark里面主要是icmp包，查看这些icmp，发现data里面类似base64编码，用tshark提取出来</p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tshark -nr &quot;out.pcap&quot; -Y &#x27;icmp.resp_to&#x27; -T fields -e &quot;data.data&quot;|xxd -r -p |sed &#x27;s/^.*\$//g&#x27; |awk &#x27;NR%2 == 0&#x27; &gt; zhishuxia_ssh.txt</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>-Y</strong> 过滤的是reply包，**-e** 提取data，<strong>xxd</strong>是把提取的hex解码，<strong>sed</strong>删除前面多余的<code>$$START$$</code>，取出来的消息每条有一个重复，利用<strong>awk</strong>每隔一行打印（NR为行号，模2为0实现每隔一行打印）</p>
+<p><em>开头的—-BEGIN CERTIFICATE—–和结尾的end一开始让我以为是什么证书文件，对应数据包中也有ssh，以为是要通过证书解密ssh，发现在wireshark中ssh不支持这么做，尝试无果</em></p>
+<ul>
+<li>把多余的信息（certificate的标头和标尾）去除后，直接拿去base64解码，得到了一个zip文件</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314205235462.png" alt="image-20240314205235462"></p>
+<ul>
+<li>zip里面是一个<code>flag.gif</code>，开始gif隐写了，这里是时间轴隐写</li>
+</ul>
+<blockquote>
+<p>关于gif隐写 <a class="link" target="_blank" rel="noopener" href="https://ctf-wiki.org/misc/picture/gif/">GIF - CTF Wiki (ctf-wiki.org) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li><code>identify -format &quot;%T &quot; flag.gif </code>查看每一帧的时间间隔，发现是20和50交替</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314205812516.png" alt="image-20240314205812516"></p>
+<ul>
+<li>利用sed，把20转成0，50转成1；利用tr删除空格：<code>identify -format &quot;%T &quot; flag.gif | sed &#39;s/20/0/g&#39; | sed &#39;s/50/1/g&#39;|tr -d &#39; &#39;</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314210137379.png" alt="image-20240314210137379"></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">011011010100010000110101010111110011000101110100</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>cyberchef-from binary</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314210248126.png" alt="image-20240314210248126"></p>
+<ul>
+<li>flag为<code>mD5_1t</code> 经过md5后的密文，那么再加个md5</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240314210354365.png" alt="image-20240314210354365"></p>
+<ul>
+<li>包上flag:<code>flag&#123;f0f1003afe4ae8ce4aa8e8487a8ab3b6&#125;</code></li>
+</ul>
+<p><em>这道题，挺有意思的，卡在gif隐写，我不是很熟😭</em></p>
 
         </div>
 
@@ -988,7 +1117,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-03-13 23:06:26
+                    :</strong> 2024-03-14 22:58:53
             </li>
         
         <li>
@@ -1069,7 +1198,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">CTF_MISC流量分析做题记录</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BUUCTF"><span class="nav-text">BUUCTF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95"><span class="nav-text">简单</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-wireshark"><span class="nav-text">0x01 wireshark</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-%E8%A2%AB%E5%97%85%E6%8E%A2%E7%9A%84%E6%B5%81%E9%87%8F"><span class="nav-text">0x02 被嗅探的流量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-http%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%901"><span class="nav-text">0x03 http流量分析1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-%E6%95%B0%E6%8D%AE%E5%8C%85%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%B4%A2"><span class="nav-text">0x04 数据包中的线索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05-%E8%A2%AB%E5%81%B7%E8%B5%B0%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-text">0x05 被偷走的文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06-%E8%8D%B7%E5%85%B0%E6%95%B0%E6%8D%AE%E6%B3%84%E9%9C%B2"><span class="nav-text">0x06 荷兰数据泄露</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07-NTFS%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="nav-text">0x07 NTFS数据流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x08-9-4-1-%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x08 [9.4.1 鼠标流量分析] 鼠标流量分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x09-9-4-2-%E9%94%AE%E7%9B%98%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-%E9%94%AE%E7%9B%98%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x09 [9.4.2 键盘流量分析]键盘流量分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0A-NewStarCTF-2023-%E5%85%AC%E5%BC%80%E8%B5%9B%E9%81%93-%E6%B5%81%E9%87%8F%EF%BC%81%E9%B2%A8%E9%B1%BC%EF%BC%81"><span class="nav-text">0x0A [NewStarCTF 2023 公开赛道]流量！鲨鱼！</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0B-9-3-3-TLS%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-TLS%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x0B [9.3.3 TLS流量分析]TLS流量分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0C-%E5%A4%A7%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89"><span class="nav-text">0x0C 大流量分析（一）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0D-%E5%A4%A7%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89"><span class="nav-text">0x0D 大流量分析（二）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0E-%E5%A4%A7%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89"><span class="nav-text">0x0E 大流量分析（三）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0F-%E7%A7%98%E5%AF%86%E6%96%87%E4%BB%B6"><span class="nav-text">0x0F 秘密文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E7%AD%89"><span class="nav-text">中等</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-9-3-2-webshell%E6%B7%B7%E6%B7%86%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-webshell%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%901"><span class="nav-text">0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-NewStarCTF-%E5%85%AC%E5%BC%80%E8%B5%9B%E8%B5%9B%E9%81%93-%E6%9C%80%E5%90%8E%E7%9A%84%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x02 [NewStarCTF 公开赛赛道]最后的流量分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-sqltest"><span class="nav-text">0x03 sqltest</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x04 流量分析</span></a></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BUUCTF%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%85%A8%E8%AE%B0%E5%BD%95"><span class="nav-text">BUUCTF流量分析全记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95"><span class="nav-text">简单</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-wireshark"><span class="nav-text">0x01 wireshark</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-%E8%A2%AB%E5%97%85%E6%8E%A2%E7%9A%84%E6%B5%81%E9%87%8F"><span class="nav-text">0x02 被嗅探的流量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-http%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%901"><span class="nav-text">0x03 http流量分析1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-%E6%95%B0%E6%8D%AE%E5%8C%85%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%B4%A2"><span class="nav-text">0x04 数据包中的线索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05-%E8%A2%AB%E5%81%B7%E8%B5%B0%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-text">0x05 被偷走的文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06-%E8%8D%B7%E5%85%B0%E6%95%B0%E6%8D%AE%E6%B3%84%E9%9C%B2"><span class="nav-text">0x06 荷兰数据泄露</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07-NTFS%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="nav-text">0x07 NTFS数据流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x08-9-4-1-%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x08 [9.4.1 鼠标流量分析] 鼠标流量分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x09-9-4-2-%E9%94%AE%E7%9B%98%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-%E9%94%AE%E7%9B%98%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x09 [9.4.2 键盘流量分析]键盘流量分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0A-NewStarCTF-2023-%E5%85%AC%E5%BC%80%E8%B5%9B%E9%81%93-%E6%B5%81%E9%87%8F%EF%BC%81%E9%B2%A8%E9%B1%BC%EF%BC%81"><span class="nav-text">0x0A [NewStarCTF 2023 公开赛道]流量！鲨鱼！</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0B-9-3-3-TLS%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-TLS%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x0B [9.3.3 TLS流量分析]TLS流量分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0C-%E5%A4%A7%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89"><span class="nav-text">0x0C 大流量分析（一）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0D-%E5%A4%A7%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89"><span class="nav-text">0x0D 大流量分析（二）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0E-%E5%A4%A7%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89"><span class="nav-text">0x0E 大流量分析（三）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x0F-%E7%A7%98%E5%AF%86%E6%96%87%E4%BB%B6"><span class="nav-text">0x0F 秘密文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x10-John-in-the-middle"><span class="nav-text">0x10 John-in-the-middle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x11%E3%80%90SUCTF2018%E3%80%91-followme"><span class="nav-text">0x11【SUCTF2018】 followme</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x12-CFI-CTF-2018-webLogon-capture"><span class="nav-text">0x12 [CFI-CTF 2018]webLogon capture</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x13-greatescape"><span class="nav-text">0x13 greatescape</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E7%AD%89"><span class="nav-text">中等</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-9-3-2-webshell%E6%B7%B7%E6%B7%86%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90-webshell%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%901"><span class="nav-text">0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-NewStarCTF-%E5%85%AC%E5%BC%80%E8%B5%9B%E8%B5%9B%E9%81%93-%E6%9C%80%E5%90%8E%E7%9A%84%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x02 [NewStarCTF 公开赛赛道]最后的流量分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-sqltest"><span class="nav-text">0x03 sqltest</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">0x04 流量分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05-%E5%AE%89%E6%B4%B5%E6%9D%AF2019-Attack"><span class="nav-text">0x05 [安洵杯2019] Attack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06-BSidesSF2019-table-tennis"><span class="nav-text">0x06 [BSidesSF2019]table-tennis</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%B0%E9%9A%BE"><span class="nav-text">困难</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-%E8%9C%98%E8%9B%9B%E4%BE%A0%E5%91%80"><span class="nav-text">0x01 蜘蛛侠呀</span></a></li></ol></li></ol></li></ol>
 
     </div>
 </div>
@@ -1106,7 +1235,7 @@
                     </span>
                     
                         <span>
-                            9.9k words in total
+                            10.9k words in total
                         </span>
                     
                 </p>
