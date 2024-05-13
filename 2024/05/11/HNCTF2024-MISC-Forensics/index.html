@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="MADISUN">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://madifaye.github.io/2024/05/11/hnctf2024-misc-forensics/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="secretbinwalk -e secret.png提取出来一个zip压缩包，里面有一个flag.txt，内容是：flag is not here 只有一行但是txt大小却是353bytes，感觉很可疑，用vim打开后出现了很多零宽度字符  里面的零宽度字符种类包括：0x200b、0x200d、0x202c、0xfeff 在线网站解密：https:&#x2F;&#x2F;330k.github.io&#x2F;misc_to">
+<meta property="og:type" content="article">
+<meta property="og:title" content="H&amp;NCTF2024">
+<meta property="og:url" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/index.html">
+<meta property="og:site_name" content="Mad1sun个人博客">
+<meta property="og:description" content="secretbinwalk -e secret.png提取出来一个zip压缩包，里面有一个flag.txt，内容是：flag is not here 只有一行但是txt大小却是353bytes，感觉很可疑，用vim打开后出现了很多零宽度字符  里面的零宽度字符种类包括：0x200b、0x200d、0x202c、0xfeff 在线网站解密：https:&#x2F;&#x2F;330k.github.io&#x2F;misc_to">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233037118.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233314212.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233429375.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233621537.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512234447206.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513182955290.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513183110416.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513184801867.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513184910374.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513190447727.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513191602611.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513192540024.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513193035736.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513195238375.png">
+<meta property="article:published_time" content="2024-05-11T12:39:17.000Z">
+<meta property="article:modified_time" content="2024-05-13T15:08:30.489Z">
+<meta property="article:author" content="Mad1sun">
+<meta property="article:tag" content="CTF比赛wp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233037118.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/rainbow.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/rainbow.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/rainbow.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            H&amp;NCTF2024 -
+        
+        Mad1sun&#39;s BL0G~
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+        
+            
+    
+            
+    
+
+    
+        <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    
+<script src="/js/libs/anime.min.js"></script>
+
+    <h1 class="ml13">
+        Mad1sun&#39;s BL0G~
+    </h1>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+
+        anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [100,0],
+                translateZ: 0,
+                opacity: [0,1],
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i
+            }).add({
+            targets: '.ml13 .letter',
+            translateY: [0,-100],
+            opacity: [1,0],
+            easing: "easeInExpo",
+            duration: 1200,
+            delay: (el, i) => 100 + 30 * i
+        });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
+        });
+
+        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
+        hidePreloaderAfterTimeout(5000);
+
+        function hidePreloaderAfterTimeout(delay) {
+            setTimeout(function () {
+                var preloader = document.querySelector('.preloader');
+                preloader.style.opacity = '0';
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 200);
+            }, delay);
+        }
+    </script>
+</div>
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    <!--- Font Part-->
+    
+        <link href="https://fonts.cdnfonts.com/css/komix" rel="stylesheet">
+    
+    
+    
+        <link href="https://192960944.r.cdn36.com/chinesefonts3/packages/jhlst/dist/京華老宋体v1_007/result.css" rel="stylesheet">
+    
+    
+
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"madifaye.github.io","root":"/","language":"en","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":6,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":true,"family":"KingHwa_OldSong","url":"https://192960944.r.cdn36.com/chinesefonts3/packages/jhlst/dist/京華老宋体v1_007/result.css"},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":true},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/image/grand_budapest.jpg","dark":"/image/before_sunset.jpg"},"title":"MAD1SUN'S BLOG","subtitle":{"text":["Im Mad1sun.","Carpe Diem"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#c30452","dark":"#c32504"},"text_style":{"title_size":"4.0rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":true,"family":"\"Komix\",sans-serif","url":"https://fonts.cdnfonts.com/css/komix"},"social_links":{"enable":true,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":"xqlmadison@outlook.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":"Probably Up","artist":"Lawrence","url":"http://music.163.com/outchain/player?type=2&id=865052867&auto=1&height=66","cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"icon":"fa-regular fa-tags","path":"/tags/"},"Categories":{"icon":"fa-regular fa-folder","path":"/categories/"}},"search":{"enable":true,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}},"categories":{"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"你常活在光明里。","show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/2/27 08:08:08"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Mad1sun&#39;s BL0G~
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-regular fa-tags fa-fw"></i>
+                                    TAGS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/"
+                                        >
+                                    <i class="fa-regular fa-folder fa-fw"></i>
+                                    CATEGORIES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                TAGS
+                            </span>
+                            
+                                <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/"
+                        >
+                            <span>
+                                CATEGORIES
+                            </span>
+                            
+                                <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                
+                
+                <img src="/image/background.jpg" alt="H&amp;NCTF2024" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-bold backdrop-blur-lg rounded-xl border border-border-color ">H&amp;NCTF2024</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/image/avatar.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">MADISUN</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-05-11 20:39:17</span>
+        <span class="mobile">2024-05-11 20:39:17</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-05-13 23:08:30</span>
+            <span class="mobile">2024-05-13 23:08:30</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CTF%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/">CTF做题记录</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/CTF%E6%AF%94%E8%B5%9Bwp/">CTF比赛wp</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.7k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>18 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h2 id="secret"><a href="#secret" class="headerlink" title="secret"></a>secret</h2><p><code>binwalk -e secret.png</code>提取出来一个zip压缩包，里面有一个<code>flag.txt</code>，内容是：flag is not here 只有一行但是txt大小却是<code>353bytes</code>，感觉很可疑，用vim打开后出现了很多<strong>零宽度字符</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240512233037118.png" alt="image-20240512233037118"></p>
+<p>里面的零宽度字符种类包括：<code>0x200b</code>、<code>0x200d</code>、<code>0x202c</code>、<code>0xfeff</code></p>
+<p>在线网站解密：<a class="link" target="_blank" rel="noopener" href="https://330k.github.io/misc_tools/unicode_steganography.html">https://330k.github.io/misc_tools/unicode_steganography.html <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240512233314212.png" alt="image-20240512233314212"></p>
+<p>拿到一个<code>key:Snow White</code></p>
+<p>回到PNG，二进制编辑器打开，发现在png末尾后还有一段数据，以<code>9e97ba2a</code>开头，经搜索得知这是<strong>oursecret</strong>的特征</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240512233429375.png" alt="image-20240512233429375"></p>
+<p>把图片放进oursecret，点击unhide，出来一个flag.txt，打开发现是这样的，在文本下面显然还藏了东西</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240512233621537.png" alt="image-20240512233621537"></p>
+<p>再次二进制编辑器打开，发现末尾是一堆<code>09</code> <code>20</code> <code>0d</code> <code>0a</code></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">09 -&gt;  tab</span><br><span class="line">20 -&gt;  空格</span><br><span class="line">0A -&gt; \r</span><br><span class="line">0D -&gt; \n</span><br></pre></td></tr></table></figure></div>
+
+<p>尝试过将09 20分别对应二进制，或者和摩斯电码对应起来，但都失败了。回想到<code>key:Snow White</code>感觉还没用上，这个文本似乎也和雪有关，于是在搜索引擎中搜索<code>Snow Stegnography</code>，发现了<strong>SNOW隐写</strong>。</p>
+<blockquote>
+<p><a class="link" target="_blank" rel="noopener" href="https://hasegawaazusa.github.io/snow-note.html">snow隐写笔记 | 独奏の小屋 (hasegawaazusa.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<p>SNOW 是 the Steganographic Nature Of Whitespace 的简写。</p>
+<p>SNOW 用于通过在行尾附加<strong>空格和制表符</strong>来隐藏 ASCII 文本中的消息，即<strong>文本隐写</strong>。由于空格和制表符在文本查看器中通常不可见，因此消息实际上对不经意的观察者隐藏。并且如果使用内置加密，即使检测到消息也无法读取。</p>
+<p>官网下载对应程序：<a class="link" target="_blank" rel="noopener" href="https://darkside.com.au/snow/">The SNOW Home Page (darkside.com.au) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>提取：</p>
+<div class="highlight-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SNOW.EXE <span class="literal">-C</span> <span class="literal">-p</span> <span class="string">&quot;duzou&quot;</span> infile outfile</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240512234447206.png" alt="image-20240512234447206"></p>
+<p>拿到这一串和八卦有关的字符串</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">兑震乾兑乾坤乾艮乾兑兑艮兑乾震兑乾坎兑艮乾兑乾艮乾艮巽兑离震兑坎坤兑乾艮兑坎离兑兑巽兑艮离兑震兑兑坎震兑离离兑兑离兑坤乾兑艮离兑兑坎兑兑震兑艮巽兑坎坤兑兑巽兑艮兑兑艮乾兑离艮兑兑坤兑坎艮兑乾离兑离巽兑兑坎兑兑离兑艮坤兑艮乾兑离乾兑巽兑兑坤乾兑艮离兑兑巽兑艮兑兑艮乾兑离艮兑离乾兑巽离兑坎坤乾坎震</span><br></pre></td></tr></table></figure></div>
+
+<p>在这里也做了很多尝试，试过按照乾一兑二…依次转二进制然后拼起来，但结果不对</p>
+<p>最后搜索到一个<strong>八卦图形base8</strong>工具：<a class="link" target="_blank" rel="noopener" href="https://github.com/chyroc/base8-bagua/tree/master">chyroc/base8-bagua: 八卦图形base64 (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>Decode原理是把八卦图形转成8进制，再将8进制数字转换成3个二进制数，组成二进制数组，以8个二进制数为一个byte，组成byte数组，返回byte数组</p>
+<p>由于github上的这个工具是用go写的，我本地的go已经不支持go get了，于是更换成了另一个基于python的脚本：<a class="link" target="_blank" rel="noopener" href="https://gitee.com/lkjlsj/base8-bagua-py">base8-bagua-py: Python版base8-bagua 八卦符编码解码 (gitee.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>跑出来得到:</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XG0NCEpF4SoFjLrYkRJxrMKtoLqpVOnBTMJwpPaxrLqpVPbo+</span><br></pre></td></tr></table></figure></div>
+
+<p>这是XXencode编码，在线解码，拿到flag：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H&amp;NCTF&#123;Do_y0u_want_mak3_a_5now_man&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><em>究极套娃，不过题目挺精彩的，不算太谜语，也涨了见识吧，就是套的有点多</em></p>
+<h2 id="小明是个猴子"><a href="#小明是个猴子" class="headerlink" title="小明是个猴子"></a>小明是个猴子</h2><p>Volatility pslist，可以看见有一个<strong>mspaint.exe</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0xfffffa800474f910 mspaint.exe            2980   2192      7      127      1      0 2024-05-05 04:42:46 UTC+0000 </span><br></pre></td></tr></table></figure></div>
+
+<p>memdump把进程存下来</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vol.py -f xiaoming.raw --profile=Win7SP1x64 memdump -p 2980 -D ./ </span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p><a class="link" target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/536408671">宸极实验室——『CTF』利用 Volatility 对 Windows 画图取证 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<p>拿下来是dmp，修改后缀为data后丢给GIMP，官网<a class="link" target="_blank" rel="noopener" href="https://www.gimp.org/downloads/">GIMP - Downloads <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>图像类型选择<code>平面RGB</code>，宽度调整到<code>2880</code>，高度调整到<code>1536</code></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240513182955290.png" alt="image-20240513182955290"></p>
+<p>可以看出来下面那行就是key，需要翻转一下，拿到key:<code>#2a92ak@d27e</code></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240513183110416.png" alt="image-20240513183110416"></p>
+<p>回到volatility，<code>filescan|grep Desktop</code>发现有两个zip：<code>xiaoming.zip</code>和<code>secret.zip</code></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f xiaoming.raw --profile=Win7SP1x64 filescan |grep Desktop</span></span><br><span class="line"></span><br><span class="line">0x000000007d8c1f20     16      0 R--rw- \Device\HarddiskVolume2\Users\MIAOMI~1\Desktop\secret.zip</span><br><span class="line">0x000000007fe0ad50     16      0 R--rw- \Device\HarddiskVolume2\Users\MIAOMI~1\Desktop\xiaoming.zip</span><br></pre></td></tr></table></figure></div>
+
+<p><code>dumpfiles</code>把两个zip拿下来</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f xiaoming.raw --profile=Win7SP1x64 dumpfiles -Q 0x000000007d8c1f20 -D . -u</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f xiaoming.raw --profile=Win7SP1x64 dumpfiles -Q 0x000000007fe0ad50 -D . -u</span></span><br></pre></td></tr></table></figure></div>
+
+<p>secret.zip底下就是flag.txt，两个zip都加密了，拿key直接解密secret.zip，拿到flag</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H&amp;NCTF&#123;U_r_a_f0rensic_m4s7er&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="ez-pcap"><a href="#ez-pcap" class="headerlink" title="ez_pcap"></a>ez_pcap</h2><p>拿到两个流量包，ctf1和ctf2，先看的ctf2，过滤http，追踪，发现发送包和响应包具有固定的头：<code>dFAXQV1LORcHRQtLRlwMAhwFTAg/M</code>，<code>TxcWR1NNExZAD0ZaAWMIPAZjH1BFBFtHThcJSlUXWEd</code></p>
+<p>这是冰蝎4.0的特征，<code>behind_decrypt</code>解密：<a class="link" target="_blank" rel="noopener" href="https://github.com/melody27/behinder_decrypt">melody27/behinder_decrypt: 冰蝎流量解密脚本， (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python3 py_decrypt.py -f ~/Desktop/HNCTF--/ctf2.pcapng</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cd /var/www/html/dvwa/hackable/uploads/ ;zip -P H&amp;Nctf14789 Secret.zip dmp.dmp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">进入php文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125; &amp;+mg\Z7Pm4</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">进入php文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cd /var/www/html/dvwa/hackable/uploads/ ;zip -P HNCTF--14789 Secret.zip dmp.dmp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>重要信息为<code>zip -P HNCTF--14789 Secret.zip</code>，<strong>secret.zip的密码就是HNCTF–14789</strong></p>
+<p>在http过滤中看见了Get zip的请求</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240513184801867.png" alt="image-20240513184801867"></p>
+<p>追踪一下，在返回数据中可以看见zip，把zip存下来，用刚才的密码解密，拿到一个<code>dmp.dmp</code></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240513184910374.png" alt="image-20240513184910374"></p>
+<p><code>file dmp.dmp</code>发现是minidump</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mini DuMP crash report, 17 streams, Sun May  5 11:27:13 2024, 0x469925 type</span><br></pre></td></tr></table></figure></div>
+
+<p>搜索到这样一篇wp，里面的minidump的type和这个一样:<a class="link" target="_blank" rel="noopener" href="https://ctftime.org/writeup/31452">CTFtime.org / HTB Uni CTF 2021 - 资格赛 / 反击 / 写作 — CTFtime.org / HTB Uni CTF 2021 - Quals / Strike Back / Writeup <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>这应该是和Cobalt Strike 相关的 Minidump文件，通过radare2，可以确定这是beacon.exe进程的转储</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">r2 dmp.dmp</span>                                        </span><br><span class="line">WARN: Invalid or unsupported enumeration encountered 21</span><br><span class="line">WARN: Invalid or unsupported enumeration encountered 22</span><br><span class="line">INFO: Parsing data sections for large dumps can take time</span><br><span class="line">INFO: Please be patient (but if strings ain&#x27;t your thing try with -z)</span><br><span class="line">WARN: Relocs has not been applied. Please use `-e bin.relocs.apply=true` or `-e bin.cache=true` next time</span><br><span class="line">WARN: format string ([2]EwwbBddd[4]Ed[2]Ew[2]q (mdmp_processor_architecture)ProcessorArchitecture ProcessorLevel ProcessorRevision NumberOfProcessors (mdmp_product_type)ProductType MajorVersion MinorVersion BuildNumber (mdmp_platform_id)PlatformId CsdVersionRva (mdmp_suite_mask)SuiteMask Reserved2 ProcessorFeatures) is too large for this buffer (53, 52)</span><br><span class="line"> -- Press &#x27;c&#x27; in visual mode to toggle the cursor mode</span><br><span class="line"><span class="meta prompt_">[0x00d50000]&gt; </span><span class="language-bash">iSq~exe</span></span><br><span class="line">0x00400000 0x0044b000 ---- C:\Users\admin\Desktop\beacon.exe</span><br><span class="line"><span class="meta prompt_">[0x00d50000]&gt; </span></span><br></pre></td></tr></table></figure></div>
+
+<p><code>C:\Users\admin\Desktop\beacon.exe</code></p>
+<p>在ctf2中可以看见 <code>GET /dpixel</code>也是beacon的特征，那么知道这一点，思路就是从dmp中提取AES 和 HMAC 密钥</p>
+<p><a class="link" target="_blank" rel="noopener" href="https://github.com/DidierStevens/Beta/tree/master">DidierStevens/Beta: Beta versions of my software (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>里面有很多跟cs有关的脚本</p>
+<p>提取密钥还需要cs流量的<strong>发送任务数据</strong>，转到ctf1，可以看见<code>POST /submit.php?id=465129432</code>这是下发指令的包，里面的data就是发送任务数据</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240513190447727.png" alt="image-20240513190447727"></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python3 cs-extract-key.py -c 000002301fb2227e0816dff4d4929ff34a3e8f0e1a99621b59a8a3331810ca4c02b847750a005c797ecd557357a3065cfcb893e9ffdc30706bfa6050afdb7936826d87ad0d0aa6358c8c110bd5e9a71d22eeeec36b6fd5dbf74891ef7c0e45d4a52878d063bc2090bf3433145cc430b2c4b58941c813b5ff76dbe51ad45f1ca9c0e3bbf94976f2bbb096ecd4144ebf905d13f24efaa27e9e947b7b20321cb9784ce0f4b6153d6a0ac2ae5f4decb08a7712b17b70f85b7ed950f786c1a60d12ddedca817cffd3859a3f79f099b5ee33c757d91c63061e81f84b00aeaac8107509cecf0f5dbc1447f99eda8de06f12db79a3bdc45fc56032d13770e32974827f297b0e221c2a52c22e791f8f52a66d7a0f408113e3a9288593d756311cb2e04f32cf87ce1243b6aaa411b56d42061a3a4a368ac54ab9c4787630e9eb33b4e528d20987877b2b2e5c585957ee9f98be431cf4370617e44a32ab9eca9fdab37d9486aceb0fea1736a67a2f639aaad8cf0f80a8db1c69876064b24cacc3605f435735563f753e915fcc5b0464962730af70015ad0aff8b2a75be2b56132bcd6695bb56d49e65c7bf70c5a3f0bad26e6eb344b8b8123c2b306ae0d1197f97f2f1afb424f666812953c20cc4182f2a767889ffcc6b2c3d5d84d3ef70111f6e35f8e500f571ef9365c1479733a9809e4cbfdc476413fde7dbb4ef108f9e97d1ea4c64c3097f03c302aef55bc6cf22e48eef9e14c74744eebb0f3c40edfac127d6f1456f7876cc7f1f77e3f65c2d9e5b7a201d1e8b408dc50 ~/Desktop/dmp.dmp</span></span><br><span class="line"></span><br><span class="line">File: /Users/madison/Desktop/dmp.dmp</span><br><span class="line">Searching for AES and HMAC keys</span><br><span class="line">Searching after sha256\x00 string (0x2ef5ea)</span><br><span class="line">AES key position: 0x002f5b22</span><br><span class="line">AES Key:  0406b3801de60f1fd4d7391d618eec81</span><br><span class="line">HMAC key position: 0x002f8e42</span><br><span class="line">HMAC Key: 3e2c8bd57d043ae78caa33c1f76fb3de</span><br><span class="line">SHA256 raw key: 3e2c8bd57d043ae78caa33c1f76fb3de:0406b3801de60f1fd4d7391d618eec81</span><br></pre></td></tr></table></figure></div>
+
+<p><code>SHA256 raw key: 3e2c8bd57d043ae78caa33c1f76fb3de:0406b3801de60f1fd4d7391d618eec81</code>拿到key之后直接用<code>cs-parse-http-traffic.py</code>提取，脚本需要更改一下编码，否则会报错</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python3.11 ~/Downloads/cs-parse-http-traffic.py -k 3e2c8bd57d043ae78caa33c1f76fb3de:0406b3801de60f1fd4d7391d618eec81 ~/Desktop/ctf1.pcapng -e</span></span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240513191602611.png" alt="image-20240513191602611"></p>
+<p>拿到flag：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H&amp;NCTF&#123;29d5c78b-4367-49ff-807f-dd204341f225&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="关于CS流量"><a href="#关于CS流量" class="headerlink" title="关于CS流量"></a>关于CS流量</h3><blockquote>
+<p><a class="link" target="_blank" rel="noopener" href="https://ctftime.org/writeup/31452">CTFtime.org / HTB Uni CTF 2021 - 资格赛 / 反击 / 写作 — CTFtime.org / HTB Uni CTF 2021 - Quals / Strike Back / Writeup <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>[<a class="link" target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46081055/article/details/123413246">2021绿城杯] [Misc] 流量分析 + cobaltstrike 流量解密_2021-绿城杯-misc-流量分析-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/327060.html"># Cobalt Strike：使用已知的私钥解密流量-Part 2 - FreeBuf网络安全行业门户 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://ilikeoyt.github.io/2023/09/28/%E5%B8%B8%E8%A7%81webshell%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">常见webshell流量分析 | ycx’s blog (ilikeoyt.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://fdlucifer.github.io/2022/01/05/decrypt-cs-traffic/">从pcap包中解密cobalt-strike流量 | fdvoid0’s blog (fdlucifer.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://blog.csdn.net/jyttttttt/article/details/132795604">常见webshell流量解密分析-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://blog.nviso.eu/2021/10/27/cobalt-strike-using-known-private-keys-to-decrypt-traffic-part-2/">Cobalt Strike：使用已知私钥解密流量 – 第 2 部分 – NVISO Labs — Cobalt Strike: Using Known Private Keys To Decrypt Traffic – Part 2 – NVISO Labs <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://github.com/WBGlIl/CS_Decrypt">WBGlIl/CS_Decrypt (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h1 id="Forensics"><a href="#Forensics" class="headerlink" title="Forensics"></a>Forensics</h1><h2 id="ice的秘密"><a href="#ice的秘密" class="headerlink" title="ice的秘密"></a>ice的秘密</h2><p>附件中有一个内存镜像和一个ccx文件，这个ccx文件是<code>CnCrypt</code>的格式，根据题目描述，ccx第一层密码是<code>user_domain_password</code></p>
+<p>volatility mimikatz直接拿到第一层密码：<code>ice_CTF_CFRS[]</code></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ vol.py -f ice_secret.raw --profile=Win7SP1x64 mimikatz             </span><br><span class="line">Volatility Foundation Volatility Framework 2.6.1</span><br><span class="line">Module   User             Domain           Password                                </span><br><span class="line">-------- ---------------- ---------------- ----------------------------------------</span><br><span class="line">wdigest  ice              CTF              CFRS[]                                  </span><br><span class="line">wdigest  CTF$             WORKGROUP               </span><br></pre></td></tr></table></figure></div>
+
+<p>CnCrypt挂载</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240513192540024.png" alt="image-20240513192540024"></p>
+<p>里面又个tips.txt，内容为</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">key分为三段，拼接起来才是真密码哦，key3的第一位是_</span><br></pre></td></tr></table></figure></div>
+
+<p>猜测这个key是第二层挂载密钥</p>
+<p>volatility pslist 发现里面有一个<code>mspaint.exe</code>，又来</p>
+<p>接下来的步骤和<strong>小明是个猴子</strong>的步骤一样，memdump转储进程，修改后缀，丢进GIMP里，不同的是这次不需要用平面RGB，调整宽高，直接能看见<code>key3:_pic</code></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240513193035736.png" alt="image-20240513193035736"></p>
+<p>volatility filescan扫扫桌面，发现了一个<code>main.py</code>和<code>key2.txt</code></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f ice_secret.raw --profile=Win7SP1x64 filescan |grep Desktop</span></span><br><span class="line"></span><br><span class="line">0x000000007e0e65e0     16      0 R--rw- \Device\HarddiskVolume2\Users\ice\Desktop\main.py</span><br><span class="line">0x000000007eb41380     16      0 R--rw- \Device\HarddiskVolume2\Users\ice\Desktop\key2.txt</span><br></pre></td></tr></table></figure></div>
+
+<p>接下来试图用dumpfiles转文件，但失败了，用<code>mftparser</code>查看和恢复被删除的文件</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f ice_secret.raw --profile=Win7SP1x64 mftparser &gt;icemft.txt</span></span><br></pre></td></tr></table></figure></div>
+
+<p>在存下来的txt中能看见这两个文件</p>
+<p>main.py</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">$FILE_NAME</span><br><span class="line">Creation                       Modified                       MFT Altered                    Access Date                    Name/Path</span><br><span class="line">------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------</span><br><span class="line">2024-05-05 12:43:33 UTC+0000 2024-05-05 13:05:07 UTC+0000   2024-05-05 13:05:07 UTC+0000   2024-05-06 06:56:29 UTC+0000   Users\ice\Desktop\main.py</span><br><span class="line"></span><br><span class="line">$OBJECT_ID</span><br><span class="line">Object ID: dfbea7e7-750b-ef11-a6da-b060882901b6</span><br><span class="line">Birth Volume ID: 80000000-6802-0000-0000-180000000100</span><br><span class="line">Birth Object ID: 4f020000-1800-0000-6465-6620656e636f</span><br><span class="line">Birth Domain ID: 64652028-4f4f-304f-4f4f-304f304f4f4f</span><br><span class="line"></span><br><span class="line">$DATA</span><br><span class="line">0000000000: 64 65 66 20 65 6e 63 6f 64 65 20 28 4f 4f 30 4f   def.encode.(OO0O</span><br><span class="line">0000000010: 4f 4f 30 4f 30 4f 4f 4f 30 30 30 30 30 29 3a 0d   OO0O0OOO00000):.</span><br><span class="line">0000000020: 0a 20 20 20 20 4f 30 4f 30 30 30 30 30 30 30 4f   .....O0O0000000O</span><br><span class="line">0000000030: 30 4f 4f 4f 30 30 20 3d 5b 5d 0d 0a 20 20 20 20   0OOO00.=[]......</span><br><span class="line">0000000040: 66 6f 72 20 4f 30 4f 30 4f 4f 30 30 4f 30 30 4f   for.O0O0OO00O00O</span><br><span class="line">0000000050: 4f 4f 30 4f 4f 20 69 6e 20 4f 4f 30 4f 4f 4f 30   OO0OO.in.OO0OOO0</span><br><span class="line">0000000060: 4f 30 4f 4f 4f 30 30 30 30 30 3a 0d 0a 20 20 20   O0OOO00000:.....</span><br><span class="line">0000000070: 20 20 20 20 20 4f 30 30 30 4f 4f 4f 4f 30 30 30   .....O000OOOO000</span><br><span class="line">0000000080: 4f 30 30 30 4f 30 20 3d 28 6f 72 64 20 28 4f 30   O000O0.=(ord.(O0</span><br><span class="line">0000000090: 4f 30 4f 4f 30 30 4f 30 30 4f 4f 4f 30 4f 4f 20   O0OO00O00OOO0OO.</span><br><span class="line">00000000a0: 29 5e 30 78 31 31 34 30 30 30 20 5e 30 78 35 31   )^0x114000.^0x51</span><br><span class="line">00000000b0: 34 29 2b 31 31 34 30 30 30 2d 35 31 34 0d 0a 20   4)+114000-514...</span><br><span class="line">00000000c0: 20 20 20 20 20 20 20 4f 30 4f 30 30 30 30 30 30   .......O0O000000</span><br><span class="line">00000000d0: 30 4f 30 4f 4f 4f 30 30 20 2e 61 70 70 65 6e 64   0O0OOO00..append</span><br><span class="line">00000000e0: 20 28 4f 30 30 30 4f 4f 4f 4f 30 30 30 4f 30 30   .(O000OOOO000O00</span><br><span class="line">00000000f0: 30 4f 30 20 26 30 78 66 66 29 0d 0a 20 20 20 20   0O0.&amp;0xff)......</span><br><span class="line">0000000100: 72 65 74 75 72 6e 20 4f 30 4f 30 30 30 30 30 30   return.O0O000000</span><br><span class="line">0000000110: 30 4f 30 4f 4f 4f 30 30 0d 0a 64 65 66 20 64 65   0O0OOO00..def.de</span><br><span class="line">0000000120: 63 6f 64 65 20 28 4f 4f 4f 4f 4f 4f 4f 4f 4f 30   code.(OOOOOOOOO0</span><br><span class="line">0000000130: 4f 4f 4f 30 4f 30 30 29 3a 0d 0a 20 20 20 20 4f   OOO0O00):......O</span><br><span class="line">0000000140: 30 4f 30 30 4f 30 30 4f 30 30 30 4f 4f 4f 4f 4f   0O00O00O000OOOOO</span><br><span class="line">0000000150: 20 3d 27 27 0d 0a 20 20 20 20 66 6f 72 20 4f 30   .=&#x27;&#x27;......for.O0</span><br><span class="line">0000000160: 30 4f 4f 30 30 30 30 30 4f 4f 4f 4f 30 30 4f 20   0OO00000OOOO00O.</span><br><span class="line">0000000170: 69 6e 20 4f 4f 4f 4f 4f 4f 4f 4f 4f 30 4f 4f 4f   in.OOOOOOOOO0OOO</span><br><span class="line">0000000180: 30 4f 30 30 3a 0d 0a 20 20 20 20 20 20 20 20 4f   0O00:..........O</span><br><span class="line">0000000190: 4f 30 4f 4f 30 4f 30 4f 4f 30 4f 30 4f 30 30 4f   O0OO0O0OO0O0O00O</span><br><span class="line">00000001a0: 20 3d 20 3f 0d 0a 20 20 20 20 20 20 20 20 4f 30   .=.?..........O0</span><br><span class="line">00000001b0: 4f 30 30 4f 30 30 4f 30 30 30 4f 4f 4f 4f 4f 20   O00O00O000OOOOO.</span><br><span class="line">00000001c0: 2b 3d 20 3f 0d 0a 20 20 20 20 72 65 74 75 72 6e   +=.?......return</span><br><span class="line">00000001d0: 20 4f 30 4f 30 30 4f 30 30 4f 30 30 30 4f 4f 4f   .O0O00O00O000OOO</span><br><span class="line">00000001e0: 4f 4f 20 0d 0a 0d 0a 22 22 22 0d 0a 3e 3e 3e 65   OO.....&quot;&quot;&quot;..&gt;&gt;&gt;e</span><br><span class="line">00000001f0: 6e 63 6f 64 65 28 22 6b 65 79 31 22 29 0d 0a 5b   ncode(&quot;key1&quot;)..[</span><br><span class="line">0000000200: 32 30 35 2c 20 31 39 31 2c 20 31 38 37 2c 20 31   205,.191,.187,.1</span><br><span class="line">0000000210: 31 35 2c 20 31 32 34 2c 20 31 31 37 2c 20 31 31   15,.124,.117,.11</span><br><span class="line">0000000220: 30 2c 20 31 38 31 2c 20 31 38 37 2c 20 31 35 33   0,.181,.187,.153</span><br><span class="line">0000000230: 2c 20 31 39 39 2c 20 31 31 30 2c 20 31 37 34 2c   ,.199,.110,.174,</span><br><span class="line">0000000240: 20 32 30 32 2c 20 31 35 33 5d 0d 0a 22 22 22      .202,.153]..&quot;&quot;&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>整理一下，修改一下变量名得到以下程序</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">encode</span> (plain):</span><br><span class="line">    a =[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> plain:</span><br><span class="line">        temp1 =(<span class="built_in">ord</span> (i )^<span class="number">0x114000</span> ^<span class="number">0x514</span>)+<span class="number">114000</span>-<span class="number">514</span>          </span><br><span class="line">        a.append(temp1 &amp;<span class="number">0xff</span>)      </span><br><span class="line">    <span class="keyword">return</span> a  </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decode</span> (cipher):      </span><br><span class="line">  b =<span class="string">&#x27;&#x27;</span>      </span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> cipher:          </span><br><span class="line">    OO0OO0O0OO0O0O00O = ?          </span><br><span class="line">    b += ?      </span><br><span class="line">  <span class="keyword">return</span> b     </span><br><span class="line"><span class="string">&quot;&quot;&quot;  &gt;&gt;&gt;encode(&quot;key1&quot;)  [205, 191, 187, 115, 124, 117, 110, 181, 187, 153, 199, 110, 174, 202, 153]  &quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>逻辑很简单，经过两个异或和加减后对256取模，直接逆向的话不知道数据应该是多少倍，所以我们直接正向思考，把常用字符的ascii码的范围：<code>33-126</code>按照encode跑一遍，得到对应关系</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">list</span> = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">33</span>,<span class="number">127</span>):</span><br><span class="line">    <span class="built_in">list</span>.append(((i^<span class="number">0x11400</span>^<span class="number">0x514</span>)+<span class="number">114000</span>-<span class="number">514</span>)&amp;<span class="number">0xff</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(<span class="built_in">list</span>)):</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">chr</span>(i+<span class="number">33</span>),<span class="built_in">list</span>[i])</span><br></pre></td></tr></table></figure></div>
+
+<p>得到对应关系表</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">! 131</span><br><span class="line">&quot; 132</span><br><span class="line"># 133</span><br><span class="line">$ 126</span><br><span class="line">% 127</span><br><span class="line">&amp; 128</span><br><span class="line">&#x27; 129</span><br><span class="line">( 138</span><br><span class="line">) 139</span><br><span class="line">* 140</span><br><span class="line">+ 141</span><br><span class="line">, 134</span><br><span class="line">- 135</span><br><span class="line">. 136</span><br><span class="line">/ 137</span><br><span class="line">0 114</span><br><span class="line">1 115</span><br><span class="line">2 116</span><br><span class="line">3 117</span><br><span class="line">4 110</span><br><span class="line">5 111</span><br><span class="line">6 112</span><br><span class="line">7 113</span><br><span class="line">8 122</span><br><span class="line">9 123</span><br><span class="line">: 124</span><br><span class="line">; 125</span><br><span class="line">&lt; 118</span><br><span class="line">= 119</span><br><span class="line">&gt; 120</span><br><span class="line">? 121</span><br><span class="line">@ 162</span><br><span class="line">A 163</span><br><span class="line">B 164</span><br><span class="line">C 165</span><br><span class="line">D 158</span><br><span class="line">E 159</span><br><span class="line">F 160</span><br><span class="line">G 161</span><br><span class="line">H 170</span><br><span class="line">I 171</span><br><span class="line">J 172</span><br><span class="line">K 173</span><br><span class="line">L 166</span><br><span class="line">M 167</span><br><span class="line">N 168</span><br><span class="line">O 169</span><br><span class="line">P 146</span><br><span class="line">Q 147</span><br><span class="line">R 148</span><br><span class="line">S 149</span><br><span class="line">T 142</span><br><span class="line">U 143</span><br><span class="line">V 144</span><br><span class="line">W 145</span><br><span class="line">X 154</span><br><span class="line">Y 155</span><br><span class="line">Z 156</span><br><span class="line">[ 157</span><br><span class="line">\ 150</span><br><span class="line">] 151</span><br><span class="line">^ 152</span><br><span class="line">_ 153</span><br><span class="line">` 194</span><br><span class="line">a 195</span><br><span class="line">b 196</span><br><span class="line">c 197</span><br><span class="line">d 190</span><br><span class="line">e 191</span><br><span class="line">f 192</span><br><span class="line">g 193</span><br><span class="line">h 202</span><br><span class="line">i 203</span><br><span class="line">j 204</span><br><span class="line">k 205</span><br><span class="line">l 198</span><br><span class="line">m 199</span><br><span class="line">n 200</span><br><span class="line">o 201</span><br><span class="line">p 178</span><br><span class="line">q 179</span><br><span class="line">r 180</span><br><span class="line">s 181</span><br><span class="line">t 174</span><br><span class="line">u 175</span><br><span class="line">v 176</span><br><span class="line">w 177</span><br><span class="line">x 186</span><br><span class="line">y 187</span><br><span class="line">z 188</span><br><span class="line">&#123; 189</span><br><span class="line">| 182</span><br><span class="line">&#125; 183</span><br><span class="line">~ 184</span><br></pre></td></tr></table></figure></div>
+
+<p>根据上表和<code>[205, 191, 187, 115, 124, 117, 110, 181, 187, 153, 199, 110, 174, 202, 153]</code>拿到key1:<code>key1:34sy_m4th_</code></p>
+<p>在mft存下来的数据中还有key2.txt</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$FILE_NAME</span><br><span class="line">Creation                       Modified                       MFT Altered                    Access Date                    Name/Path</span><br><span class="line">------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------</span><br><span class="line">2024-05-05 05:07:25 UTC+0000 2024-05-05 05:24:56 UTC+0000   2024-05-05 05:24:56 UTC+0000   2024-05-06 06:55:54 UTC+0000   Users\ice\Desktop\key2.txt</span><br><span class="line"></span><br><span class="line">$OBJECT_ID</span><br><span class="line">Object ID: debea7e7-750b-ef11-a6da-b060882901b6</span><br><span class="line">Birth Volume ID: 80000000-2001-0000-0000-180000000100</span><br><span class="line">Birth Object ID: 07010000-1800-0000-5253-4352435b5b5b</span><br><span class="line">Birth Domain ID: 46434353-4643-465d-5d5d-5253525b5b5b</span><br><span class="line"></span><br><span class="line">$DATA</span><br><span class="line">0000000000: 52 53 43 52 43 5b 5b 5b 46 43 43 53 46 43 46 5d   RSCRC[[[FCCSFCF]</span><br><span class="line">0000000010: 5d 5d 52 53 52 5b 5b 5b 46 43 53 43 46 5d 5d 5d   ]]RSR[[[FCSCF]]]</span><br><span class="line">0000000020: 43 52 52 5b 5b 5b 46 43 46 46 5d 5d 5d 5b 43 52   CRR[[[FCFF]]][CR</span><br><span class="line">0000000030: 52 43 52 5d 5b 5b 5b 46 43 53 53 53 43 43 43 53   RCR][[[FCSSSCCCS</span><br><span class="line">0000000040: 46 46 5d 5d 5d 5b 52 43 53 52 52 5d 5b 5b 5b 46   FF]]][RCSRR][[[F</span><br><span class="line">0000000050: 43 46 46 53 53 53 5d 5d 5d 43 46 5b 5b 5b 5b 46   CFFSSS]]]CF[[[[F</span><br><span class="line">0000000060: 43 5d 5d 5d 5d 5b 52 52 52 5d 5b 5b 5b 5b 46 43   C]]]][RRR][[[[FC</span><br><span class="line">0000000070: 43 46 5d 5d 5d 5d 5b 46 46 46 5d 5b 52 5d 5b 5b   CF]]]][FFF][R][[</span><br><span class="line">0000000080: 5b 5b 46 43 43 5d 5d 5d 5d 5b 52 5d 5b 5b 5b 46   [[FCC]]]][R][[[F</span><br><span class="line">0000000090: 43 46 5d 5d 5d 52 52 5b 5b 46 43 46 43 46 5d 5d   CF]]]RR[[FCFCF]]</span><br><span class="line">00000000a0: 46 46 46 46 52 52 5b 52 52 5d 5b 5b 46 43 46 43   FFFFRR[RR][[FCFC</span><br><span class="line">00000000b0: 46 5d 5d 5b 5b 5b 43 46 5d 5d 5d 46 46 5b 52 43   F]][[[CF]]]FF[RC</span><br><span class="line">00000000c0: 43 52 52 5d 5b 5b 5b 46 5d 5d 5d 5b 5b 5b 46 46   CRR][[[F]]][[[FF</span><br><span class="line">00000000d0: 5d 5d 5d 5b 52 52 43 52 5d 5b 5b 5b 46 46 5d 5d   ]]][RRCR][[[FF]]</span><br><span class="line">00000000e0: 5d 5b 46 46 43 46 5d 52 52 43 52 43 52 52 43 52   ][FFCF]RRCRCRRCR</span><br><span class="line">00000000f0: 43 46 46 43 46 46 46 43 46 43 46 5b 46 46 43 46   CFFCFFFCFCF[FFCF</span><br><span class="line">0000000100: 5d 46 46 43 46 43 46   </span><br></pre></td></tr></table></figure></div>
+
+<p>联想到第一层加密中<code>CFRS[]</code>，这是一种绘图语言：</p>
+<p>[CFRS<a class="link" target="_blank" rel="noopener" href="https://susam.github.io/cfrs/">] | An extremely minimal drawing language consisting of only 6 simple commands: C, F, R, S, [, and ]. (susam.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>在网站中输入数据，需要删除后面几位，可以发现画出来了一个<code>2B</code>，别骂了别骂了</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240513195238375.png" alt="image-20240513195238375"></p>
+<p>根据提示，B改为小写b，把key拼起来<code>34sy_m4th_2b_pic</code>，再去CnCrypt里面挂载一遍，拿到flag</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H&amp;NCTF&#123;F0rensics_1s_1nt3r3st1ng&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> H&amp;NCTF2024</li>
+        <li><strong>Author:</strong> MADISUN</li>
+        <li><strong>Created at
+                :</strong> 2024-05-11 20:39:17</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-05-13 23:08:30
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/05/11/HNCTF2024-MISC-Forensics/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/CTF%E6%AF%94%E8%B5%9Bwp/">#CTF比赛wp</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">MISC_内存取证_Volatility使用</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">CTF_MISC流量分析总结</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">H&amp;NCTF2024</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#secret"><span class="nav-text">secret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E6%98%8E%E6%98%AF%E4%B8%AA%E7%8C%B4%E5%AD%90"><span class="nav-text">小明是个猴子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ez-pcap"><span class="nav-text">ez_pcap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8ECS%E6%B5%81%E9%87%8F"><span class="nav-text">关于CS流量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Forensics"><span class="nav-text">Forensics</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ice%E7%9A%84%E7%A7%98%E5%AF%86"><span class="nav-text">ice的秘密</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">MADISUN</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        11 posts in total
+                    </span>
+                    
+                        <span>
+                            26.6k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.1</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script src="/js/firework.js"></script>
+                    
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+{% if theme.fireworks %}
+<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+<script type="text/javascript" src="/js/fireworks.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"react":{"opacity":0.8},"dialog":{"enable":true},"display":{"hOffset":30},"log":false});</script></body>
+</html>
