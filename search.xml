@@ -1,8 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>2023春秋杯_Misc</title>
+    <url>/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/</url>
+    <content><![CDATA[<h1 id="谁偷了我的外卖"><a href="#谁偷了我的外卖" class="headerlink" title="谁偷了我的外卖"></a>谁偷了我的外卖</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
+<li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li>
+</ul>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
+<li>拿到手是一张jpg</li>
+</ul>
+<img lazyload src="/images/loading.svg" data-src="2023春秋杯-Misc/小凯.jpg" alt="小凯" style="zoom:33%;">
+
+<ul>
+<li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160239092.png" alt="image-20240304160239092"></p>
+<ul>
+<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
+<li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160712556.png" alt="image-20240304160712556"></p>
+<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
+<ul>
+<li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
+</ul>
+<p><strong>能发现第一个少了四个字母</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161318875.png" alt="处理文件夹文件名称"></p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>先把第2个文件开始的提取出来</strong></p>
+<ul>
+<li>base64解码，可以在末尾发现应该是压缩包</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161819149.png" alt="image-20240304161819149"></p>
+<ul>
+<li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162516972.png" alt="image-20240304162516972"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162720172.png" alt="image-20240304162720172"></p>
+<p><strong>成功拿到download.zip</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162046748.png" alt="image-20240304162046748"></p>
+<p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162147928.png" alt="image-20240304162147928"></p>
+<ul>
+<li>查看这两个文件<ul>
+<li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li>
+</ul>
+</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162805829.png" alt="image-20240304162805829"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304163109001.png" alt="image-20240304163109001"></p>
+<ul>
+<li><p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
+</li>
+<li><p>用bkcrack明文爆破出密钥</p>
+</li>
+</ul>
+<p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164507564.png" alt="image-20240304164507564"></p>
+<p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p>
+<ul>
+<li>利用密钥破解</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure></div>
+
+<p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164738068.png" alt="image-20240304164738068"></p>
+<ul>
+<li>成功提取并打开txt.galf</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164841781.png" alt="image-20240304164841781"></p>
+<ul>
+<li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h1 id="明文混淆（复现）"><a href="#明文混淆（复现）" class="headerlink" title="明文混淆（复现）"></a>明文混淆（复现）</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
+<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
+</ul>
+<h2 id="解题过程-1"><a href="#解题过程-1" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
+<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203835579.png" alt="image-20240304203835579"></p>
+<ul>
+<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203726863.png" alt="image-20240304203726863"></p>
+<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
+<ul>
+<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
+<li>bkcrack爆破</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211905788.png" alt="image-20240304211905788"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211926934.png" alt="image-20240304211926934"></p>
+<ul>
+<li>提取出shell2.php，解混淆</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240304212121097.png" alt="image-20240304212121097"></p>
+<p><em>php解混淆知识有待加强:sob:</em></p>
+]]></content>
+      <categories>
+        <category>CTF做题记录</category>
+      </categories>
+      <tags>
+        <tag>MISC-压缩包</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>H&amp;NCTF2024</title>
-    <url>/2024/05/11/HNCTF2024-MISC-Forensics/</url>
+    <url>/2024/05/11/HNCTF-MISC/</url>
     <content><![CDATA[<h2 id="secret"><a href="#secret" class="headerlink" title="secret"></a>secret</h2><p><code>binwalk -e secret.png</code>提取出来一个zip压缩包，里面有一个<code>flag.txt</code>，内容是：flag is not here 只有一行但是txt大小却是<code>353bytes</code>，感觉很可疑，用vim打开后出现了很多<strong>零宽度字符</strong></p>
 <p><img lazyload src="/images/loading.svg" data-src="./image-20240512233037118.png" alt="image-20240512233037118"></p>
 <p>里面的零宽度字符种类包括：<code>0x200b</code>、<code>0x200d</code>、<code>0x202c</code>、<code>0xfeff</code></p>
@@ -280,114 +388,6 @@
       </categories>
       <tags>
         <tag>vulnhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2023春秋杯_Misc</title>
-    <url>/2024/03/04/2023%E6%98%A5%E7%A7%8B%E6%9D%AF-Misc/</url>
-    <content><![CDATA[<h1 id="谁偷了我的外卖"><a href="#谁偷了我的外卖" class="headerlink" title="谁偷了我的外卖"></a>谁偷了我的外卖</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
-<li>小凯最近入职了大厂，但是在工作途中出现了一些麻烦事，怎么办呢</li>
-</ul>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
-<li>拿到手是一张jpg</li>
-</ul>
-<img lazyload src="/images/loading.svg" data-src="2023春秋杯-Misc/小凯.jpg" alt="小凯" style="zoom:33%;">
-
-<ul>
-<li>binwalk分析一下，发现里面有个压缩包，binwalk -e 不管用，foremost提取一下</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160239092.png" alt="image-20240304160239092"></p>
-<ul>
-<li>010里还有个提示：<code>I can give you a hint: - = / But there was a takeaway that was partially eaten.</code></li>
-<li>拿到压缩包，是加密的，里面是一个flag文件夹和很多“外卖”文件</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304160712556.png" alt="image-20240304160712556"></p>
-<p><strong>观察发现有序的且“_”后面的4个字符很像base64，再加上前面有序号，以及提示信息，很容易猜测是要把这些按顺序组合成一段base64</strong></p>
-<ul>
-<li>我先随便提取一下，形成一个文件夹，这样虽然文件是空的，但是文件名都在，再利用批量处理文件夹名称，再利用python</li>
-</ul>
-<p><strong>能发现第一个少了四个字母</strong></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161318875.png" alt="处理文件夹文件名称"></p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding =gbk</span></span><br><span class="line"><span class="keyword">from</span> natsort <span class="keyword">import</span> ns, natsorted</span><br><span class="line"><span class="keyword">import</span> os,re</span><br><span class="line">folder = <span class="string">r&quot;/Users/madison/Desktop/wmx&quot;</span></span><br><span class="line">files = os.listdir(folder)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">files_1 = natsorted(files,alg=ns.PATH)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files_1:</span><br><span class="line">    flag+=i</span><br><span class="line">lst = re.findall(<span class="string">&#x27;_([\w|+|=|-]&#123;4&#125;)&#x27;</span>,flag)</span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lst:</span><br><span class="line">    <span class="built_in">str</span>+=i</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>.replace(<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>))</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>先把第2个文件开始的提取出来</strong></p>
-<ul>
-<li>base64解码，可以在末尾发现应该是压缩包</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304161819149.png" alt="image-20240304161819149"></p>
-<ul>
-<li>补上文件头<code>504b03</code>的base64:<code>UEsD</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162516972.png" alt="image-20240304162516972"></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162720172.png" alt="image-20240304162720172"></p>
-<p><strong>成功拿到download.zip</strong></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162046748.png" alt="image-20240304162046748"></p>
-<p><strong>这两个文件就是之前加密压缩包flag文件夹里的两个文件，还差一个txt.galf，这个明显就是flag.txt反过来</strong></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162147928.png" alt="image-20240304162147928"></p>
-<ul>
-<li>查看这两个文件<ul>
-<li>md文件里有一半的flag<code>flag&#123;W1sh_y0u_AaaAaaaa</code>，钥匙.png是一张用<strong>bandizip</strong>压缩文件的图，使用的算法是<strong>ZipCrypto</strong>，猜测要使用明文爆破bkcrack了</li>
-</ul>
-</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304162805829.png" alt="image-20240304162805829"></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304163109001.png" alt="image-20240304163109001"></p>
-<ul>
-<li><p>用bandizip压缩提取出来的md或png，记住要<strong>选用zipcrypto算法</strong>，算法需要一致，这里以压缩png为例，压缩成crack.zip</p>
-</li>
-<li><p>用bkcrack明文爆破出密钥</p>
-</li>
-</ul>
-<p>-C 对应待解密的压缩包，-c为待解密压缩包里的某个加密文件，-P为明文压缩包，-p为已知的明文文件或明文信息</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -c 外卖箱/flag/小凯的奋斗故事.md -P crack.zip -p 小凯的奋斗故事.md</span><br></pre></td></tr></table></figure></div>
-
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164507564.png" alt="image-20240304164507564"></p>
-<p><strong>拿到密钥：48ff002a 56e00484 380c5c49</strong></p>
-<ul>
-<li>利用密钥破解</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">bkcrack -C wmx.zip -k 48ff002a 56e00484 380c5c49 -U new.zip 1234 </span><br></pre></td></tr></table></figure></div>
-
-<p>-k为密钥，-U为你设置的新的zip，和新zip的密码（会把原来的zip里的东西复制到new.zip中，并且new.zip的密码被覆盖为1234）</p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164738068.png" alt="image-20240304164738068"></p>
-<ul>
-<li>成功提取并打开txt.galf</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304164841781.png" alt="image-20240304164841781"></p>
-<ul>
-<li>结合文件名以及上半部分的flag，可知，文本内容需要倒置过来</li>
-</ul>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">flag&#123;W1sh_y0u_AaaAaaaaaaaaaaa_w0nderfu1_CTF_journe9&#125;</span><br></pre></td></tr></table></figure></div>
-
-<h1 id="明文混淆（复现）"><a href="#明文混淆（复现）" class="headerlink" title="明文混淆（复现）"></a>明文混淆（复现）</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><ul>
-<li>小明新买了一台windows电脑，给了小文一个经过两层混淆的webshell，，但压缩包密码搞忘了。听说webshell密码是一个叫flag的东西。。。</li>
-</ul>
-<h2 id="解题过程-1"><a href="#解题过程-1" class="headerlink" title="解题过程"></a>解题过程</h2><ul>
-<li>压缩包是加密的，一一排除伪加密，暴力破解，剩下明文爆破</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203835579.png" alt="image-20240304203835579"></p>
-<ul>
-<li>bkcrack先查看一下压缩包的加密算法：<code>bkcrack -L</code></li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304203726863.png" alt="image-20240304203726863"></p>
-<p><strong>果然是ZipCrypto，明晃晃的明文爆破了</strong></p>
-<ul>
-<li>从LICENSE.txt 入手，所有的LICENSE.txt，都有换行，把明文设置为12个以上的空格</li>
-<li>bkcrack爆破</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211905788.png" alt="image-20240304211905788"></p>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304211926934.png" alt="image-20240304211926934"></p>
-<ul>
-<li>提取出shell2.php，解混淆</li>
-</ul>
-<p><img lazyload src="/images/loading.svg" data-src="./image-20240304212121097.png" alt="image-20240304212121097"></p>
-<p><em>php解混淆知识有待加强:sob:</em></p>
-]]></content>
-      <categories>
-        <category>CTF做题记录</category>
-      </categories>
-      <tags>
-        <tag>MISC-压缩包</tag>
       </tags>
   </entry>
   <entry>
@@ -812,6 +812,47 @@
       </tags>
   </entry>
   <entry>
+    <title>Mad1sun&#39;s_diary</title>
+    <url>/2024/03/04/Mad1sun-s-diary/</url>
+    <content><![CDATA[
+<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="075ccf1543005f7453a6b60f38722a7a42766389e9a0ec744823689d17a79416">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8dbe94d7f737c5cd469505c4a4f08a7b6f667c2bcc7e8bcc1101e50b7049df7119ef282aa8ae99dbbb8171861bcfb1b1dddc1d6384602f77af8ed62b7441ca57a8a2310eb6a37d7ea9c178724cb1e86e84df4fda9aaf10ed03e76ef92f0644b615f52ca4e2c8bf4051f2818e0afe618fd552766300d8d61e95c00f98538f6082f41c0f65fe2529d35367bc9caec7c3f8fbd659f03b984237ffc6e60f7b7a81d3835d63ab3965182ed1f33123241da04f6cee3218fd6d2cc3064bb011503840a750f6c16d0e639cd66ad7b4a8ca22420bda45d991c6a4663b4fab83d6e665abd1bee27bde2881f5ba87bcb1cea799e1d831d3fb196e27939eaae30aa831edfb244b4c9e6c06824c8e5583fc441df06c7685f11d72f539630e5e55fbc88872c0e5807c64fc6ce12e6bb7967b35d9c291f510309c1a96c3b18b4cdf94f77883556b866253734d276b26686b94938b711c8eead1bb8a53fdac73b34f6eaadeccec954979a7b5bd5f0e1c0c5ffc58cf88a44a409991cfa824f146c75d1bb748903094f6c2b09a66339b3af423cf82bc30134a5af43c34422354661e31d237384f65819f11a17fb661b6d07dc3409eb05bcd7034018b484add8742729dd27bac4ea54dc0d1005f99935da83595a2c386daf1641e15030ea4749d04d2708939e1362c27297e76191ae7ebf7d85b36ee5e0188e70be084c62b17cd1281b1cea02ed5d0aa51f662f2e63ba398a5db86c4740bf5823f0ba677344ffbd33ebf168114256691fe28be77a66b97c6f4e0a4981cb38aa31862dcf0c0fe27ad12a69f4d7d0606a9981d5332acc0ebaa378b93ea65776f1871e3f62c9ee3bae2c10d1fe18259147c4321dd8e433323f5484c2fc9ec15cb06674acdce4e270158d1969b7fa82d68a4b06f9198d197e731f32ccef9b8b87c5c61e4c392fb4c9bf69809b56b28cfc198b54b4727a7205b02e038a69e87f9cd58914416ccfa956d4c36f08f908dc42d21138e095fa8d0e7ddc6a6bcce77887f450dec1c83ad2c3862c3bfb20c9587d5db37870ee4f97fbd7f515a3497904c1ffe0b48bdce0bd6877856e179af67c5f7a911988fc164c9ea9eb6c2c174bf3f3729c286dde9b4f6cfc7cf858d98266908aecc6ee4e2f65c831f5269bc99e29da01155fd44e72277355314c08ea10fe399d1d799ee82d7b2555871041a4125cebe0c480eec28b74804cb9799aa9acd4a10b47100ef750748387c71013e894f905b4fb43f0adffa316e6ad05db7fa5a174b86f3433b8dfb0122aac8884be1eb16a294cce62ec0bfa4a8d0001988a56d8e2673f8b2406ff343d2c46c12d667db16ceb6146fae3d1a8c56f678a27b034aff048924475e0fd54291c1e8bcaf5ab898b0314305543e55893ed782f50c1b489af0a3ede018ded8204c5743aa6630b7dd39bc4d31b4629f1a4a8d05c1f532a1234f885ce6e16ee6959a18b6cec92d9cb47698a61b9bda2c11fd6214105713d50f904a8f86cbb25cf3cec6aea845ca35d05c1f37abeb639e9a580ceae77a98480b32da28e79198f8192420d143adce3e0ae57483022f57045b2544d5aea7540d6595e143f9479f04d864f5d22faf0f5d696bac1ac270b0105993f53e73648e9f665bf4586290ef2ad01de44469986638817ea4471ffa22da9dd5c08cfb451dc13b274d7730af8d5481375fc5d92fd11aedb694827339481a905104ac9e577b02bd457999dde5c6bd2e723f3132ddbb3831027a87650a7ed81e6e3939063e34e75068d3c3119c104a0230555e68bc41c83416bc43d9ba117fbdc3e21a4b1d4c1bb6519ceaa89f93a3a717cb6f209681a1f9ee0df345603ec85e20a879bd638e1f55f02c253861cd873de5239c52ad5512adf59f0b167be996427af8341174bba68a6e6a4c1b3b483b76d83011ba9542b1dae9ed1edd98f5709dfcb53f3919ef948bf26e6af3fc5f81b1459e757d7360baa85ca34a9d7fdf67fcab45f1d02e86fbb96278b2d80959f8ca68f3ced2da29d2edc804fccf082268c0ea06413a91b8719e0d2b8b3013e56edcb44a8871a7e4e96d89fd02818a00aac38b3d84ca46eaeb028a82b2a7a82431881037945a9ad936d4bc610e0d9fa28a8285bf96a950d4b83682aba42864c2a9102518372ca6e27a13a0d0cb160ec49b6bd1dfaa0459a9a6f10eec050ce9c50c464ae2187723eec05534a351e27e8c572cb0c0767f153cd27f2a197a27551ef5f033df3d99275f03467f2f4527ecfd40c71b192a69f9ce15f3e28adcd0b5cadbda0cc1cd5f7c64a9cd0399106a661cfda31fb9c1921e731f828b0760af686fce696bc6152a5f5d293db1de5523154cabe986aba79451cdc4d43dca9a8f872ddad9a5c4425c38534c3f4c759c8ae57fe1e81c17117ad66e8f739144b3af96d0c012f9773dfc99a5f3074f714662fb15b0da5969f3034aa986b245e222477948ff75d0bf2ee3fb091c30669a2125aebec21b1504d3924f47533d10bb4f1218dcb63154b14f576590dd7baef797a75175618e815a1f2a240d926185c1cf43c183dd29b6aaa9e65a737901c1e13cadfe3f6bd12302672c67dbce8475b58e6380b90fbe50b431efd14052158f85d5f9d0b8c35e55797683ff8120590ba93d79d52cff3a13139972f20a448b8b21cd781578ddd058d7277e271bb656d2bd382efda2c2c793ef244e7fba6a69887a2c8806b9e43f970e3411c07e7792c5033dac2246b3cc7924a0ea847bcf36bb49ce25c7f9a5b39a48c8dc0f90b429b79f227a98b089e854ecb74d1a6e835fbda48732d2cabc49a8f9d3e4eb4f6b0c79c2a879403c875ff8fe557b71fb386427876d7932ec1bbe37edd1111849cf79177cd491cf692652e6636b3824ce3efb204ee60b77fc2c5a8c8be40c5774900a3174e880e1e89beb01d0dfb27554438dc3a8e2b8301a64026737f68c79ecb135eae96cf2edfbac2f2584bdf9a86100a08a7b2e98581a21941bbbc04f23928a99980ebff588962099a09254c0ec8a60c632606967c13c33a4d604937b49673c10d75628b9292b1cccb4df00fc26946939148fa816f1be67bfc95a60964574ccb6d7f62884350a8c767fe0ab63be3a591d20af5a6127a45c0b21708d3d385e8627480d793deecf64b37eea098aab115a4d4887c872c0a6e4240017e6f10caf36c9cb26ce363fa615124153035452af4cde81afd4e1dd973088193af7f4e3230aec10aab9f56ff0408253fb3970435fb4d43b65882ec3bc3396379fc480f6fd35c582d676eba64995759d75d7e57208b80f18695b385306fe72aa77288efad716192fd5e315d502d779ba18978fe5774fb67649ac1d256110f138d0f583ea05a95a03dcf05c4fe229c46fc353f6f0f9ac9fa2d4f06b3ace5d20d08e19639c078e25b4de57ead0c6fb0840ba997c98600e8bc799576fe48eb40fd6f0e116ba1e80c78841565ec1eb17977d3369e35cdd6f41d2533e470b823e0afa28546d9043dde92ee65579bab0f5b148826f917e1959fc40cf09651c345d5200eae2efef32417e63ea66784197f889765ba9d5813db9b2c3174557d3125c25295515671a4faee0970ca4a47e749a6ef45ae98ca524789a23ee96673f4ec2e9ad33fe60f76366bb568049a2c3c5afe12ba3f3a19990b1b8dd52b6d7b4a8f5137fee385f697ce280711712a5e51f0f060390d65a04f56242ce8bcc6c8599512a22afa59e66fb616898105b6f2ca8868f83454b6f2e5e971f90dc15d4e45909b1857164331f798da4deeda490b7aa4605e726214020e229b6aa3f401dce514ad8c2153457878d190f24bbf3885bc898b80bac5a356f07d37a28ab44</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>Mad1sun的生活小日记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>CTF_MISC流量分析总结</title>
+    <url>/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><ul>
+<li>openssl 搞人心态<ul>
+<li>salted__</li>
+<li>php中的openssl</li>
+</ul>
+</li>
+</ul>
+<h2 id="sql注入流量"><a href="#sql注入流量" class="headerlink" title="sql注入流量"></a>sql注入流量</h2><h2 id="大流量"><a href="#大流量" class="headerlink" title="大流量"></a>大流量</h2><blockquote>
+<p>数据处理：<a class="link" href="https://zhuanlan.zhihu.com/p/35623547">模拟企业网络流量进行入侵溯源分析 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>CTF知识积累</category>
+      </categories>
+      <tags>
+        <tag>MISC-流量分析</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MISC_内存取证_Volatility使用</title>
     <url>/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p>MISC 内存取证 Volatility使用</p>
@@ -889,24 +930,26 @@
       </tags>
   </entry>
   <entry>
-    <title>CTF_MISC流量分析总结</title>
-    <url>/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><h2 id="USB流量"><a href="#USB流量" class="headerlink" title="USB流量"></a>USB流量</h2><h2 id="TLS流量"><a href="#TLS流量" class="headerlink" title="TLS流量"></a>TLS流量</h2><h2 id="webshell流量"><a href="#webshell流量" class="headerlink" title="webshell流量"></a>webshell流量</h2><ul>
-<li>openssl 搞人心态<ul>
-<li>salted__</li>
-<li>php中的openssl</li>
-</ul>
-</li>
-</ul>
-<h2 id="sql注入流量"><a href="#sql注入流量" class="headerlink" title="sql注入流量"></a>sql注入流量</h2><h2 id="大流量"><a href="#大流量" class="headerlink" title="大流量"></a>大流量</h2><blockquote>
-<p>数据处理：<a class="link" href="https://zhuanlan.zhihu.com/p/35623547">模拟企业网络流量进行入侵溯源分析 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-]]></content>
+    <title>Mad1sun_bad_days</title>
+    <url>/2024/02/29/Mad1sun-bad-days/</url>
+    <content><![CDATA[
+<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="38e0b744c166c42bafc82fbb60a28f502fcbe76f1b47d8c14a91936c7530d523">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8daeae4b6ca3ddbfd01ec051499d4b50f2d43a75fc586274852cb871e33d21bf4379b6e540a918d6d3898b90acb267cfb0ddf5d64f1ee868313bdc4b97bf3d931dec88407482e7e9be8213f445488ddb3c64a5abb3900b55e21520c4210cc93c206815002449a7fbc7b0009219b65730859170cf5115e41eaf416af24e7dd41c5eb763d76b810b52c82192d44c6136bf9875c6187f53f31ced3e97e06e54ed6a1c2012ab39916707500105ec43c703a60673a17e9c85244b01e93fab8a9d5a843dbc30325250cbe69299f6c47ea651530c0103fa7b114102889a969743508ad1ab59bb99b1752ec66ca9274f0f31e09564b2c7a8a799fa953c9006fa8f8c87f53428097f9a93ff9f44b48a48b2f4dea2b5dca2db228564700a77af39853e9e3038e0cfc0a05dd7616eaee5cc49ba9d59e91a9db21d3e460e620b0e68717157dfc4a3467451810fac4776ef433560454ec5ac582e1b05ada5b3e6f0a35dc836a08463482d980762ca1207f164f1942c8e797823ddadab5e5bfdc09089d383616e467a935978e86cb26b25df7f3aab4dd221ec829f412aa584b672635631233f500bd45f2d61e7885cc5fba1fcb63d4b30e298201be459858fa078a72629beaa750e</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
       <categories>
-        <category>CTF知识积累</category>
+        <category>Mad1sun的生活小日记</category>
       </categories>
       <tags>
-        <tag>MISC-流量分析</tag>
+        <tag>Mad1sun倒霉蛋的日常</tag>
       </tags>
   </entry>
   <entry>
@@ -2090,48 +2133,5 @@
       <tags>
         <tag>MISC-流量分析</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Mad1sun_bad_days</title>
-    <url>/2024/02/29/Mad1sun-bad-days/</url>
-    <content><![CDATA[
-<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="38e0b744c166c42bafc82fbb60a28f502fcbe76f1b47d8c14a91936c7530d523">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8daeae4b6ca3ddbfd01ec051499d4b50f2d43a75fc586274852cb871e33d21bf4379b6e540a918d6d3898b90acb267cfb0ddf5d64f1ee868313bdc4b97bf3d931dec88407482e7e9be8213f445488ddb3c64a5abb3900b55e21520c4210cc93c206815002449a7fbc7b0009219b65730859170cf5115e41eaf416af24e7dd41c5eb763d76b810b52c82192d44c6136bf9875c6187f53f31ced3e97e06e54ed6a1c2012ab39916707500105ec43c703a60673a17e9c85244b01e93fab8a9d5a843dbc30325250cbe69299f6c47ea651530c0103fa7b114102889a969743508ad1ab59bb99b1752ec66ca9274f0f31e09564b2c7a8a799fa953c9006fa8f8c87f53428097f9a93ff9f44b48a48b2f4dea2b5dca2db228564700a77af39853e9e3038e0cfc0a05dd7616eaee5cc49ba9d59e91a9db21d3e460e620b0e68717157dfc4a3467451810fac4776ef433560454ec5ac582e1b05ada5b3e6f0a35dc836a08463482d980762ca1207f164f1942c8e797823ddadab5e5bfdc09089d383616e467a935978e86cb26b25df7f3aab4dd221ec829f412aa584b672635631233f500bd45f2d61e7885cc5fba1fcb63d4b30e298201be459858fa078a72629beaa750e</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>Mad1sun的生活小日记</category>
-      </categories>
-      <tags>
-        <tag>Mad1sun倒霉蛋的日常</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mad1sun&#39;s_diary</title>
-    <url>/2024/03/04/Mad1sun-s-diary/</url>
-    <content><![CDATA[
-<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="不正确，再试一次～" data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="075ccf1543005f7453a6b60f38722a7a42766389e9a0ec744823689d17a79416">8c76022e97a58cf7bdb38a6c611ba5afe6d77c112047be7c42efabbb76a9fb8dbe94d7f737c5cd469505c4a4f08a7b6f667c2bcc7e8bcc1101e50b7049df7119ef282aa8ae99dbbb8171861bcfb1b1dddc1d6384602f77af8ed62b7441ca57a8a2310eb6a37d7ea9c178724cb1e86e84df4fda9aaf10ed03e76ef92f0644b615f52ca4e2c8bf4051f2818e0afe618fd552766300d8d61e95c00f98538f6082f41c0f65fe2529d35367bc9caec7c3f8fbd659f03b984237ffc6e60f7b7a81d3835d63ab3965182ed1f33123241da04f6cee3218fd6d2cc3064bb011503840a750f6c16d0e639cd66ad7b4a8ca22420bda45d991c6a4663b4fab83d6e665abd1bee27bde2881f5ba87bcb1cea799e1d831d3fb196e27939eaae30aa831edfb244b4c9e6c06824c8e5583fc441df06c7685f11d72f539630e5e55fbc88872c0e5807c64fc6ce12e6bb7967b35d9c291f510309c1a96c3b18b4cdf94f77883556b866253734d276b26686b94938b711c8eead1bb8a53fdac73b34f6eaadeccec954979a7b5bd5f0e1c0c5ffc58cf88a44a409991cfa824f146c75d1bb748903094f6c2b09a66339b3af423cf82bc30134a5af43c34422354661e31d237384f65819f11a17fb661b6d07dc3409eb05bcd7034018b484add8742729dd27bac4ea54dc0d1005f99935da83595a2c386daf1641e15030ea4749d04d2708939e1362c27297e76191ae7ebf7d85b36ee5e0188e70be084c62b17cd1281b1cea02ed5d0aa51f662f2e63ba398a5db86c4740bf5823f0ba677344ffbd33ebf168114256691fe28be77a66b97c6f4e0a4981cb38aa31862dcf0c0fe27ad12a69f4d7d0606a9981d5332acc0ebaa378b93ea65776f1871e3f62c9ee3bae2c10d1fe18259147c4321dd8e433323f5484c2fc9ec15cb06674acdce4e270158d1969b7fa82d68a4b06f9198d197e731f32ccef9b8b87c5c61e4c392fb4c9bf69809b56b28cfc198b54b4727a7205b02e038a69e87f9cd58914416ccfa956d4c36f08f908dc42d21138e095fa8d0e7ddc6a6bcce77887f450dec1c83ad2c3862c3bfb20c9587d5db37870ee4f97fbd7f515a3497904c1ffe0b48bdce0bd6877856e179af67c5f7a911988fc164c9ea9eb6c2c174bf3f3729c286dde9b4f6cfc7cf858d98266908aecc6ee4e2f65c831f5269bc99e29da01155fd44e72277355314c08ea10fe399d1d799ee82d7b2555871041a4125cebe0c480eec28b74804cb9799aa9acd4a10b47100ef750748387c71013e894f905b4fb43f0adffa316e6ad05db7fa5a174b86f3433b8dfb0122aac8884be1eb16a294cce62ec0bfa4a8d0001988a56d8e2673f8b2406ff343d2c46c12d667db16ceb6146fae3d1a8c56f678a27b034aff048924475e0fd54291c1e8bcaf5ab898b0314305543e55893ed782f50c1b489af0a3ede018ded8204c5743aa6630b7dd39bc4d31b4629f1a4a8d05c1f532a1234f885ce6e16ee6959a18b6cec92d9cb47698a61b9bda2c11fd6214105713d50f904a8f86cbb25cf3cec6aea845ca35d05c1f37abeb639e9a580ceae77a98480b32da28e79198f8192420d143adce3e0ae57483022f57045b2544d5aea7540d6595e143f9479f04d864f5d22faf0f5d696bac1ac270b0105993f53e73648e9f665bf4586290ef2ad01de44469986638817ea4471ffa22da9dd5c08cfb451dc13b274d7730af8d5481375fc5d92fd11aedb694827339481a905104ac9e577b02bd457999dde5c6bd2e723f3132ddbb3831027a87650a7ed81e6e3939063e34e75068d3c3119c104a0230555e68bc41c83416bc43d9ba117fbdc3e21a4b1d4c1bb6519ceaa89f93a3a717cb6f209681a1f9ee0df345603ec85e20a879bd638e1f55f02c253861cd873de5239c52ad5512adf59f0b167be996427af8341174bba68a6e6a4c1b3b483b76d83011ba9542b1dae9ed1edd98f5709dfcb53f3919ef948bf26e6af3fc5f81b1459e757d7360baa85ca34a9d7fdf67fcab45f1d02e86fbb96278b2d80959f8ca68f3ced2da29d2edc804fccf082268c0ea06413a91b8719e0d2b8b3013e56edcb44a8871a7e4e96d89fd02818a00aac38b3d84ca46eaeb028a82b2a7a82431881037945a9ad936d4bc610e0d9fa28a8285bf96a950d4b83682aba42864c2a9102518372ca6e27a13a0d0cb160ec49b6bd1dfaa0459a9a6f10eec050ce9c50c464ae2187723eec05534a351e27e8c572cb0c0767f153cd27f2a197a27551ef5f033df3d99275f03467f2f4527ecfd40c71b192a69f9ce15f3e28adcd0b5cadbda0cc1cd5f7c64a9cd0399106a661cfda31fb9c1921e731f828b0760af686fce696bc6152a5f5d293db1de5523154cabe986aba79451cdc4d43dca9a8f872ddad9a5c4425c38534c3f4c759c8ae57fe1e81c17117ad66e8f739144b3af96d0c012f9773dfc99a5f3074f714662fb15b0da5969f3034aa986b245e222477948ff75d0bf2ee3fb091c30669a2125aebec21b1504d3924f47533d10bb4f1218dcb63154b14f576590dd7baef797a75175618e815a1f2a240d926185c1cf43c183dd29b6aaa9e65a737901c1e13cadfe3f6bd12302672c67dbce8475b58e6380b90fbe50b431efd14052158f85d5f9d0b8c35e55797683ff8120590ba93d79d52cff3a13139972f20a448b8b21cd781578ddd058d7277e271bb656d2bd382efda2c2c793ef244e7fba6a69887a2c8806b9e43f970e3411c07e7792c5033dac2246b3cc7924a0ea847bcf36bb49ce25c7f9a5b39a48c8dc0f90b429b79f227a98b089e854ecb74d1a6e835fbda48732d2cabc49a8f9d3e4eb4f6b0c79c2a879403c875ff8fe557b71fb386427876d7932ec1bbe37edd1111849cf79177cd491cf692652e6636b3824ce3efb204ee60b77fc2c5a8c8be40c5774900a3174e880e1e89beb01d0dfb27554438dc3a8e2b8301a64026737f68c79ecb135eae96cf2edfbac2f2584bdf9a86100a08a7b2e98581a21941bbbc04f23928a99980ebff588962099a09254c0ec8a60c632606967c13c33a4d604937b49673c10d75628b9292b1cccb4df00fc26946939148fa816f1be67bfc95a60964574ccb6d7f62884350a8c767fe0ab63be3a591d20af5a6127a45c0b21708d3d385e8627480d793deecf64b37eea098aab115a4d4887c872c0a6e4240017e6f10caf36c9cb26ce363fa615124153035452af4cde81afd4e1dd973088193af7f4e3230aec10aab9f56ff0408253fb3970435fb4d43b65882ec3bc3396379fc480f6fd35c582d676eba64995759d75d7e57208b80f18695b385306fe72aa77288efad716192fd5e315d502d779ba18978fe5774fb67649ac1d256110f138d0f583ea05a95a03dcf05c4fe229c46fc353f6f0f9ac9fa2d4f06b3ace5d20d08e19639c078e25b4de57ead0c6fb0840ba997c98600e8bc799576fe48eb40fd6f0e116ba1e80c78841565ec1eb17977d3369e35cdd6f41d2533e470b823e0afa28546d9043dde92ee65579bab0f5b148826f917e1959fc40cf09651c345d5200eae2efef32417e63ea66784197f889765ba9d5813db9b2c3174557d3125c25295515671a4faee0970ca4a47e749a6ef45ae98ca524789a23ee96673f4ec2e9ad33fe60f76366bb568049a2c3c5afe12ba3f3a19990b1b8dd52b6d7b4a8f5137fee385f697ce280711712a5e51f0f060390d65a04f56242ce8bcc6c8599512a22afa59e66fb616898105b6f2ca8868f83454b6f2e5e971f90dc15d4e45909b1857164331f798da4deeda490b7aa4605e726214020e229b6aa3f401dce514ad8c2153457878d190f24bbf3885bc898b80bac5a356f07d37a28ab44</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-swup-reload-script src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>Mad1sun的生活小日记</category>
-      </categories>
   </entry>
 </search>

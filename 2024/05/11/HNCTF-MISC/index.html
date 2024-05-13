@@ -13,7 +13,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://madifaye.github.io/2024/05/11/hnctf2024-misc-forensics/"/>
+    <link rel="canonical" href="https://madifaye.github.io/2024/05/11/hnctf-misc/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -21,30 +21,30 @@
         <meta name="description" content="secretbinwalk -e secret.png提取出来一个zip压缩包，里面有一个flag.txt，内容是：flag is not here 只有一行但是txt大小却是353bytes，感觉很可疑，用vim打开后出现了很多零宽度字符  里面的零宽度字符种类包括：0x200b、0x200d、0x202c、0xfeff 在线网站解密：https:&#x2F;&#x2F;330k.github.io&#x2F;misc_to">
 <meta property="og:type" content="article">
 <meta property="og:title" content="H&amp;NCTF2024">
-<meta property="og:url" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/index.html">
+<meta property="og:url" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/index.html">
 <meta property="og:site_name" content="Mad1sun个人博客">
 <meta property="og:description" content="secretbinwalk -e secret.png提取出来一个zip压缩包，里面有一个flag.txt，内容是：flag is not here 只有一行但是txt大小却是353bytes，感觉很可疑，用vim打开后出现了很多零宽度字符  里面的零宽度字符种类包括：0x200b、0x200d、0x202c、0xfeff 在线网站解密：https:&#x2F;&#x2F;330k.github.io&#x2F;misc_to">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233037118.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233314212.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233429375.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233621537.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512234447206.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513182955290.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513183110416.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513184801867.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513184910374.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513190447727.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513191602611.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513192540024.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513193035736.png">
-<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240513195238375.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240512233037118.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240512233314212.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240512233429375.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240512233621537.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240512234447206.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240513182955290.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240513183110416.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240513184801867.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240513184910374.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240513190447727.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240513191602611.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240513192540024.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240513193035736.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240513195238375.png">
 <meta property="article:published_time" content="2024-05-11T12:39:17.000Z">
 <meta property="article:modified_time" content="2024-05-13T15:19:19.928Z">
 <meta property="article:author" content="Mad1sun">
 <meta property="article:tag" content="CTF比赛wp">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/image-20240512233037118.png">
+<meta name="twitter:image" content="https://madifaye.github.io/2024/05/11/HNCTF-MISC/image-20240512233037118.png">
     
     
     <!--- Icon Part-->
@@ -793,7 +793,7 @@
             </li>
         
         <li>
-            <strong>Link:</strong> https://redefine.ohevan.com/2024/05/11/HNCTF2024-MISC-Forensics/
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/05/11/HNCTF-MISC/
         </li>
         <li>
             <strong>
