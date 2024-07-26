@@ -18,16 +18,23 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="MISC 内存取证 Volatility使用  从零开始的内存取证训练，工具为Volatility，面向CTF-MISC做的训练记录，同时会记录Volaitlity的使用，Volatility的版本可能会根据不同的题目更换  Memslab 入门0x01 lab0 Never Too Late Mister 题目来源于：[MemLabs&#x2F;Lab 0 at master · stuxnet999&#x2F;M">
+        <meta name="description" content="MISC 内存取证 Volatility使用¡  从零开始的内存取证训练，工具为Volatility，面向CTF-MISC做的训练记录，同时会记录Volaitlity的使用，Volatility的版本可能会根据不同的题目更换  Memslab 入门0x01 lab0 Never Too Late Mister 题目来源于：[MemLabs&#x2F;Lab 0 at master · stuxnet999&#x2F;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MISC_内存取证_Volatility使用">
 <meta property="og:url" content="https://madifaye.github.io/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="Mad1sun个人博客">
-<meta property="og:description" content="MISC 内存取证 Volatility使用  从零开始的内存取证训练，工具为Volatility，面向CTF-MISC做的训练记录，同时会记录Volaitlity的使用，Volatility的版本可能会根据不同的题目更换  Memslab 入门0x01 lab0 Never Too Late Mister 题目来源于：[MemLabs&#x2F;Lab 0 at master · stuxnet999&#x2F;M">
+<meta property="og:description" content="MISC 内存取证 Volatility使用¡  从零开始的内存取证训练，工具为Volatility，面向CTF-MISC做的训练记录，同时会记录Volaitlity的使用，Volatility的版本可能会根据不同的题目更换  Memslab 入门0x01 lab0 Never Too Late Mister 题目来源于：[MemLabs&#x2F;Lab 0 at master · stuxnet999&#x2F;">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://madifaye.github.io/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/image-20240511210926533.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/image-20240514161436735.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/image-20240514170335700.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/image-20240516094911415.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/image-20240516110206328.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/image-20240516110151475.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/Stage2.png">
+<meta property="og:image" content="https://madifaye.github.io/2024/05/11/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/MISC-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-Volatility%E4%BD%BF%E7%94%A8/image-20240517170507874.png">
 <meta property="article:published_time" content="2024-05-11T12:39:17.000Z">
-<meta property="article:modified_time" content="2024-05-13T15:19:08.952Z">
+<meta property="article:modified_time" content="2024-05-17T09:10:06.329Z">
 <meta property="article:author" content="Mad1sun">
 <meta property="article:tag" content="MISC-内存取证">
 <meta name="twitter:card" content="summary">
@@ -497,7 +504,7 @@
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -555,8 +562,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-05-13 23:19:08</span>
-            <span class="mobile">2024-05-13 23:19:08</span>
+            <span class="desktop">2024-05-17 17:10:06</span>
+            <span class="mobile">2024-05-17 17:10:06</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -594,12 +601,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>831 Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.6k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>3 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>13 Mins</span>
         </span>
     
     
@@ -618,7 +625,7 @@
 
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <p>MISC 内存取证 Volatility使用</p>
+            <p>MISC 内存取证 Volatility使用¡</p>
 <blockquote>
 <p>从零开始的内存取证训练，工具为Volatility，面向CTF-MISC做的训练记录，同时会记录Volaitlity的使用，Volatility的版本可能会根据不同的题目更换</p>
 </blockquote>
@@ -671,6 +678,186 @@
 <ul>
 <li>最后的flag：<code>flag&#123;you_are_good_but_1_4m_b3tt3r&#125;</code></li>
 </ul>
+<h4 id="0x02-lab1-Beginner’s-Luck"><a href="#0x02-lab1-Beginner’s-Luck" class="headerlink" title="0x02 lab1 Beginner’s Luck"></a>0x02 lab1 Beginner’s Luck</h4><ul>
+<li>题目来源于：[MemLabs/Lab 1 at master · stuxnet999/MemLabs (github.com)](<a class="link" target="_blank" rel="noopener" href="https://github.com/stuxnet999/MemLabs/tree/master/Lab">https://github.com/stuxnet999/MemLabs/tree/master/Lab <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> 1)</li>
+<li>题目描述：</li>
+</ul>
+<p>My sister’s computer crashed. We were very fortunate to recover this memory dump. Your job is get all her <strong>important files</strong> from the system. From what we remember, we suddenly saw <strong>a black window pop up</strong> with some thing being executed. When the crash happened, she was trying to <strong>draw something</strong>. Thats all we remember from the time of crash.</p>
+<p><strong>Note</strong>: This challenge is composed of 3 flags.</p>
+<ul>
+<li><p>工具：Volatility2</p>
+</li>
+<li><p>从题目描述出发，我把关键的部分都标记了：</p>
+<ul>
+<li><code>Important files</code> 意味着 <code>filescan</code>和<code>dumpfiles</code>的使用</li>
+<li><code>a black window pop up</code>应该是cmd.exe，那么在<code>pslist</code>里肯定可以看见</li>
+<li><code>draw something</code> 应该是<code>mspaint.exe</code>，通过<code>pslist</code>查看</li>
+</ul>
+</li>
+<li><p>从<code>pslist</code>入手，看见了几个有趣的进程<code>cmd.exe</code>，<code>WinRAR.exe</code>，<code>conhost.exe</code>，<code>mspaint.exe</code>验证了我们的猜想</p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab1.raw --profile=Win7SP1x64 pslist</span></span><br><span class="line"></span><br><span class="line">0xfffffa8002222780 cmd.exe                1984    604      1       21      1      0 2019-12-11 14:34:54 UTC+0000</span><br><span class="line">0xfffffa8001010b30 WinRAR.exe             1512   2504      6      207      2      0 2019-12-11 14:37:23 UTC+0000</span><br><span class="line">0xfffffa800104a780 conhost.exe            2260    368      2       50      1      0 2019-12-11 14:37:54 UTC+0000</span><br><span class="line">0xfffffa80022bab30 mspaint.exe            2424    604      6      128      1      0 2019-12-11 14:35:14 UTC+0000 </span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>从cmd和conhost开始：<code>cmdline</code>，<code>consoles</code>查看，在consoles中我们看见了敏感的数据<code>Zmxh</code></li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab1.raw --profile=Win7SP1x64 consoles</span></span><br><span class="line"></span><br><span class="line">C:\Users\SmartNet&gt;St4G3$1                                                       </span><br><span class="line">ZmxhZ3t0aDFzXzFzX3RoM18xc3Rfc3Q0ZzMhIX0= </span><br></pre></td></tr></table></figure></div>
+
+<p>base64解码得到flag</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;ZmxhZ3t0aDFzXzFzX3RoM18xc3Rfc3Q0ZzMhIX0=&quot;</span>|<span class="built_in">base64</span> -d</span></span><br><span class="line"></span><br><span class="line">flag&#123;th1s_1s_th3_1st_st4g3!!&#125; </span><br></pre></td></tr></table></figure></div>
+
+
+
+<ul>
+<li>mspaint.exe：pslist查看进程号+memdump转储+改后缀为data+GIMP+翻转，<code>flag&#123;Good_BoY_good_girl&#125;</code></li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240514161436735.png" alt="image-20240514161436735"></p>
+<ul>
+<li>WinRAR.exe：<code>filescan｜grep -i rar</code>，可以看见有个<code>Important.rar</code>和题目描述的important files也能对应起来</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab1.raw --profile=Win7SP1x64 filescan|grep -i rar</span> </span><br><span class="line"></span><br><span class="line">0x000000003fb48bc0      1      0 R--r-- \Device\HarddiskVolume2\Users\Alissa Simpson\Documents\Important.rar</span><br></pre></td></tr></table></figure></div>
+
+<p>或者因为有cmd.exe，在<code>cmdline</code>中查看</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab1.raw --profile=Win7SP1x64 cmdline |grep -i WinRAR</span></span><br><span class="line"></span><br><span class="line">Volatility Foundation Volatility Framework 2.6.1</span><br><span class="line">WinRAR.exe pid:   1512</span><br><span class="line">Command line : &quot;C:\Program Files\WinRAR\WinRAR.exe&quot; &quot;C:\Users\Alissa Simpson\Documents\Important.rar&quot;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>转储下来，<code>mv</code>指令修改文件以及文件扩展名，<code>unrar e important.rar</code>可以看见</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">unrar e download.rar</span> </span><br><span class="line"></span><br><span class="line">UNRAR 7.00 freeware      Copyright (c) 1993-2024 Alexander Roshal</span><br><span class="line"></span><br><span class="line">Archive comment:</span><br><span class="line">Password is NTLM hash(in uppercase) of Alissa&#x27;s account passwd.</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Archive comment: Password is NTLM hash(in uppercase) of Alissa’s account passwd.</strong></p>
+<ul>
+<li>hashdump查看passwd的hash</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab1.raw --profile=Win7SP1x64 hashdump</span>      </span><br><span class="line"></span><br><span class="line">Alissa Simpson:1003:aad3b435b51404eeaad3b435b51404ee:f4ff64c8baac57d22f22edc681055ba6:::</span><br></pre></td></tr></table></figure></div>
+
+<p>所以passwd就是<code>F4FF64C8BAAC57D22F22EDC681055BA6</code></p>
+<ul>
+<li>成功看见flag3.png</li>
+</ul>
+<img lazyload src="/images/loading.svg" data-src="MISC-内存取证-Volatility使用/image-20240514170335700.png" alt="image-20240514170335700" style="zoom:50%;">
+
+<h4 id="0x03-lab2-A-New-World"><a href="#0x03-lab2-A-New-World" class="headerlink" title="0x03 lab2 A New World"></a>0x03 lab2 A New World</h4><ul>
+<li>题目描述：</li>
+</ul>
+<p>One of the clients of our company, lost the access to his system due to an unknown error. He is supposedly a very popular <strong>“environmental” activist</strong>. As a part of the investigation, he told us that his go to applications are <strong>browsers</strong>, his <strong>password managers</strong> etc. We hope that you can dig into this memory dump and find his important stuff and give it back to us.</p>
+<p><strong>Note</strong>: This challenge is composed of 3 flags.</p>
+<ul>
+<li><p>根据题目描述</p>
+<ul>
+<li><code>environmental activist</code>-&gt; envars</li>
+<li>browsers需要根据pslist里显示的正在使用的浏览器，针对性的提取history</li>
+<li>password managers也需要根据进程，针对性的利用</li>
+</ul>
+</li>
+<li><p>那么第一步就是<code>envars</code></p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab2.raw --profile=Win7SP1x64 envars</span></span><br><span class="line"></span><br><span class="line">2096 cmd.exe              0x00000000000ec300 NEW_TMP                        C:\Windows\ZmxhZ3t3M2xjMG0zX1QwXyRUNGczXyFfT2ZfTDRCXzJ9</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;w3lc0m3_T0_$T4g3_!_Of_L4B_2&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><code>pslist</code>查看，发现有<code>chrome</code>和<code>KeePass</code></li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab2.raw --profile=Win7SP1x64 pslist</span></span><br><span class="line"></span><br><span class="line">0xfffffa8000fae6a0 chrome.exe             2572   2296      8      177      2      0 2019-12-14 10:36:56 UTC+0000</span><br><span class="line">0xfffffa800224a8c0 KeePass.exe            3008   1064     12      316      1      0 2019-12-14 10:37:56 UTC+0000</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>KeePass将密码存储在带有扩展程序 <code>&quot;.kdbx&quot;</code> 的数据库中，并使用<strong>主密码</strong>进行查找。于是先filescan查找kdbx，找到一个<code>Hidden.kdbx</code>，dumpfiles保存下来，修改后缀；但我们还缺少密码，<code>filescan|grep -i password</code></li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x000000003fce1c70      1      0 R--r-d \Device\HarddiskVolume2\Users\Alissa Simpson\Pictures\Password.png</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>dumpfiles后，修改后缀，打开图片发现png中存了password：<code>P4SSw0rd_123</code>，打开KeePass，输入密码，导入，看见了flag字段</li>
+</ul>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240516094911415.png" alt="image-20240516094911415"></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;w0w_th1s_1s_Th3_SeC0nD_ST4g3_!!&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>查看chromehistory需要特定的插件，来源于：<a class="link" target="_blank" rel="noopener" href="https://github.com/superponible/volatility-plugins">Volaitilty-Plugins <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab2.raw --profile=Win7SP1x64 chromehistory</span></span><br><span class="line"></span><br><span class="line">32 https://mega.nz/#F!TrgSQQTS!H0ZrUzF0B-ZKNM3y9E76lg                               MEGA                                                                                  2     0 2019-12-14 10:21:39.602970        N/A</span><br></pre></td></tr></table></figure></div>
+
+<p>拿到一个mega链接：<a class="link" target="_blank" rel="noopener" href="https://mega.nz/#F!TrgSQQTS!H0ZrUzF0B-ZKNM3y9E76lg">https://mega.nz/#F!TrgSQQTS!H0ZrUzF0B-ZKNM3y9E76lg <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> ，访问可以下载一个<code>Important.zip</code></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">unzip Importand.zip</span></span><br><span class="line"></span><br><span class="line">Archive:  Important.zip</span><br><span class="line">Password is SHA1(stage-3-FLAG) from Lab-1. Password is in lowercase.</span><br><span class="line">   skipping: Important.png           unsupported compression method 99</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Password is SHA1(stage-3-FLAG) from Lab-1. Password is in lowercase</strong></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240516110206328.png" alt="image-20240516110206328"></p>
+<p><img lazyload src="/images/loading.svg" data-src="./image-20240516110151475.png" alt="image-20240516110151475"></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;oK_St4g3_3_is_DoNE!!&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="0x04-lab3-The-Evil’s-Den"><a href="#0x04-lab3-The-Evil’s-Den" class="headerlink" title="0x04 lab3 The Evil’s Den"></a>0x04 lab3 The Evil’s Den</h4><ul>
+<li>题目描述：</li>
+</ul>
+<p>A <strong>malicious</strong> script encrypted a very secret piece of information I had on my system. Can you recover the information for me please?</p>
+<p><strong>Note-1</strong>: This challenge is composed of only 1 flag. The flag split into 2 parts.</p>
+<p><strong>Note-2</strong>: You’ll need the first half of the flag to get the second.</p>
+<p>Need: Steghide</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab3.raw --profile=Win7SP1x86 filescan|grep Desktop</span></span><br><span class="line"></span><br><span class="line">0x0000000004f34148      2      0 RW---- \Device\HarddiskVolume2\Users\hello\Desktop\suspision1.jpeg</span><br><span class="line">0x000000003de1b5f0      8      0 R--rw- \Device\HarddiskVolume2\Users\hello\Desktop\evilscript.py.py</span><br><span class="line">0x000000003e727e50      8      0 -W-rw- \Device\HarddiskVolume2\Users\hello\Desktop\vip.txt</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#evilscript.py.py</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">xor</span>(<span class="params">s</span>):</span><br><span class="line">  a = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">chr</span>(<span class="built_in">ord</span>(i)^<span class="number">3</span>) <span class="keyword">for</span> i <span class="keyword">in</span> s)</span><br><span class="line">  <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encoder</span>(<span class="params">x</span>):  </span><br><span class="line">  <span class="keyword">return</span> x.encode(<span class="string">&quot;base64&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">  f = <span class="built_in">open</span>(<span class="string">&quot;C:\\Users\\hello\\Desktop\\vip.txt&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line">  arr = sys.argv[<span class="number">1</span>]</span><br><span class="line">  arr = encoder(xor(arr))</span><br><span class="line">  f.write(arr)</span><br><span class="line">  f.close()</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#vip.txt</span><br><span class="line">am1gd2V4M20wXGs3b2U=</span><br></pre></td></tr></table></figure></div>
+
+<p>与3异或然后base64，简单逻辑，拿cyberchef跑出结果是<code>inctf&#123;0n3_h4lf</code></p>
+<p>根据提示，需要用到前半段，猜测前半段flag是加密的密码，由此得到后半段</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">steghide extract -sf suspision1.jpeg</span></span><br><span class="line">Enter passphrase: </span><br><span class="line">wrote extracted data to &quot;secret text&quot;.</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"> open secret\ text</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">_1s_n0t_3n0ugh&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inctf&#123;0n3_h4lf_1s_n0t_3n0ugh&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="0x05-lab4-Obsession"><a href="#0x05-lab4-Obsession" class="headerlink" title="0x05 lab4 Obsession"></a>0x05 lab4 Obsession</h4><ul>
+<li>题目描述</li>
+</ul>
+<p>My system was recently compromised. The Hacker stole a lot of information but he also <strong>deleted</strong> a very important file of mine. I have no idea on how to recover it. The only evidence we have, at this point of time is this memory dump. Please help me.</p>
+<p><strong>Note</strong>: This challenge is composed of only 1 flag.</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab4.raw --profile=Win7SP1x64 filescan |grep Desktop</span></span><br><span class="line"></span><br><span class="line">0x000000003fc398d0     16      0 R--rw- \Device\HarddiskVolume2\Users\SlimShady\Desktop\Important.txt</span><br><span class="line">0x000000003e8ad250     14      0 R--r-- \Device\HarddiskVolume2\Users\eminem\Desktop\galf.jpeg</span><br><span class="line">0x000000003e8d19e0     16      0 R--r-- \Device\HarddiskVolume2\Users\eminem\Desktop\Screenshot1.png</span><br></pre></td></tr></table></figure></div>
+
+<p><code>galf.jpeg</code>和<code>Screenshot1.png</code>都是兔子洞</p>
+<p>最重要的是Important.txt，但他已经被删除了，所以dumpfiles是无法取出文件的，利用MFT表恢复文件，有两种方法：</p>
+<ul>
+<li><code>mftparser</code>插件</li>
+<li>R-studio秒了</li>
+</ul>
+<p>这里直接Rstudio提取，恢复important.txt</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> Important.txt|<span class="built_in">tr</span> -d <span class="string">&#x27;\r&#x27;</span>|<span class="built_in">tr</span> -d <span class="string">&#x27;\n&#x27;</span></span></span><br><span class="line">inctf&#123;1_is_n0t_EQu4l_7o_2_bUt_th1s_d0s3nt_m4ke_s3ns3&#125;Good work :P </span><br></pre></td></tr></table></figure></div>
+
+<p>关于MFT表请查看：</p>
+<p><a class="link" target="_blank" rel="noopener" href="https://www.freebuf.com/articles/network/278525.html">Windows 取证之$MFT - FreeBuf网络安全行业门户 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h4 id="0x06-lab5-Black-Tuesday"><a href="#0x06-lab5-Black-Tuesday" class="headerlink" title="0x06 lab5 Black Tuesday"></a>0x06 lab5 Black Tuesday</h4><ul>
+<li>题目描述</li>
+</ul>
+<p>We received this memory dump from our client recently. Someone accessed his system when he was not there and he found some rather <strong>strange files</strong> being accessed. Find those files and they might be useful. I quote his exact statement,</p>
+<blockquote>
+<p>The names were not readable. They were <strong>composed of alphabets and numbers</strong> but I wasn’t able to make out what exactly it was.</p>
+</blockquote>
+<p>Also, he noticed his most loved <strong>application</strong> that he always used crashed every time he ran it. Was it a <strong>virus</strong>?</p>
+<p><strong>Note-1</strong>: This challenge is composed of 3 flags. If you think 2nd flag is the end, it isn’t!! :P</p>
+<p><strong>Note-2</strong>: There was a small mistake when making this challenge. If you find any string which has the string “*<strong>L4B_3_D0n3*!!</strong>“ in it, please change it to “*<strong>L4B_5_D0n3*!!</strong>“ and then proceed.</p>
+<p><strong>Note-3</strong>: You’ll get the stage 2 flag only when you have the stage 1 flag.</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab2.raw --profile=Win7SP1x64 iehistory</span></span><br><span class="line"></span><br><span class="line">Location: Visited: Alissa Simpson@file:///C:/Users/Alissa%20Simpson/stAg3_5.txt</span><br><span class="line">Location: Visited: Alissa Simpson@file:///C:/Users/Alissa%20Simpson/Pictures/ZmxhZ3shIV93M0xMX2QwbjNfU3Q0ZzMtMV8wZl9MNEJfM19EMG4zXyEhfQ.bmp</span><br><span class="line">Location: Visited: Alissa Simpson@file:///C:/Users/Alissa%20Simpson/Downloads/SW1wb3J0YW50.rar</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;!!_w3LL_d0n3_St4g3-1_0f_L4B_5_D0n3_!!&#125;</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab5.raw --profile=Win7SP1x64 filescan |grep <span class="string">&quot;SW1wb3J0YW50.rar&quot;</span></span></span><br><span class="line"></span><br><span class="line">0x000000003eed56f0      1      0 R--r-- \Device\HarddiskVolume2\Users\SmartNet\Documents\SW1wb3J0YW50.rar</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab5.raw --profile=Win7SP1x64 dumpfiles -Q 0x000000003eed56f0 -D .</span></span><br><span class="line"></span><br><span class="line">DataSectionObject 0x3eed56f0   None   \Device\HarddiskVolume2\Users\SmartNet\Documents\SW1wb3J0YW50.rar</span><br></pre></td></tr></table></figure></div>
+
+<p>根据提示，密码应该就是flag1</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">unrar e Important.rar</span>                            </span><br><span class="line"></span><br><span class="line">UNRAR 7.00 freeware      Copyright (c) 1993-2024 Alexander Roshal</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Extracting from Important.rar</span><br><span class="line"></span><br><span class="line">Enter password (will not be echoed) for Stage2.png: </span><br><span class="line"></span><br><span class="line">Extracting  Stage2.png                                                OK </span><br><span class="line">All OK</span><br></pre></td></tr></table></figure></div>
+
+<p><img lazyload src="/images/loading.svg" data-src="./Stage2.png" alt="Stage2"></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;W1th_th1s_$taGe_2_1s_c0mPL3T3_!!&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><code>procdump可以导出可执行文件</code></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vol.py -f MemoryDump_Lab5.raw --profile=Win7SP1x64 procdump -p 2724 -D .</span></span><br><span class="line">Volatility Foundation Volatility Framework 2.6.1</span><br><span class="line">Process(V)         ImageBase          Name                 Result</span><br><span class="line">------------------ ------------------ -------------------- ------</span><br><span class="line">0xfffffa800108cb30 0x0000000001000000 NOTEPAD.EXE          OK: executable.2724.exe</span><br></pre></td></tr></table></figure></div>
+
+<img lazyload src="/images/loading.svg" data-src="MISC-内存取证-Volatility使用/image-20240517170507874.png" alt="image-20240517170507874" style="zoom:33%;">
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bi0s&#123;M3m_l4B5_OVeR_!&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+
 <h3 id="H-amp-NCTF2024"><a href="#H-amp-NCTF2024" class="headerlink" title="H&amp;NCTF2024"></a>H&amp;NCTF2024</h3><p>wp请查看：</p>
 <p><a href="https://madifaye.github.io/2024/05/11/HNCTF2024-MISC-Forensics/">H&amp;NCTF2024 - Mad1sun’s BL0G~ (madifaye.github.io)</a></p>
 <p>工具为：Volatiilty2</p>
@@ -682,8 +869,9 @@
 <li>使用GIMP查看data文件</li>
 <li>调整图像类型，多试几种(RGB、平面RGB等等)，调整宽度和高度，主要调整宽度，高度可以设置在<code>1024</code>左右</li>
 </ul>
-<h4 id="Volatility-mftparser"><a href="#Volatility-mftparser" class="headerlink" title="Volatility mftparser"></a>Volatility mftparser</h4><p>如果涉及到<code>dumpfiles</code>无法提取，记得使用mfrparser查看是否文件被删除，但是能通过mftparser恢复数据，复制二进制再转储，可以在末尾添加<code>&gt; 1.txt</code>输出到txt文件中方便查看完整数据</p>
+<h4 id="Volatility-mftparser"><a href="#Volatility-mftparser" class="headerlink" title="Volatility mftparser"></a>Volatility mftparser</h4><p>如果涉及到<code>dumpfiles</code>无法提取文件，可以使用<code>mftparser</code>查看是否文件被删除，但是能通过mftparser恢复数据，复制二进制再手动转储，可以在末尾添加<code>&gt; 1.txt</code>输出到txt文件中方便查看完整数据</p>
 <p>这个功能貌似只有Volatility2有</p>
+<h4 id="R-Studio-Network"><a href="#R-Studio-Network" class="headerlink" title="R-Studio Network"></a>R-Studio Network</h4><p>无法提取文件，可以使用Rstudio提取</p>
 
         </div>
 
@@ -698,7 +886,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-05-13 23:19:08
+                    :</strong> 2024-05-17 17:10:06
             </li>
         
         <li>
@@ -754,10 +942,10 @@
                     <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
                         <a class="next"
                         rel="next"
-                        href="/2024/03/12/MISC-%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/"
+                        href="/2024/05/11/2024%E5%B9%B46%E6%9C%88-7%E6%9C%88DASCTF%E5%81%9A%E9%A2%98%E4%B8%8E%E5%A4%8D%E7%8E%B0/"
                         >
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">CTF_MISC流量分析总结</span>
+                                <span class="post-nav-title-item">2024年6月-7月DASCTF做题与复现</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex justify-center items-center">
@@ -779,7 +967,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">MISC_内存取证_Volatility使用</div>
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Memslab-%E5%85%A5%E9%97%A8"><span class="nav-text">Memslab 入门</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-lab0-Never-Too-Late-Mister"><span class="nav-text">0x01 lab0 Never Too Late Mister</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#H-amp-NCTF2024"><span class="nav-text">H&amp;NCTF2024</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mspaint-exe"><span class="nav-text">mspaint.exe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Volatility-mftparser"><span class="nav-text">Volatility mftparser</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Memslab-%E5%85%A5%E9%97%A8"><span class="nav-text">Memslab 入门</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-lab0-Never-Too-Late-Mister"><span class="nav-text">0x01 lab0 Never Too Late Mister</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-lab1-Beginner%E2%80%99s-Luck"><span class="nav-text">0x02 lab1 Beginner’s Luck</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-lab2-A-New-World"><span class="nav-text">0x03 lab2 A New World</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-lab3-The-Evil%E2%80%99s-Den"><span class="nav-text">0x04 lab3 The Evil’s Den</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05-lab4-Obsession"><span class="nav-text">0x05 lab4 Obsession</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06-lab5-Black-Tuesday"><span class="nav-text">0x06 lab5 Black Tuesday</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#H-amp-NCTF2024"><span class="nav-text">H&amp;NCTF2024</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mspaint-exe"><span class="nav-text">mspaint.exe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Volatility-mftparser"><span class="nav-text">Volatility mftparser</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#R-Studio-Network"><span class="nav-text">R-Studio Network</span></a></li></ol></li></ol>
 
     </div>
 </div>
@@ -812,11 +1000,11 @@
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        11 posts in total
+                        12 posts in total
                     </span>
                     
                         <span>
-                            26.7k words in total
+                            29.2k words in total
                         </span>
                     
                 </p>
