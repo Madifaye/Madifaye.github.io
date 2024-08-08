@@ -293,7 +293,7 @@
 
 <p>得到password:<code>P@ssW0rdddd</code></p>
 <ul>
-<li>加密后的密文去010找方便一些，因为有些是不可见字符，搜索<code>cat S3rCr3t.tar.gz</code>就能找到，<code>0D 0A</code>是回车和换行，从<code>0D0A</code>后复制数据到<code>0D0A</code>就是密文，而且经典<code>Salted__</code>开头，<strong>保存为bin文件</strong></li>
+<li>加密后的密文去010找方便一些，因为有些是不可见字符，搜索<code>cat S3rCr3t.tar.gz</code>就能找到，<code>0D 0A</code>是回车和换行，从<code>0D0A</code>后复制数据到<code>0D0A</code>就是密文，而且经典<code>Salted__</code>开头，<strong>可以直接保存为bin文件，我这里通过cyber存成了dat文件，都一样</strong></li>
 </ul>
 <p><img lazyload src="/images/loading.svg" data-src="./image-20240808173008998.png" alt="image-20240808173008998"></p>
 <ul>
